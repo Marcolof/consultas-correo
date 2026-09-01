@@ -1,16 +1,16 @@
 import { Route, Routes } from 'react-router-dom'
-import { StarterPage } from '@/pages/StarterPage'
+import { ReclamosListPage } from '@/pages/ReclamosListPage'
 import { AppShell } from './AppShell'
 
 /**
- * Única ruta de la base: reemplazar `StarterPage` por las pantallas reales
- * a medida que el proyecto avance, o agregar más `<Route>` bajo `AppShell`.
+ * Rutas del prototipo. Agregar pantallas nuevas como `<Route>` bajo
+ * `AppShell` para que compartan el chrome (header, sidebar, footer).
  */
 export function AppRouter() {
   return (
     <Routes>
       <Route element={<AppShell />}>
-        <Route index element={<StarterPage />} />
+        <Route index element={<ReclamosListPage />} />
       </Route>
     </Routes>
   )

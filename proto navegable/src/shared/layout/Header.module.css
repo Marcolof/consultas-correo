@@ -208,14 +208,23 @@
   transform: rotate(180deg);
 }
 
+/*
+ * Mobile: la barra queda vacía salvo la hamburguesa — logo, "Nuevo envío" y
+ * el bloque de usuario se resuelven desde el cajón del Sidebar (que ya trae
+ * su propio logo en el header del drawer, y los ítems "Mi cuenta" /
+ * "Nuevo envío"). Por eso se oculta `.main` entero, no sus partes sueltas.
+ */
 @media (max-width: 767.98px) {
-  .userTrigger {
+  .main {
     display: none;
   }
+}
 
-  .user {
-    padding-right: 0.5rem;
-  }
+/* Mismo estado que el breakpoint de arriba, pero forzado por el switch
+ * "Responsive" del panel "Casos de uso" (ver AppShell.tsx) — para que se
+ * pueda previsualizar sin angostar la ventana real. */
+:global(.force-mobile) .main {
+  display: none !important;
 }
 
 .dropdown {

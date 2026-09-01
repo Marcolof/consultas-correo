@@ -28,6 +28,12 @@
   }
 }
 
+/* Modo responsive forzado (panel "Casos de uso" → switch "Responsive"):
+ * mismo resultado que angostar la ventana real, sin depender de su ancho. */
+:global(.force-mobile) .rail {
+  display: none !important;
+}
+
 .railList {
   display: flex;
   flex-direction: column;
@@ -72,6 +78,10 @@
   .backdrop {
     display: none;
   }
+}
+
+:global(.force-mobile) .backdrop {
+  display: block !important;
 }
 
 .drawer {

@@ -1,0 +1,51 @@
+/* Buscador pill. Ver tokens `--search-input-*` en tokens.css. */
+
+.wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: var(--search-input-height);
+  padding: 0 var(--space-4);
+  border: var(--border-width-thin) solid var(--border-default);
+  border-radius: var(--search-input-radius);
+  background-color: var(--field-bg);
+  transition: border-color var(--transition-fast);
+}
+
+.wrap:focus-within {
+  border-color: var(--border-focus);
+}
+
+.icon {
+  flex-shrink: 0;
+  margin-right: var(--space-2);
+  color: var(--icon-enabled);
+}
+
+.input {
+  flex: 1 1 auto;
+  min-width: 0;
+  height: 100%;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: var(--field-text);
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-base);
+}
+
+.input::placeholder {
+  color: var(--text-muted);
+}
+
+/* El foco ya lo indica el borde del contenedor (`.wrap:focus-within`); no
+ * hace falta el anillo de accesibilidad encima. */
+.input:focus-visible {
+  outline: none;
+}
+
+/* Oculta la "x" nativa de type=search en Chrome/Edge — el diseño no la pide. */
+.input::-webkit-search-cancel-button {
+  display: none;
+}

@@ -1,0 +1,35 @@
+/* Fila de navegación. Ver tokens `--nav-list-item-*` en tokens.css. */
+
+.item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--nav-list-item-gap);
+  width: 100%;
+  min-height: var(--nav-list-item-height);
+  padding: var(--space-3) var(--space-4);
+  border: var(--border-width-thin) solid var(--border-subtle);
+  border-radius: var(--nav-list-item-radius);
+  background-color: var(--surface-raised);
+  box-shadow: var(--shadow-row);
+  text-align: left;
+  cursor: pointer;
+  transition: background-color var(--transition-fast), border-color var(--transition-fast);
+}
+
+.item:hover {
+  background-color: var(--table-row-hover-bg);
+  border-color: var(--border-default);
+}
+
+.label {
+  color: var(--text-primary);
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-medium);
+  line-height: var(--line-height-snug);
+}
+
+.arrow {
+  flex-shrink: 0;
+  color: var(--color-accent);
+}

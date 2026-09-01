@@ -1,0 +1,36 @@
+/* Filtro en píldoras. Ver tokens `--chip-*` en tokens.css. */
+
+.group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: var(--chip-height);
+  padding: 0 var(--chip-padding-x);
+  border: var(--border-width-thin) solid var(--chip-border);
+  border-radius: var(--chip-radius);
+  background-color: var(--chip-bg);
+  color: var(--chip-text);
+  font-family: var(--font-family-base);
+  font-size: var(--chip-font-size);
+  font-weight: var(--chip-font-weight);
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background-color var(--transition-base), color var(--transition-base),
+    border-color var(--transition-base);
+}
+
+.chip:hover:not(.chipActive) {
+  border-color: var(--chip-border-active);
+}
+
+.chipActive {
+  background-color: var(--chip-bg-active);
+  color: var(--chip-text-active);
+  border-color: var(--chip-border-active);
+}

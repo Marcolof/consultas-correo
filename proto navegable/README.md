@@ -6,12 +6,13 @@ Base de chrome UI de **MiCorreo** (Correo Argentino) en React + TypeScript + Vit
 > por ser el equivalente válido sin espacios). Antes se llamaba `mlof-ui-base`
 > — renombrada para que el nombre sea legible de cara al Hub y a GitHub.
 
-Extraída del proyecto de referencia `Envio internacional CLAUDE`, con **fidelidad
-visual** (tokens, tipografía, medidas) pero **sin ninguna funcionalidad de
-negocio**: no hay roles, permisos, envíos, mocks ni escenarios. Es un punto de
-partida para construir pantallas nuevas (por ejemplo, la evolución de
-Consultas / Reclamos) reutilizando el mismo chrome y los mismos componentes
-que ya usa el resto del portal.
+El **chrome** (header, sidebar, footer, tokens, primitivos de UI) está
+extraído del proyecto de referencia `Envio internacional CLAUDE` con
+**fidelidad visual** (tokens, tipografía, medidas) y sin nada de su
+funcionalidad de negocio (no hay roles, permisos, envíos, mocks ni
+escenarios de ese proyecto). Sobre esa base ya se construyó la primera
+pantalla real de **este** proyecto — el listado de Reclamos — con datos
+reales de negocio (qué motivo ve cada perfil de usuario).
 
 ## Qué incluye
 
@@ -23,13 +24,21 @@ que ya usa el resto del portal.
   espaciado, radios, sombras, capas — en tres niveles (primitive → semantic →
   component). Ver [`documentation/guia-de-estilos-ui.md`](../documentation/guia-de-estilos-ui.md).
 - **Primitivos de UI** (`src/shared/ui`): `Button`, `Input`, `Textarea`,
-  `Select`, `NumberInput`, `Field`, `Checkbox`, `RadioGroup`, `RadioDot`,
-  `Switch`, `Modal`, `ConfirmDialog`, `Alert`, `Badge`, `Toast`, `DataTable`,
-  `Pagination`, `EmptyState`, `Stepper`, `Tabs`.
+  `Select`, `NumberInput`, `SearchInput`, `Field`, `Checkbox`, `RadioGroup`,
+  `RadioDot`, `Switch`, `ChipGroup`, `Modal`, `ConfirmDialog`, `Alert`,
+  `Badge`, `Toast`, `DataTable`, `Pagination`, `NavListItem`, `EmptyState`,
+  `Stepper`, `Tabs`.
 - **Assets**: fuentes Gilroy (.ttf), logo de Correo Argentino / MiCorreo,
   íconos del sidebar y del header, botón de chat flotante.
-- Una `StarterPage` de ejemplo montando varios componentes — reemplazarla por
-  la pantalla real.
+- **Pantallas reales**: `ReclamosListPage` (`/`) — listado de motivos de
+  reclamo filtrable por perfil de usuario, con datos reales (no mock) desde
+  `src/core/reclamos/reasonProfiles.ts`. Ver
+  [`documentation/pantalla-reclamos-listado.md`](../documentation/pantalla-reclamos-listado.md).
+- **Tooling de prototipo** (no es chrome de producción): el botón flotante
+  junto al `ChatBubble` abre "Volver al Hub" y "Casos de uso" — este último
+  simula qué perfil de usuario está activo (Individuo/Franquicias/Fulfillment),
+  lo que cambia qué se ve en `ReclamosListPage`. Ver
+  `src/core/session/activeUseCase.ts` y `src/app/HubAccessButton.tsx`.
 
 ## Qué NO incluye (a propósito)
 
@@ -71,8 +80,8 @@ npm run build        # build de producción
 
 ## Cómo seguir desde acá
 
-1. Reemplazar `src/pages/StarterPage.tsx` por la pantalla real (o agregar
-   páginas nuevas y rutas en `src/app/router.tsx`).
+1. Agregar páginas nuevas como rutas en `src/app/router.tsx`, siguiendo el
+   patrón de `ReclamosListPage`.
 2. Si la pantalla nueva necesita un componente que no está acá, agregarlo en
    `src/shared/ui/<Componente>/` siguiendo el mismo patrón: `.tsx` +
    `.module.css` (consumiendo tokens, nunca literales) + `index.ts`.

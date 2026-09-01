@@ -8,12 +8,14 @@ project:
   local_root: "."
 
 strategy:
-  current_focus: "Hub publicado y verificado en https://consultas-correo-v1.vercel.app. Falta el segundo proyecto Vercel para 'proto navegable' (requiere crearlo desde la cuenta del usuario) y luego actualizar los 2 links que hoy apuntan a localhost."
-  intervention: hybrid # reference-existing (html reference de producción) + standalone-prototype (proto navegable, código nuevo)
+  current_focus: "Documentación del Hub puesta al día (4 documentos, no 2) y todo el trabajo acumulado de la sesión pusheado a GitHub."
+  intervention: hybrid # reference-existing (html reference de producción + imagen de referencia de Reclamos) + standalone-prototype (proto navegable, código nuevo)
   recommended_next:
     - "Usuario: crear un SEGUNDO proyecto Vercel apuntando al mismo repo, con Root Directory = 'proto navegable' (Vite se autodetecta), para publicar el prototipo por separado"
     - "Cuando exista la URL del segundo proyecto: actualizar el href de la card 'Prototipo navegable' en hub/index.html (hoy apunta a localhost:4300, marcado con TODO) y el HUB_URL de proto navegable/src/app/HubAccessButton.tsx (hoy apunta a localhost:4311/)"
-    - "Cuando el usuario quiera avanzar: cerrar las definiciones de la sección 4 de documentation/brief-consultas-reclamos.md antes de construir pantallas de negocio"
+    - "Si se edita cualquier documentation/*.md o data/*.json, recordar copiar los cambios también a hub/downloads/ y a las páginas .html del Hub que los renderizan (no hay build step que los mantenga sincronizados solo)"
+    - "Diseñar/construir la pantalla de detalle de un reclamo — hoy las filas del listado sólo muestran un Toast placeholder"
+    - "Cuando el usuario quiera avanzar: cerrar las definiciones de la sección 4 de documentation/brief-consultas-reclamos.md (ahora con 2 preguntas más sobre determinación de perfil) antes de seguir sumando pantallas de negocio"
     - "Si se autoriza Figma, leer 'Mi Correo 2.0' como referencia de pantallas nuevas"
   deferred:
     - "Definición de alcance de negocio (tipos de consulta, qué es 'administrar consultas') — usuario pidió dejarla abierta por ahora"
@@ -29,13 +31,22 @@ knowledge:
     - "2026-09-01: repo git inicializado en la raíz de 'Reclamos claude' y publicado en https://github.com/Marcolof/consultas-correo (público). Excluye 'html reference/' (dominio interno + token de sesión embebido) y 'Font gilroy/' + los .ttf dentro de proto navegable/src/assets/fonts (fuente comercial sin licencia de redistribución pública) — decisión explícita del usuario. Verificado en GitHub que los 4 elementos de raíz (.project, documentation, hub, proto navegable) llegaron al remoto."
     - "2026-09-01: usuario confirmó que el Hub debe ser la raíz pública del proyecto. Se quitó <base href=\"/hub/\"> de las 4 páginas de hub/ (sólo tenía sentido cuando el Hub vivía en un subpath) y se corrigió el link del footer de index.html para apuntar al blob de GitHub en vez de una ruta relativa fuera de hub/. El servidor local (reclamos-hub, puerto 4311) ahora sirve la carpeta hub/ directamente como raíz — deja de servir toda 'Reclamos claude' — para que el comportamiento local sea idéntico al de producción."
     - "2026-09-01: con autorización del usuario (sesión de Vercel ya abierta en el navegador de Claude), se configuró Root Directory='hub' en el proyecto Vercel 'consultas-correo-v1' y se disparó un Redeploy manual (cambiar Root Directory no redeploya solo). Verificado en vivo: https://consultas-correo-v1.vercel.app muestra el Hub y navega correctamente (index → documentación → doc → volver)."
+    - "2026-09-01: usuario proveyó definición funcional (JSON, schema_version 1) confirmando que el negocio distingue 3 perfiles de usuario (fulfillment, franquicias, individuo) con subconjuntos distintos de motivos de reclamo visibles — dato de negocio real, no inferencia. Documentado en documentation/motivos-reclamo-por-perfil.md + data/motivos-reclamo-por-perfil.json. Contrasta con reclaclamos.html, que muestra los motivos sin diferenciar perfil."
+    - "2026-09-01: 'proto navegable es la base sobre la que se construirán las pantallas de Consultas/Reclamos' quedó CONFIRMADO por la acción del usuario (pidió construir la primera pantalla ahí) — ya no es supuesto, se retira de 'assumptions'."
+    - "2026-09-01: construida ReclamosListPage (ruta '/'), basada en imagen de referencia + datos reales de perfil. Agregados a shared/ui: ChipGroup, NavListItem, SearchInput (+ tokens --chip-*/--nav-list-item-*/--search-input-*). HubAccessButton ahora abre un menú (Volver al Hub / Casos de uso); 'Casos de uso' es un Modal con selector de perfil activo (core/session/activeUseCase.ts). Detalle en documentation/pantalla-reclamos-listado.md."
+    - "2026-09-01 (corrección, misma sesión que el ítem anterior): el usuario aclaró que 'Casos de uso' NO debe definir qué chip viene preseleccionado — el chip por defecto siempre es 'Todos'. En cambio, el perfil activo define qué CHIPS EXISTEN para ese usuario (regla nueva de negocio, distinta de la matriz motivo×perfil): Individuo ve sólo Todos/Individuo; Franquicias ve Todos/Individuo/Franquicias; Fulfillment ve Todos/Individuo/Fulfillment. Documentado en documentation/motivos-reclamo-por-perfil.md sección 6 + data/visibilidad-perfiles.json. Implementado en core/reclamos/profileVisibility.ts (data-driven, no hardcodeado) y ReclamosListPage (si el chip elegido deja de ser válido al cambiar de caso de uso, vuelve a 'Todos'). Verificado en navegador con los 3 perfiles + el reseteo automático."
+    - "2026-09-01: agregada sección 'Pantalla' al panel 'Casos de uso' (Modal subido de size sm a md) con switch 'Responsive' (core/session/forcedViewport.ts, mismo patrón que activeUseCase.ts). Al activarlo aplica una clase global 'force-mobile' (AppShell.tsx) que fuerza el mismo estado que el breakpoint real de 768px en Header/Sidebar/AppShell, sin depender del ancho real de la ventana: riel del Sidebar oculto, header vacío salvo hamburguesa (logo/Nuevo envío/usuario se ocultan — antes sólo se ocultaba el texto de usuario, ahora TODO el bloque, corrigiendo también el breakpoint real para que no diverja del forzado), cajón con el árbol completo (Panel, Mis envíos, Servicios, Mi saldo, Integraciones, Mi cuenta, Nuevo envío) igual a la imagen de referencia del usuario. Verificado en navegador con la ventana en tamaño desktop real. Documentado en pantalla-reclamos-listado.md sección 5."
+    - "2026-09-01 (ajuste sobre el ítem anterior, mismo día): el usuario pidió que el switch 'Responsive' angoste efectivamente el ancho visible, no sólo reacomode el layout. Se logró con `transform: translateZ(0)` en el wrapper `force-mobile` (AppShell.module.css) + `max-width: 390px` + `margin: 0 auto` — un `transform` distinto de `none` convierte al elemento en el containing block de sus descendientes `position: fixed` (Header, riel del Sidebar, ChatBubble, HubAccessButton), que dejan de posicionarse contra la ventana real y pasan a posicionarse contra esos 390px. El Modal 'Casos de uso' queda afuera del efecto a propósito (se renderiza en portal a <body>, fuera del wrapper) — el panel de control sigue a tamaño normal mientras el contenido controlado se ve angosto. Verificado en navegador: pantalla completa se angosta y centra con sombra, el cajón mobile y los botones flotantes quedan contenidos dentro del marco angosto. Build de producción limpio."
   assumptions:
-    - "proto navegable es la base sobre la que se construirán las pantallas de Consultas/Reclamos (no confirmado explícitamente por el usuario)"
     - "El alcance v1 se enfoca en mejorar la experiencia de reclamos ya existente, no en sumar tipos de consulta nuevos"
+    - "SUPERSEDED (2026-09-01, ver knowledge.confirmed): 'el filtro arranca en el perfil activo' — el usuario corrigió esto en la misma sesión. El comportamiento real es: filtro siempre en 'Todos', el perfil activo controla qué chips existen, no cuál viene elegido."
+    - "'Todos' sigue mostrando la unión completa de motivos (19) sin importar el perfil activo — la regla de visibilidad de chips (sección 6 de motivos-reclamo-por-perfil.md) restringe qué CHIPS existen, no qué trae 'Todos'. No confirmado explícitamente que deba ser así para siempre; queda como pregunta abierta."
   open_questions:
     - "¿Qué tipos de consulta existen más allá del alta de reclamo (seguimiento, listado, edición, historial)?"
     - "¿Qué significa 'administrar consultas' en este proyecto y qué acciones comprende?"
-    - "¿proto navegable pasa a ser el repo del prototipo de Reclamos, o queda como base compartida y el prototipo real vive en otra carpeta?"
+    - "¿Cómo se determina el perfil (fulfillment/franquicias/individuo) de un usuario logueado? ¿Puede tener más de uno? ¿Qué pasa si no matchea ninguno? (ver documentation/motivos-reclamo-por-perfil.md, sección 6)"
+    - "¿Los 3 perfiles son estables o se espera que se agreguen más pronto? (el usuario mencionó 'podría ampliarse')"
+    - "¿El chip 'Todos' debería acotarse también según el perfil activo (mostrar sólo la unión de lo que ese perfil puede ver), o se mantiene siempre como el universo completo de motivos como está hoy?"
 
 sources:
   - type: legacy-html
@@ -50,6 +61,14 @@ sources:
     location: "Mi Correo 2.0 (fileKey wN6vAlF1TgGc2AJdJJvsAU) — registrado en memoria de usuario"
     purpose: "Referencia de pantallas nuevas (no de lo ya existente)"
     confidence: unknown # sin verificar en esta sesión: MCP de Figma no autorizado
+  - type: functional-definition
+    location: "documentation/data/motivos-reclamo-por-perfil.json (pegado por el usuario en el chat el 2026-09-01, guardado tal cual como snapshot)"
+    purpose: "Regla de negocio real: qué motivos de reclamo ve cada perfil de usuario (fulfillment/franquicias/individuo)"
+    confidence: high # provisto directamente por el usuario como definición funcional confirmada
+  - type: functional-definition
+    location: "documentation/data/visibilidad-perfiles.json (descripta en prosa por el usuario el 2026-09-01, formalizada por Claude como JSON siguiendo el mismo criterio del archivo anterior)"
+    purpose: "Regla de negocio real, distinta de la anterior: qué chips de tipo de reclamo puede ver cada perfil activo (visibilidad de perfiles entre sí, no de motivos)"
+    confidence: high # ejemplos A/B/C dados explícitamente por el usuario, no inferidos
 
 capabilities:
   prototype:
@@ -69,18 +88,18 @@ artifacts:
   hub:
     status: draft
     path: "hub/index.html"
-    structure: "Hub con 2 opciones (Prototipo, Documentación). Documentación abre hub/documentacion.html con 2 cards (brief.html, guia-de-estilos.html); cada doc vuelve con flecha a documentacion.html, y ésta vuelve con flecha a index.html"
+    structure: "Hub con 2 opciones (Prototipo, Documentación). Documentación abre hub/documentacion.html con 4 cards (brief.html, guia-de-estilos.html, motivos-reclamo-por-perfil.html, pantalla-reclamos-listado.html); cada doc vuelve con flecha a documentacion.html, y ésta vuelve con flecha a index.html"
     provider: fallback
     served_via: "reclamos-hub (npx serve, puerto 4311, apuntando directo a la carpeta hub/) — ver .claude/launch.json en la carpeta outputs de la sesión"
-    note: "El Hub es la raíz pública prevista del proyecto (Vercel: Root Directory = 'hub'). La card 'Prototipo navegable' en index.html todavía apunta a localhost:4300 (marcado con TODO) hasta que exista la URL del segundo proyecto Vercel de proto navegable."
+    note: "El Hub es la raíz pública prevista del proyecto (Vercel: Root Directory = 'hub'). La card 'Prototipo navegable' en index.html todavía apunta a localhost:4300 (marcado con TODO) hasta que exista la URL del segundo proyecto Vercel de proto navegable. Botón 'Descargar' en las 4 cards de documentacion.html y en la esquina superior derecha de cada detalle (misma fila que 'Volver a Documentación'). Descarga el .md real (y los .json de datos, para los 2 docs de negocio), no un extracto: copiados a hub/downloads/ porque Vercel (Root Directory='hub') no incluye documentation/ en el deploy. Estas copias hay que mantenerlas sincronizadas a mano si el original cambia. Estructura de card con botón: dejó de ser <a class=\"card\"> entera (no se puede anidar un <a> de descarga adentro); ahora es <div class=\"card card--doc\"> con el título como <a class=\"card-link\"> estirado (.card-link::after) y el botón de descarga como hermano con z-index mayor. 2026-09-01: agregadas motivos-reclamo-por-perfil.html y pantalla-reclamos-listado.html (transcripción HTML fiel de los .md, mismo patrón visual) — el Hub ya no estaba desactualizado."
     last_updated: "2026-09-01"
   prototype:
     status: draft
-    fidelity: high # chrome/tokens; "none" para pantallas de negocio (sólo hay un StarterPage de ejemplo)
+    fidelity: high # chrome/tokens con fidelidad alta; ya tiene 1 pantalla de negocio real (Reclamos)
     path: "proto navegable"
     provider: fallback
-    note: "Agregado HubAccessButton (src/app/HubAccessButton.tsx): botón flotante junto al ChatBubble que hoy sólo linkea al Hub (localhost:4311/, actualizado 2026-09-01 cuando el Hub pasó a servirse desde su propia raíz). Explícitamente NO es chrome de producción de MiCorreo — es tooling de este prototipo. A futuro se expande a un modal con 'Volver al Hub' + 'Casos de uso' (panel de tweaks) — pendiente, no implementado. TODO marcado en el código: cambiar a la URL de producción del Hub cuando exista."
-    last_updated: "2026-08-31"
+    note: "2026-09-01: primera pantalla real (ReclamosListPage, ruta '/'), basada en imagen de referencia del usuario + datos reales de motivos-reclamo-por-perfil.json. Se agregaron 3 primitivos nuevos a shared/ui (ChipGroup, NavListItem, SearchInput) y 3 grupos de tokens nuevos (--chip-*, --nav-list-item-*, --search-input-*) — documentados en guia-de-estilos-ui.md. HubAccessButton dejó de ser un link directo: ahora abre un menú con 'Volver al Hub' y 'Casos de uso' (Modal con ChipGroup de perfil activo — core/session/activeUseCase.ts). StarterPage.tsx eliminado (reemplazado por la pantalla real). CORREGIDO en la misma sesión: el filtro de chips siempre arranca en 'Todos'; el perfil activo controla qué chips existen (core/reclamos/profileVisibility.ts, data-driven), no cuál viene elegido — si el chip elegido deja de ser válido al cambiar de caso de uso, vuelve a 'Todos' solo. Typecheck y build de producción verificados sin errores; verificado en navegador con los 3 perfiles (2 chips para Individuo, 3 para Franquicias, 3 para Fulfillment) y el reseteo automático."
+    last_updated: "2026-09-01"
   documentation:
     status: draft
     path: "documentation/guia-de-estilos-ui.md"
@@ -90,8 +109,30 @@ artifacts:
     status: draft
     path: "documentation/brief-consultas-reclamos.md"
     provider: fallback
-    note: "Definición general de alto nivel. Sección 4 queda explícitamente abierta a pedido del usuario."
-    last_updated: "2026-08-31"
+    note: "Definición general de alto nivel. Sección 4 queda explícitamente abierta a pedido del usuario. Actualizado 2026-09-01 con referencia cruzada a motivos-reclamo-por-perfil.md."
+    last_updated: "2026-09-01"
+  reason-profile-mapping:
+    status: draft
+    path: "documentation/motivos-reclamo-por-perfil.md"
+    data_path: "documentation/data/motivos-reclamo-por-perfil.json"
+    hub_path: "hub/motivos-reclamo-por-perfil.html"
+    provider: fallback
+    note: "Documenta la definición funcional provista por el usuario (3 perfiles × 19 motivos de reclamo). Los mismos datos ahora también viven copiados en proto navegable/src/core/reclamos/data/ (import JSON de la app) — dos copias intencionales, no hay build step compartido; anotado en el código para que no se desincronicen sin darse cuenta. Visible en el Hub desde el 2026-09-01."
+    last_updated: "2026-09-01"
+  reclamos-list-screen:
+    status: draft
+    path: "documentation/pantalla-reclamos-listado.md"
+    hub_path: "hub/pantalla-reclamos-listado.html"
+    provider: fallback
+    note: "Documenta la primera pantalla real del prototipo: qué reutiliza, qué componentes/tokens nuevos agrega, el mecanismo 'Casos de uso' (corregido: visibilidad de chips, no preselección), y las decisiones de UX tomadas sin pedido explícito (con su razón y su corrección, con trazabilidad). Visible en el Hub desde el 2026-09-01."
+    last_updated: "2026-09-01"
+  profile-visibility-mapping:
+    status: draft
+    path: "documentation/motivos-reclamo-por-perfil.md#6-visibilidad-de-perfiles-entre-sí"
+    data_path: "documentation/data/visibilidad-perfiles.json"
+    provider: fallback
+    note: "Regla nueva de negocio (distinta de la matriz motivo×perfil): qué chips de tipo de reclamo puede ver cada perfil activo. Copia también en proto navegable/src/core/reclamos/data/visibilidad-perfiles.json (mismo criterio de duplicación deliberada que el otro dataset)."
+    last_updated: "2026-09-01"
 
 figma:
   status: reference

@@ -1,0 +1,9 @@
+{
+  "schema_version": 1,
+  "purpose": "Qué chips de tipo de reclamo puede ver cada perfil de usuario activo (visibilidad de perfiles entre sí, no de motivos)",
+  "visibility": {
+    "individuo": ["todos", "individuo"],
+    "franquicias": ["todos", "individuo", "franquicias"],
+    "fulfillment": ["todos", "individuo", "fulfillment"]
+  }
+}

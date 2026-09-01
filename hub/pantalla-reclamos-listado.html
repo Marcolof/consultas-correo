@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Pantalla: Listado de Reclamos — MiCorreo</title>
+<link rel="stylesheet" href="hub.css" />
+</head>
+<body>
+  <header class="top">
+    <div class="brand">Correo Argentino · MiCorreo</div>
+    <p>Documentación — Pantalla: Listado de Reclamos</p>
+  </header>
+
+  <main>
+    <div class="top-row">
+      <a class="back-link" href="documentacion.html">&larr; Volver a Documentación</a>
+      <a class="download-btn" href="downloads/pantalla-reclamos-listado.md" download title="Descargar pantalla-reclamos-listado.md">
+        <svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M8 1v9m0 0L4.5 6.5M8 10l3.5-3.5M2 12v1.5A1.5 1.5 0 0 0 3.5 15h9a1.5 1.5 0 0 0 1.5-1.5V12" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Descargar
+      </a>
+    </div>
+
+    <div class="status-bar">
+      <span class="pill draft">Draft — primera pantalla real del prototipo</span>
+    </div>
+
+    <h1>Pantalla: Listado de Reclamos</h1>
+
+    <blockquote>
+      Reemplaza al <code>StarterPage</code> de ejemplo. Construida el
+      2026-09-01 sobre <code>proto navegable</code>, basada en una imagen
+      de referencia (layout) y en la definición funcional de
+      <a href="motivos-reclamo-por-perfil.html">motivos por perfil</a>
+      (datos reales).
+    </blockquote>
+
+    <h2>1. Qué hace</h2>
+    <p>Ruta índice (<code>/</code>) del prototipo: <code>src/pages/ReclamosListPage.tsx</code>. Muestra:</p>
+    <ol>
+      <li>Título "Reclamos" (<code>PageHeader</code>, sin descripción ni acciones).</li>
+      <li>Un buscador de una línea.</li>
+      <li>Sección "Tipos de Reclamos" con chips de filtro: <strong>Todos</strong>, Individuo, Franquicias, Fulfillment — el subconjunto realmente visible depende del "caso de uso" activo (ver sección 4).</li>
+      <li>Contador ("N consultas") que refleja el resultado real de filtro + búsqueda combinados.</li>
+      <li>Listado de motivos (filas clickeables con flecha), con scroll propio.</li>
+    </ol>
+    <p>
+      Los datos <strong>no son mock arbitrario</strong>: motivos, perfiles
+      y qué perfil ve qué motivo salen de
+      <code>core/reclamos/reasonProfiles.ts</code>, que a su vez lee una
+      copia del JSON documentado en
+      <a href="motivos-reclamo-por-perfil.html">motivos por perfil</a>.
+      Cambiar de chip realmente cambia qué se ve (12 para Individuo, 4 para
+      Franquicias, 17 para Fulfillment, 19 para Todos) — no es una maqueta
+      estática.
+    </p>
+
+    <h2>2. Componentes reutilizados (sin cambios)</h2>
+    <p><code>PageContainer</code>, <code>PageHeader</code>, <code>EmptyState</code>, <code>Modal</code>, <code>useToast</code> (cola de notificaciones) — todos ya existían en la base de UI, sin tocar su código.</p>
+
+    <h2>3. Componentes nuevos agregados a <code>shared/ui</code></h2>
+    <p>La imagen de referencia no coincidía con ningún primitivo existente en 3 casos. Se agregaron siguiendo el mismo patrón (<code>.tsx</code> + <code>.module.css</code> + <code>index.ts</code>, tokens nuevos donde hacía falta):</p>
+    <table>
+      <thead><tr><th>Componente</th><th>Por qué es nuevo</th><th>Tokens nuevos</th></tr></thead>
+      <tbody>
+        <tr><td><code>ChipGroup</code></td><td>Filtro en píldoras con activo en azul de marca sólido — visualmente distinto de <code>Tabs</code> (activo amarillo, para navegar entre paneles)</td><td><code>--chip-*</code></td></tr>
+        <tr><td><code>NavListItem</code></td><td>Fila clickeable (label + flecha) para listados de navegación simple</td><td><code>--nav-list-item-*</code></td></tr>
+        <tr><td><code>SearchInput</code></td><td>Buscador de una línea sin label flotante</td><td><code>--search-input-*</code></td></tr>
+      </tbody>
+    </table>
+    <p>Los 3 tokens nuevos están documentados en la <a href="guia-de-estilos.html">guía de estilos</a> y en <code>tokens.css</code>.</p>
+    <p>
+      <strong>Nota de arquitectura sobre <code>SearchInput</code></strong>:
+      no reutiliza <code>Field</code> (el envoltorio de label flotante que
+      comparten <code>Input</code>/<code>Select</code>/<code>NumberInput</code>)
+      porque su mecanismo depende de que el <code>&lt;input&gt;</code> sea
+      hermano directo del <code>&lt;label&gt;</code> en el DOM (selector CSS
+      <code>.control + .label</code>); envolver el input en un contenedor
+      para el ícono de lupa rompía esa regla. Se armó como primitivo aparte
+      en vez de forzar el patrón de <code>Field</code> donde no encaja.
+    </p>
+
+    <h2>4. Mecanismo nuevo: "Casos de uso" (perfil activo simulado)</h2>
+    <p>El botón flotante junto al <code>ChatBubble</code> (<code>app/HubAccessButton.tsx</code>) despliega un menú con 2 opciones:</p>
+    <ol>
+      <li><strong>Volver al Hub</strong> — comportamiento anterior, sin cambios.</li>
+      <li><strong>Casos de uso</strong> — abre un <code>Modal</code> con 2 secciones: "Usuarios" (perfil activo) y "Pantalla" (ver sección 5).</li>
+    </ol>
+    <p>
+      El selector de perfil escribe un <strong>contexto global</strong>
+      (<code>core/session/activeUseCase.ts</code>) que representa qué
+      perfil de usuario se está simulando — es tooling de prototipo, no
+      autenticación real.
+    </p>
+    <p>
+      <strong>Vínculo con el listado (corregido el 2026-09-01):</strong> el
+      "caso de uso" activo <strong>no decide qué chip viene elegido</strong>
+      — el chip por defecto es siempre "Todos", en las tres identidades. Lo
+      que decide es <strong>qué chips existen</strong> para navegar (ver
+      <a href="motivos-reclamo-por-perfil.html">motivos por perfil</a>,
+      sección 6):
+    </p>
+    <ul>
+      <li>Individuo ve los chips: Todos, Individuo.</li>
+      <li>Franquicias ve: Todos, Individuo, Franquicias.</li>
+      <li>Fulfillment ve: Todos, Individuo, Fulfillment.</li>
+    </ul>
+    <p>
+      Si el chip elegido deja de estar disponible al cambiar de caso de
+      uso, el filtro vuelve a "Todos" automáticamente — es la única
+      situación en la que el caso de uso toca la selección; nunca la fuerza
+      a priori.
+    </p>
+    <blockquote>
+      Versión anterior de este documento (misma fecha, corregida más
+      tarde) decía que el filtro arrancaba en el perfil activo. Era una
+      decisión de UX no pedida explícitamente; el usuario la revirtió y
+      aclaró que el mecanismo real es de visibilidad de opciones, no de
+      preselección. Se deja esta nota por trazabilidad.
+    </blockquote>
+
+    <h3>Escalabilidad</h3>
+    <ul>
+      <li>Agregar un perfil nuevo a los <strong>motivos</strong> que ve: un solo lugar, <code>core/reclamos/reasonProfiles.ts</code> → <code>RECLAMO_PROFILES</code>.</li>
+      <li>Agregar/cambiar qué <strong>chips ve</strong> cada perfil: un solo lugar, <code>visibilidad-perfiles.json</code> — es dato, no lógica hardcodeada.</li>
+      <li>Agregar más "condiciones" al panel "Casos de uso": el <code>Modal</code> está armado para sumar secciones hermanas de "Usuarios" y "Pantalla".</li>
+    </ul>
+
+    <h2>5. Sección "Pantalla" — modo responsive forzado</h2>
+    <p>El panel "Casos de uso" (tamaño <code>md</code>) suma una segunda sección: <strong>"Pantalla"</strong>, con un switch <strong>"Responsive"</strong>. Al activarlo, el prototipo pasa al layout mobile sin depender del ancho real de la ventana:</p>
+    <ul>
+      <li>El riel del <code>Sidebar</code> desaparece — sólo queda la hamburguesa.</li>
+      <li>La barra superior queda vacía salvo la hamburguesa: logo, "Nuevo envío" y el bloque de usuario se ocultan (disponibles desde el cajón del <code>Sidebar</code>).</li>
+      <li>Al abrir el cajón, se ve el árbol completo: Panel, Mis envíos, Servicios, Mi saldo, Integraciones, Mi cuenta, Nuevo envío.</li>
+      <li><strong>El ancho real de la pantalla se achica</strong> a 390px (ancho típico de smartphone), centrado, con una sombra marcando el borde.</li>
+    </ul>
+    <p>
+      <strong>Cómo se implementó</strong>: una clase global <code>force-mobile</code>
+      que <code>AppShell.tsx</code> aplica a un <code>&lt;div&gt;</code>
+      envolvente cuando <code>isResponsive</code> es <code>true</code>
+      (<code>core/session/forcedViewport.ts</code>). Header/Sidebar/AppShell
+      tienen reglas <code>:global(.force-mobile)</code> que repiten
+      exactamente las mismas reglas del breakpoint real (768px), y además
+      aplican <code>transform: translateZ(0)</code> + <code>max-width: 390px</code>
+      al wrapper — un <code>transform</code> convierte al elemento en el
+      <em>containing block</em> de sus descendientes <code>position: fixed</code>,
+      así que Header, riel y botones flotantes quedan recortados a esos
+      390px en vez de a la ventana completa. El <code>Modal</code> de
+      "Casos de uso" queda afuera de este efecto a propósito (portal a
+      <code>&lt;body&gt;</code>) — el panel de control sigue a tamaño
+      normal mientras el contenido controlado se ve angosto.
+    </p>
+    <p>
+      También se corrigió el breakpoint real (no sólo el forzado): antes,
+      angostar la ventana de verdad sólo ocultaba el texto "Hola,
+      {nombre}"; ahora oculta todo el bloque de logo/acciones/usuario, para
+      que "mobile real" y "mobile forzado" no diverjan.
+    </p>
+
+    <h2>6. Preguntas / límites que quedan (no resueltos acá)</h2>
+    <ul>
+      <li>Las filas del listado no navegan a ningún lado todavía — muestran un <code>Toast</code> de aviso. No hay pantalla de detalle de reclamo definida aún.</li>
+      <li>El buscador filtra sólo por label del motivo, sin acentos — no busca por categoría ni por sinónimos.</li>
+      <li>Sigue sin resolverse cómo se determina el perfil de un usuario real — "Casos de uso" es una simulación manual para el prototipo, no una propuesta de producción.</li>
+      <li>El modo responsive forzado sólo cubre lo explícitamente pedido (sidebar, header, drawer) — no se auditó componente por componente si algún otro <code>@media</code> propio necesitaría su override.</li>
+    </ul>
+
+    <a class="back-link" href="documentacion.html">&larr; Volver a Documentación</a>
+  </main>
+</body>
+</html>

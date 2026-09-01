@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Motivos de reclamo por perfil — MiCorreo</title>
+<link rel="stylesheet" href="hub.css" />
+</head>
+<body>
+  <header class="top">
+    <div class="brand">Correo Argentino · MiCorreo</div>
+    <p>Documentación — Motivos de reclamo por perfil</p>
+  </header>
+
+  <main>
+    <div class="top-row">
+      <a class="back-link" href="documentacion.html">&larr; Volver a Documentación</a>
+      <a class="download-btn" href="downloads/motivos-reclamo-por-perfil.md" download title="Descargar motivos-reclamo-por-perfil.md">
+        <svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M8 1v9m0 0L4.5 6.5M8 10l3.5-3.5M2 12v1.5A1.5 1.5 0 0 0 3.5 15h9a1.5 1.5 0 0 0 1.5-1.5V12" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Descargar
+      </a>
+    </div>
+
+    <div class="status-bar">
+      <span class="pill review">Confirmado, pero incompleto</span>
+    </div>
+
+    <h1>Motivos de reclamo visibles por tipo de usuario</h1>
+
+    <blockquote>
+      <strong>Fuente</strong>: definición funcional provista por el usuario
+      el 2026-09-01, confirmada como regla de negocio real (no inferencia).
+      Archivo de datos original:
+      <a href="downloads/motivos-reclamo-por-perfil.json">motivos-reclamo-por-perfil.json</a>
+      (<code>schema_version: 1</code>).
+      <br /><br />
+      <strong>Estado</strong>: define QUÉ motivo ve cada perfil, no CÓMO se
+      determina el perfil de un usuario logueado (ver sección "Preguntas
+      que abre" al final).
+    </blockquote>
+
+    <h2>1. Propósito</h2>
+    <p>
+      Esta estructura es la fuente de verdad de qué <strong>motivos de
+      reclamo</strong> debe ofrecer el selector del paso 1 del alta de
+      reclamo, según el <strong>perfil</strong> del usuario que inició
+      sesión. Reemplaza — al menos conceptualmente — el
+      <code>&lt;select&gt;</code> único y plano de ~20 opciones que hoy
+      expone la pantalla de producción por igual a cualquier usuario, sin
+      distinguir perfiles.
+    </p>
+
+    <h2>2. Perfiles (3 hoy, ampliable)</h2>
+    <table>
+      <thead><tr><th>Perfil</th><th>Label</th><th>Cant. de motivos visibles</th></tr></thead>
+      <tbody>
+        <tr><td><code>fulfillment</code></td><td>Fulfillment</td><td>17</td></tr>
+        <tr><td><code>franquicias</code></td><td>Franquicias</td><td>4</td></tr>
+        <tr><td><code>individuo</code></td><td>Individuo</td><td>12</td></tr>
+      </tbody>
+    </table>
+    <p>
+      <code>fulfillment</code> es el perfil con más motivos visibles
+      (superset casi completo); <code>franquicias</code> es el más acotado
+      y el único con motivos exclusivos propios (sellos digitales).
+    </p>
+
+    <h2>3. Matriz completa: motivo × perfil</h2>
+    <p class="lede">19 motivos en total. ✓ = visible para ese perfil.</p>
+    <table>
+      <thead><tr><th>Motivo</th><th>Fulfillment</th><th>Franquicias</th><th>Individuo</th></tr></thead>
+      <tbody>
+        <tr><td>Demora en el armado de los envíos</td><td>✓</td><td></td><td></td></tr>
+        <tr><td>Demora en el servicio</td><td>✓</td><td></td><td>✓</td></tr>
+        <tr><td>Diferencia en el armado del envío</td><td>✓</td><td></td><td></td></tr>
+        <tr><td>Diferencia de stock</td><td>✓</td><td></td><td></td></tr>
+        <tr><td>Recibí un cobro erróneo</td><td>✓</td><td></td><td>✓</td></tr>
+        <tr><td>Errores en mi factura</td><td>✓</td><td>✓</td><td>✓</td></tr>
+        <tr><td>Falta o error en la información de seguimiento</td><td>✓</td><td></td><td>✓</td></tr>
+        <tr><td>Errores con el saldo de mi cuenta</td><td>✓</td><td>✓</td><td>✓</td></tr>
+        <tr><td>Inconvenientes con la carga de envíos</td><td>✓</td><td></td><td>✓</td></tr>
+        <tr><td>Inconvenientes con la entrega</td><td>✓</td><td></td><td>✓</td></tr>
+        <tr><td>Inconveniente en la carga de los pedidos</td><td>✓</td><td></td><td></td></tr>
+        <tr><td>Inconvenientes con el pago de oficios judiciales</td><td>✓</td><td></td><td>✓</td></tr>
+        <tr><td>Inconvenientes para dar de alta un usuario adicional</td><td>✓</td><td></td><td>✓</td></tr>
+        <tr><td>No puedo pagar mis envíos</td><td>✓</td><td></td><td>✓</td></tr>
+        <tr><td>No veo el stock</td><td>✓</td><td></td><td></td></tr>
+        <tr><td>Paquete dañado</td><td>✓</td><td></td><td>✓</td></tr>
+        <tr><td>Paquete con faltante de contenido</td><td>✓</td><td></td><td>✓</td></tr>
+        <tr><td>Problema con el pago de sellos digitales</td><td></td><td>✓</td><td></td></tr>
+        <tr><td>Problemas para generar el sello digital</td><td></td><td>✓</td><td></td></tr>
+      </tbody>
+    </table>
+
+    <h3>Lectura rápida</h3>
+    <ul>
+      <li><strong>Motivos transversales a los 3 perfiles</strong> (2): "Errores en mi factura", "Errores con el saldo de mi cuenta".</li>
+      <li><strong>Motivos exclusivos de <code>fulfillment</code></strong> (6): armado de envíos, demora en el armado, diferencia en el armado, diferencia de stock, carga de pedidos, no veo el stock — todos ligados a operación logística, no a un envío individual.</li>
+      <li><strong>Motivos exclusivos de <code>franquicias</code></strong> (2): ambos sobre sellos digitales — es el único perfil sin superposición con "Demora en el servicio" ni con los motivos de entrega/paquete.</li>
+      <li><strong><code>individuo</code> es subconjunto de <code>fulfillment</code></strong> salvo por los motivos operativos de logística: todo lo que ve <code>individuo</code> también lo ve <code>fulfillment</code>, pero no al revés.</li>
+    </ul>
+
+    <h2>4. Forma del dato y extensibilidad</h2>
+    <p>
+      El JSON modela la relación motivo↔perfil <strong>dos veces</strong>
+      (<code>profiles[].reason_ids</code> y <code>reasons[].profiles</code>)
+      — son redundantes entre sí, no dos fuentes distintas: listan
+      exactamente la misma relación desde cada lado, probablemente para que
+      el consumidor no tenga que invertir el índice en runtime.
+    </p>
+    <p>
+      Para <strong>agregar un perfil nuevo</strong>: agregar una entrada en
+      <code>profiles</code> con su <code>label</code> y
+      <code>reason_ids</code>, y agregar ese id de perfil al array
+      <code>profiles</code> de cada motivo que corresponda en
+      <code>reasons</code> (mantener ambos lados sincronizados).
+    </p>
+    <p>
+      Para <strong>agregar un motivo nuevo</strong>: agregar una entrada en
+      <code>reasons</code> con <code>label</code> y la lista de perfiles
+      que lo ven, y agregar su id al <code>reason_ids</code> de cada perfil
+      correspondiente.
+    </p>
+    <p>
+      <code>schema_version: 1</code> sugiere que se espera evolución del
+      esquema — no hay todavía un changelog de qué cambiaría en una v2.
+    </p>
+
+    <h2>5. Relación con lo ya documentado</h2>
+    <ul>
+      <li>Contrasta con el hallazgo del <a href="brief.html">Brief básico</a> sección 2: la pantalla de producción muestra los ~20 motivos <strong>sin distinguir perfil</strong> — este JSON confirma que el negocio SÍ diferencia motivos por tipo de usuario, aunque la pantalla actual no lo refleje. Es evidencia concreta de una mejora real de v1: filtrar el selector de motivo según el perfil logueado.</li>
+      <li>Casi todos los labels coinciden literalmente con las opciones del <code>&lt;select&gt;</code> de producción (mismo texto, mismos acentos). La excepción es que en el JSON dos labels terminan en punto — puede ser una inconsistencia menor de datos, no una diferencia de significado.</li>
+    </ul>
+
+    <h2>6. Visibilidad de perfiles entre sí (regla nueva, 2026-09-01)</h2>
+    <blockquote>
+      <strong>Fuente</strong>: definición funcional provista por el usuario
+      el 2026-09-01, a raíz de construir la pantalla de Reclamos. Archivo
+      de datos: <a href="downloads/visibilidad-perfiles.json">visibilidad-perfiles.json</a>
+      (<code>schema_version: 1</code>).
+    </blockquote>
+    <p>
+      Es una regla <strong>distinta</strong> de la sección 3: acá no se
+      trata de qué <em>motivos</em> ve cada perfil, sino de qué
+      <strong>chips de tipo de reclamo</strong> (perfiles como opción de
+      filtro) puede ver un usuario según su propio perfil activo.
+    </p>
+    <table>
+      <thead><tr><th>Perfil activo</th><th>Chips que ve</th></tr></thead>
+      <tbody>
+        <tr><td>Individuo</td><td>Todos, Individuo</td></tr>
+        <tr><td>Franquicias</td><td>Todos, Individuo, Franquicias</td></tr>
+        <tr><td>Fulfillment</td><td>Todos, Individuo, Fulfillment</td></tr>
+      </tbody>
+    </table>
+    <p>
+      Patrón observado (no una regla codificada aparte, es lo que dicen los
+      datos): todo perfil ve <strong>su propio chip</strong> +
+      <strong>Individuo</strong> + <strong>Todos</strong>; nadie ve el chip
+      de un perfil ajeno que no sea Individuo.
+    </p>
+    <p>
+      <strong>Importante — esto NO redefine qué es "Todos"</strong>:
+      seleccionar el chip "Todos" sigue mostrando la unión completa de
+      motivos (19), sin importar qué perfil esté activo. La restricción es
+      sobre qué <strong>chips existen</strong> para navegar, no sobre qué
+      <strong>datos</strong> trae "Todos".
+    </p>
+    <p>
+      El chip por defecto sigue siendo <strong>"Todos"</strong> en todos
+      los casos. Si el chip elegido deja de estar disponible al cambiar de
+      perfil activo, el prototipo vuelve a "Todos" automáticamente.
+    </p>
+
+    <h2>7. Preguntas que abre (no resueltas por este archivo)</h2>
+    <ul>
+      <li>¿Cómo se determina el <strong>perfil</strong> de un usuario logueado? (rol de cuenta, flag, elección manual…)</li>
+      <li>¿Un mismo usuario puede tener <strong>más de un perfil</strong> simultáneamente?</li>
+      <li>¿Qué pasa con un usuario que no matchea ningún perfil?</li>
+      <li>¿Estos 3 perfiles son estables o se espera que aparezcan más pronto? ("podría ampliarse")</li>
+      <li>¿"Todos" debería acotarse también por perfil, o se mantiene siempre como la unión completa?</li>
+    </ul>
+
+    <a class="back-link" href="documentacion.html">&larr; Volver a Documentación</a>
+  </main>
+</body>
+</html>

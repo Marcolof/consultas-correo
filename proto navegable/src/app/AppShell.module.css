@@ -15,6 +15,35 @@
   }
 }
 
+:global(.force-mobile) .shell {
+  margin-left: 0 !important;
+}
+
+/*
+ * Modo responsive forzado: además de los overrides de layout de arriba, el
+ * propio wrapper de AppShell (el <div> con esta clase, ver AppShell.tsx) se
+ * angosta a un ancho típico de smartphone.
+ *
+ * Truco: `transform` con cualquier valor distinto de `none` convierte al
+ * elemento en el "containing block" de sus descendientes `position: fixed`
+ * — dejan de posicionarse contra la ventana del navegador y pasan a
+ * posicionarse contra ESTA caja. Por eso el Header (`left/right: 0`), el
+ * riel del Sidebar y los botones flotantes (`bottom/right`) quedan
+ * recortados al ancho de acá, en vez de ocupar toda la ventana real.
+ *
+ * El Modal de "Casos de uso" no se ve afectado: se renderiza en un portal
+ * directo a `<body>` (ver `shared/ui/Modal`), fuera de este wrapper.
+ */
+:global(.force-mobile) {
+  max-width: 390px;
+  min-height: 100vh;
+  margin: 0 auto;
+  overflow-x: hidden;
+  transform: translateZ(0);
+  background-color: var(--surface-page);
+  box-shadow: 0 0 0 1px var(--border-subtle), 0 24px 48px rgba(0, 0, 0, 0.18);
+}
+
 .main {
   flex: 1 1 auto;
   display: flex;

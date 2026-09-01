@@ -356,4 +356,33 @@
   --summary-value-size: var(--font-size-sm);
   --summary-edit-size: var(--font-size-xs);
   --summary-padding: var(--space-8);
+
+  /* --- Chip (ChipGroup) ---------------------------------------------------
+   * Filtro tipo píldora de una sola selección (p. ej. "Tipos de Reclamos").
+   * Distinto de Tabs: acá el activo es un fondo azul de marca sólido, no
+   * amarillo — se usa para filtrar/segmentar, no para navegar entre paneles. */
+  --chip-height: 40px;
+  --chip-padding-x: var(--space-4);
+  --chip-radius: var(--radius-pill);
+  --chip-font-size: var(--font-size-sm);
+  --chip-font-weight: var(--font-weight-semibold);
+  --chip-bg: var(--surface-raised);
+  --chip-text: var(--text-muted);
+  --chip-border: var(--border-default);
+  --chip-bg-active: var(--correo-blue);
+  --chip-text-active: var(--white);
+  --chip-border-active: var(--correo-blue);
+
+  /* --- Fila de navegación (NavListItem) -----------------------------------
+   * Fila clickeable de una lista (label + flecha), p. ej. cada motivo del
+   * listado de Reclamos. */
+  --nav-list-item-height: 56px;
+  --nav-list-item-radius: var(--radius-md);
+  --nav-list-item-gap: var(--space-3);
+
+  /* --- Buscador (SearchInput) ----------------------------------------------
+   * A diferencia de Input/Select, no lleva label flotante: es un patrón de
+   * búsqueda de una sola línea, con placeholder siempre visible. */
+  --search-input-height: 48px;
+  --search-input-radius: var(--radius-pill);
 }

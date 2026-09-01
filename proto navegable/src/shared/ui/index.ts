@@ -4,11 +4,13 @@ export { Field, fieldControlClasses, fieldDescribedBy, type FieldProps } from '.
 export { Input, type InputProps } from './Input'
 export { Select, type SelectProps } from './Select'
 export { NumberInput, type NumberInputProps } from './NumberInput'
+export { SearchInput, type SearchInputProps } from './SearchInput'
 
 // Controles
 export { Checkbox, RadioGroup, type CheckboxProps } from './Checkbox'
 export { RadioDot, type RadioDotProps } from './RadioDot'
 export { Switch, type SwitchProps } from './Switch'
+export { ChipGroup, type ChipGroupProps, type ChipItem } from './ChipGroup'
 
 // Modales y diálogos
 export { Modal, type ModalProps } from './Modal'
@@ -25,3 +27,4 @@ export { Pagination, type PaginationProps } from './Pagination'
 export { EmptyState, type EmptyStateProps } from './EmptyState'
 export { Stepper, type StepperProps } from './Stepper'
 export { Tabs, type TabsProps } from './Tabs'
+export { NavListItem, type NavListItemProps } from './NavListItem'
