@@ -1,0 +1,81 @@
+# proto navegable
+
+Base de chrome UI de **MiCorreo** (Correo Argentino) en React + TypeScript + Vite.
+
+> Nombre de carpeta: `proto navegable` (nombre de paquete npm: `proto-navegable`,
+> por ser el equivalente válido sin espacios). Antes se llamaba `mlof-ui-base`
+> — renombrada para que el nombre sea legible de cara al Hub y a GitHub.
+
+Extraída del proyecto de referencia `Envio internacional CLAUDE`, con **fidelidad
+visual** (tokens, tipografía, medidas) pero **sin ninguna funcionalidad de
+negocio**: no hay roles, permisos, envíos, mocks ni escenarios. Es un punto de
+partida para construir pantallas nuevas (por ejemplo, la evolución de
+Consultas / Reclamos) reutilizando el mismo chrome y los mismos componentes
+que ya usa el resto del portal.
+
+## Qué incluye
+
+- **Chrome de la app**: `Header` (barra superior con logo, "Nuevo envío" y menú
+  de usuario), `Sidebar` (riel de íconos en desktop + cajón deslizante en
+  mobile), `Footer`.
+- **Layout de pantalla**: `PageContainer`, `PageHeader`.
+- **Design tokens** (`src/styles/tokens.css`): paleta, tipografía (Gilroy),
+  espaciado, radios, sombras, capas — en tres niveles (primitive → semantic →
+  component). Ver [`documentation/guia-de-estilos-ui.md`](../documentation/guia-de-estilos-ui.md).
+- **Primitivos de UI** (`src/shared/ui`): `Button`, `Input`, `Textarea`,
+  `Select`, `NumberInput`, `Field`, `Checkbox`, `RadioGroup`, `RadioDot`,
+  `Switch`, `Modal`, `ConfirmDialog`, `Alert`, `Badge`, `Toast`, `DataTable`,
+  `Pagination`, `EmptyState`, `Stepper`, `Tabs`.
+- **Assets**: fuentes Gilroy (.ttf), logo de Correo Argentino / MiCorreo,
+  íconos del sidebar y del header, botón de chat flotante.
+- Una `StarterPage` de ejemplo montando varios componentes — reemplazarla por
+  la pantalla real.
+
+## Qué NO incluye (a propósito)
+
+Todo lo que en el proyecto de referencia es **funcionalidad**, no chrome:
+motor de roles/permisos, feature flags, escenarios de demo, mocks de datos,
+y los módulos de negocio (envíos, cuenta, saldo, comunicaciones digitales).
+El usuario que se muestra en el header (`src/core/user.ts`) es un dato
+estático de ejemplo: reemplazarlo por la sesión real cuando corresponda.
+
+## Fuentes (Gilroy) — no están en el repo
+
+Gilroy es una fuente comercial sin licencia de redistribución pública. Los
+`.ttf` están excluidos del repositorio (ver `.gitignore` en la raíz del
+proyecto), así que:
+
+- **En local**, copiá los 6 pesos (`Gilroy-Light/Regular/Medium/SemiBold/Bold/Heavy.ttf`)
+  a `src/assets/fonts/` antes de correr `npm run dev` — quien tenga acceso al
+  archivo de fuentes original del proyecto los provee por fuera de git.
+- **Sin los archivos**, la app funciona igual pero cae al resto de la pila
+  tipográfica (`system-ui`, `-apple-system`, `Segoe UI`) definida en
+  `--font-family-base` (`src/styles/tokens.css`) — no rompe nada, sólo pierde
+  fidelidad tipográfica exacta.
+- Esto también aplica al build de producción / deploy (Vercel u otro): sin
+  las fuentes cargadas en el entorno de build, se sirve con el fallback.
+
+## Uso
+
+```bash
+npm install
+npm run dev
+```
+
+Sirve en `http://localhost:4300`.
+
+```bash
+npm run typecheck   # tsc -b --noEmit
+npm run build        # build de producción
+```
+
+## Cómo seguir desde acá
+
+1. Reemplazar `src/pages/StarterPage.tsx` por la pantalla real (o agregar
+   páginas nuevas y rutas en `src/app/router.tsx`).
+2. Si la pantalla nueva necesita un componente que no está acá, agregarlo en
+   `src/shared/ui/<Componente>/` siguiendo el mismo patrón: `.tsx` +
+   `.module.css` (consumiendo tokens, nunca literales) + `index.ts`.
+3. No tocar `src/styles/tokens.css` salvo que haga falta un token nuevo — y en
+   ese caso, agregarlo en la capa que corresponda (primitive/semantic/component)
+   y documentarlo en la guía de estilos.

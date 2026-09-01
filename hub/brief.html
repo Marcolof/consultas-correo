@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<base href="/hub/" />
+<title>Brief básico — Consultas / Reclamos</title>
+<link rel="stylesheet" href="hub.css" />
+</head>
+<body>
+  <header class="top">
+    <div class="brand">Correo Argentino · MiCorreo</div>
+    <p>Documentación — Brief básico</p>
+  </header>
+
+  <main>
+    <a class="back-link" href="documentacion.html">&larr; Volver a Documentación</a>
+
+    <div class="status-bar">
+      <span class="pill draft">Borrador inicial</span>
+    </div>
+
+    <h1>Consultas / Reclamos — definición general (alto nivel)</h1>
+
+    <blockquote>
+      <strong>Estado: borrador inicial.</strong> Este documento resume lo
+      confirmado hasta ahora y dónde quedan huecos. No resuelve las
+      definiciones de negocio pendientes — sólo las deja explícitas para que
+      se puedan cerrar cuando corresponda, en vez de perderse entre
+      conversaciones.
+    </blockquote>
+
+    <h2>1. Objetivo (según brief original del usuario)</h2>
+    <p>
+      Mejorar la experiencia de uso de "consultas" y definir una evolución
+      gradual de sus funcionalidades. La primera versión debe aportar valor
+      por sí sola sobre lo que ya existe, sin necesidad de cubrir todas las
+      capacidades futuras del proyecto.
+    </p>
+
+    <h2>2. Qué observamos hoy (confirmado)</h2>
+    <p>
+      La única fuente concreta disponible hasta ahora es
+      <code>html reference/reclaclamos.html</code>, una captura de la
+      pantalla <code>reclamosform</code> de producción de MiCorreo. Es un
+      flujo de <strong>alta de un reclamo nuevo</strong>, en dos pasos:
+    </p>
+    <ol>
+      <li><strong>Motivo del reclamo</strong> — un único <code>&lt;select&gt;</code>
+        con ~20 opciones planas, sin agrupar ni buscar (demoras, diferencias
+        de stock, errores de facturación, paquete dañado, problemas de
+        sesión, etc.).</li>
+      <li><strong>Buscar el envío asociado</strong> — un formulario con 8
+        filtros visibles a la vez (TN, destinatario, fecha desde/hasta,
+        provincia y sucursal de origen, provincia y sucursal de destino) para
+        localizar el envío sobre el que se reclama, y una tabla de resultados
+        para elegirlo.</li>
+    </ol>
+    <p>
+      No encontramos en este HTML una vista de <strong>"mis reclamos" ya
+      cargados</strong> (listado, seguimiento, estado): el archivo sólo cubre
+      el alta.
+    </p>
+
+    <h2>3. Fricciones detectadas</h2>
+    <p class="lede">Hipótesis de trabajo, no confirmadas por research de usuario.</p>
+    <ul>
+      <li>Selector de motivo largo y plano — sin categorías ni búsqueda,
+        difícil de escanear.</li>
+      <li>8 filtros simultáneos para buscar un envío, sin combos rápidos
+        (ej. "últimos 30 días") ni autocompletado.</li>
+      <li>No hay evidencia de una pantalla de seguimiento de reclamos ya
+        cargados.</li>
+    </ul>
+    <p>
+      Estas son lecturas de UX sobre el HTML existente, no problemas
+      confirmados por usuarios reales — hay que tratarlas como punto de
+      partida para conversar, no como backlog cerrado.
+    </p>
+
+    <h2>4. Definiciones abiertas (pendientes — no resolver por inferencia)</h2>
+    <p class="lede">Repetidas del brief original, siguen sin respuesta:</p>
+    <ul>
+      <li>¿Qué tipos de consulta existen en el producto real, más allá del
+        alta de reclamo? (¿seguimiento, listado, edición, historial?)</li>
+      <li>¿Cuáles de esos tipos entran en la v1 y cuáles quedan para
+        después?</li>
+      <li>¿Qué necesidades o dificultades reales reportan los usuarios (no
+        sólo lo que se infiere mirando el HTML)?</li>
+      <li>¿Qué filtros y herramientas son realmente necesarios (vs. cuáles
+        sobran)?</li>
+      <li>¿Qué significa concretamente "administrar consultas" en este
+        proyecto — qué acciones incluye (editar, cancelar, reabrir, exportar,
+        asignar)?</li>
+      <li>¿Cómo se va a comprobar que la primera entrega aporta valor
+        (criterio de aceptación)?</li>
+    </ul>
+
+    <h2>5. Referencias de diseño</h2>
+    <ul>
+      <li><strong>Lo existente:</strong> <code>html reference/reclaclamos.html</code>
+        (fidelidad de producción).</li>
+      <li><strong>Lo nuevo:</strong> Figma "Mi Correo 2.0" (mencionado por el
+        usuario en conversaciones previas; no verificado ni sincronizado en
+        este proyecto todavía — acceso a Figma no autorizado en esta
+        sesión).</li>
+      <li><strong>Chrome y componentes reutilizables:</strong> base de UI en
+        <code>proto navegable</code> + <a href="guia-de-estilos.html">guía de estilos</a>.</li>
+    </ul>
+
+    <h2>6. Próximo paso sugerido</h2>
+    <p>
+      Cerrar la sección 4 con quien tenga el conocimiento de negocio/usuario
+      antes de construir pantallas de Reclamos sobre <code>proto navegable</code>
+      — para no tomar decisiones de alcance por inferencia. Mientras tanto,
+      el prototipo y la guía de estilos pueden seguir madurando de forma
+      independiente.
+    </p>
+
+    <a class="back-link" href="documentacion.html">&larr; Volver a Documentación</a>
+  </main>
+</body>
+</html>

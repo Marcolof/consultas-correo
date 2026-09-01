@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<base href="/hub/" />
+<title>Guía de estilos, UI y front — MiCorreo</title>
+<link rel="stylesheet" href="hub.css" />
+</head>
+<body>
+  <header class="top">
+    <div class="brand">Correo Argentino · MiCorreo</div>
+    <p>Sistema de diseño — Guía de estilos, UI y front</p>
+  </header>
+
+  <main>
+    <a class="back-link" href="documentacion.html">&larr; Volver a Documentación</a>
+
+    <div class="status-bar">
+      <span class="pill draft">Draft</span>
+    </div>
+
+    <h1>Guía de estilos, UI y front — MiCorreo</h1>
+    <blockquote>
+      Fuente: extraído del proyecto de referencia
+      <code>Envios internacionales/Envio internacional CLAUDE</code>
+      (React + TypeScript + Vite), que a su vez replica el HTML/CSS de
+      producción de MiCorreo. Documenta lo que se trajo a
+      <code>proto navegable</code>: sólo chrome y design system, sin
+      funcionalidad de negocio.
+    </blockquote>
+
+    <h2>1. Arquitectura de tokens (3 capas)</h2>
+    <p>
+      Todo el look del producto vive en <code>src/styles/tokens.css</code>,
+      organizado en tres capas que no deben saltearse:
+    </p>
+    <table>
+      <thead><tr><th>Capa</th><th>Qué es</th><th>Quién la usa</th></tr></thead>
+      <tbody>
+        <tr><td><strong>1. Primitive</strong></td><td>Valores crudos (<code>--grey-400: #ccc</code>, <code>--space-4: 1rem</code>)</td><td>Nadie directamente desde un componente</td></tr>
+        <tr><td><strong>2. Semantic</strong></td><td>Rol de uso (<code>--text-muted</code>, <code>--surface-page</code>)</td><td>Puede usarse en componentes genéricos</td></tr>
+        <tr><td><strong>3. Component</strong></td><td>Medida propia de un componente (<code>--button-height</code>, <code>--field-radius</code>)</td><td>Es lo que consume cada <code>.module.css</code></td></tr>
+      </tbody>
+    </table>
+    <p>
+      <strong>Regla dura:</strong> un componente nuevo consume tokens de capa
+      2 o 3, nunca literales ni tokens de capa 1 directo.
+    </p>
+
+    <h2>2. Marca y paleta</h2>
+    <ul>
+      <li><code>--correo-yellow: #ffce00</code> → color de marca</li>
+      <li><code>--correo-blue: #152663</code> → contraste de marca</li>
+      <li><code>--correo-grey-700: #49454f</code> → texto secundario</li>
+      <li><code>--correo-near-black: #191919</code> → texto principal</li>
+    </ul>
+    <p>
+      Escala de grises de <code>--grey-050</code> (fondo de página) a
+      <code>--grey-900</code> (texto principal). Estados:
+      <code>--red-*</code> (error), <code>--green-*</code> (éxito),
+      <code>--blue-focus</code> (foco de inputs, distinto del azul de marca).
+    </p>
+
+    <h2>3. Tipografía</h2>
+    <p>Una sola familia, <strong>Gilroy</strong>, con pesos numéricos:</p>
+    <table>
+      <thead><tr><th>Token</th><th>Peso</th><th>Archivo</th></tr></thead>
+      <tbody>
+        <tr><td><code>--font-weight-light</code></td><td>300</td><td>Gilroy-Light.ttf</td></tr>
+        <tr><td><code>--font-weight-regular</code></td><td>400</td><td>Gilroy-Regular.ttf</td></tr>
+        <tr><td><code>--font-weight-medium</code></td><td>500</td><td>Gilroy-Medium.ttf</td></tr>
+        <tr><td><code>--font-weight-semibold</code></td><td>600</td><td>Gilroy-SemiBold.ttf</td></tr>
+        <tr><td><code>--font-weight-bold</code></td><td>700</td><td>Gilroy-Bold.ttf</td></tr>
+        <tr><td><code>--font-weight-heavy</code></td><td>800</td><td>Gilroy-Heavy.ttf</td></tr>
+      </tbody>
+    </table>
+
+    <h2>4. Espaciado, radios y sombras</h2>
+    <ul>
+      <li><strong>Espaciado:</strong> escala de 4px (<code>--space-1</code> = 4px … <code>--space-12</code> = 48px).</li>
+      <li><strong>Radios:</strong> <code>--radius-xs</code> (5px, inputs) hasta <code>--radius-pill</code> (32px, botones) y <code>--radius-full</code> (círculos).</li>
+      <li><strong>Sombras:</strong> <code>--shadow-row</code>, <code>--shadow-dropdown</code>, <code>--shadow-modal</code>, <code>--shadow-inset-active</code>.</li>
+      <li><strong>Capas (z-index):</strong> escala nombrada de <code>--z-base</code> a <code>--z-demo-toolbar</code>.</li>
+    </ul>
+
+    <h2>5. Chrome de la aplicación</h2>
+    <h3>Header</h3>
+    <p>Barra superior fija, fondo amarillo, 60px de alto. Hamburguesa → logo →
+    "Nuevo envío" y bloque de usuario (avatar + "Hola, {nombre}" + menú
+    desplegable "Mi cuenta").</p>
+    <h3>Sidebar</h3>
+    <p>Riel de 61px (≥768px, sólo íconos) o cajón de 340px (offcanvas, con
+    textos y submenús) según el mismo árbol de navegación.</p>
+    <h3>Footer</h3>
+    <p>Copyright + enlaces inertes (Preguntas frecuentes, Términos y
+    condiciones, Botón de baja).</p>
+    <h3>Layout de pantalla</h3>
+    <p><code>PageContainer</code> (<code>narrow</code> max 1200px /
+    <code>full</code> a todo el ancho) + <code>PageHeader</code> (título,
+    descripción, acciones) + <code>ChatBubble</code> flotante decorativo.</p>
+
+    <h2>6. Primitivos de formulario</h2>
+    <p>
+      Comparten un sistema de <strong>label flotante</strong> (<code>Field</code>):
+      sube al enfocar o tener valor, resuelto con
+      <code>:not(:placeholder-shown)</code> — todo input necesita
+      <code>placeholder</code>.
+    </p>
+    <table>
+      <thead><tr><th>Componente</th><th>Rol</th></tr></thead>
+      <tbody>
+        <tr><td><code>Input</code> / <code>Textarea</code></td><td>Campo de texto con label flotante</td></tr>
+        <tr><td><code>Select</code></td><td>Desplegable — label siempre arriba</td></tr>
+        <tr><td><code>NumberInput</code></td><td>Input numérico con spinners propios</td></tr>
+        <tr><td><code>Checkbox</code> / <code>RadioGroup</code></td><td>Marcados en azul de marca (no amarillo, por contraste)</td></tr>
+        <tr><td><code>Switch</code></td><td>Toggle accesible (<code>role="switch"</code>)</td></tr>
+      </tbody>
+    </table>
+
+    <h2>7. Botones</h2>
+    <table>
+      <thead><tr><th>Variante</th><th>Uso</th></tr></thead>
+      <tbody>
+        <tr><td><code>primary</code></td><td>Fondo amarillo pleno, texto azul — acción principal</td></tr>
+        <tr><td><code>secondary</code></td><td>Blanco con borde amarillo — acción secundaria</td></tr>
+        <tr><td><code>tertiary</code></td><td>Sin fondo, sólo subrayado inferior amarillo</td></tr>
+        <tr><td><code>link</code></td><td>Sin fondo ni borde, como un enlace</td></tr>
+      </tbody>
+    </table>
+
+    <h2>8. Feedback y overlays</h2>
+    <ul>
+      <li><strong>Alert:</strong> banner inline, tonos danger/success/info/warning.</li>
+      <li><strong>Badge:</strong> píldora de estado, mismos tonos + neutral.</li>
+      <li><strong>Toast:</strong> cola de notificaciones, auto-cierre a los 4s.</li>
+      <li><strong>Modal / ConfirmDialog:</strong> diálogos con portal, tamaños sm/md/lg/xl.</li>
+    </ul>
+
+    <h2>9. Datos y navegación secundaria</h2>
+    <ul>
+      <li><strong>DataTable:</strong> filas separadas, sombra, radio por fila, encabezado sticky.</li>
+      <li><strong>Pagination:</strong> paginador con elipsis.</li>
+      <li><strong>EmptyState:</strong> bloque centrado para listas sin resultados.</li>
+      <li><strong>Tabs:</strong> pestaña activa como bloque amarillo con esquinas redondeadas.</li>
+      <li><strong>Stepper:</strong> 3 puntos conectados — visitado / activo / pendiente.</li>
+    </ul>
+
+    <h2>10. Assets</h2>
+    <ul>
+      <li>Logo: <code>CorreoArgentino-MiCorreo.png</code> — 28px de alto en el header, nunca estirar.</li>
+      <li>Fuentes: Gilroy Light/Regular/Medium/SemiBold/Bold/Heavy (.ttf).</li>
+      <li>Íconos del sidebar/header y <code>chatbot.png</code> (botón de chat flotante).</li>
+    </ul>
+
+    <h2>11. Qué NO forma parte de este chrome</h2>
+    <p>
+      Motor de roles/permisos, feature flags, escenarios de demo, mocks y
+      módulos de dominio (envíos, cuenta, saldo). El usuario del header es un
+      dato estático de ejemplo.
+    </p>
+
+    <h2>12. Cómo agregar un componente nuevo</h2>
+    <ol>
+      <li>Carpeta en <code>src/shared/ui/&lt;Nombre&gt;/</code> con <code>.tsx</code> + <code>.module.css</code> + <code>index.ts</code>.</li>
+      <li>El CSS consume tokens semánticos/de componente — si falta uno, se agrega primero en <code>tokens.css</code>.</li>
+      <li>Exportar desde <code>src/shared/ui/index.ts</code>.</li>
+      <li>Si es de layout de página, va en <code>src/shared/layout/</code>.</li>
+    </ol>
+
+    <a class="back-link" href="documentacion.html">&larr; Volver a Documentación</a>
+  </main>
+</body>
+</html>

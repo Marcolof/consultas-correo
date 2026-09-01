@@ -1,0 +1,38 @@
+/* Acceso flotante al Hub del proyecto — NO es chrome de producción de
+ * MiCorreo, es tooling de desarrollo de este prototipo. Vive al lado del
+ * ChatBubble (que sí es réplica real), separado por un espacio fijo para
+ * que ambos convivan sin superponerse.
+ *
+ * Hoy sólo navega directo al Hub. Cuando exista el panel de "casos de uso"
+ * (tweaks), este mismo botón abre un modal con las dos opciones — ver
+ * HubAccessButton.tsx. */
+
+.button {
+  position: fixed;
+  /* 24px (margen del chat) + 52px (su diámetro) + 16px (aire) */
+  right: calc(var(--space-6) + 52px + var(--space-4));
+  bottom: var(--space-6);
+  z-index: var(--z-chat-bubble);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 52px;
+  height: 52px;
+  border: none;
+  border-radius: var(--radius-full);
+  background-color: var(--correo-blue);
+  color: var(--white);
+  box-shadow: var(--shadow-dropdown);
+  cursor: pointer;
+  transition: transform var(--transition-fast), background-color var(--transition-fast);
+}
+
+.button:hover {
+  background-color: #1e3380;
+  transform: translateY(-2px);
+}
+
+.icon {
+  width: 22px;
+  height: 22px;
+}

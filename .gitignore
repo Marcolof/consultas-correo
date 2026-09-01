@@ -1,0 +1,25 @@
+# Carpetas de referencia — no van al repo (ver .project/project.yaml, decisión del 2026-08-31):
+# "html reference" es una captura de producción con dominio interno de dev y
+# token de sesión embebido; "Font gilroy" es una copia suelta de fuentes
+# comerciales. Ambas siguen existiendo localmente, sólo quedan fuera de git.
+/html reference/
+/Font gilroy/
+
+# Fuentes Gilroy (comerciales, sin licencia de redistribución pública) —
+# excluidas también donde las consume la app. Sin ellas, el prototipo cae al
+# fallback de la pila tipográfica (system-ui) definido en tokens.css.
+proto navegable/src/assets/fonts/*.ttf
+proto navegable/src/assets/fonts/*.otf
+proto navegable/src/assets/fonts/*.woff
+proto navegable/src/assets/fonts/*.woff2
+
+# Node / build
+node_modules/
+dist/
+dist-ssr/
+*.local
+.tmp/
+
+# Editor / OS
+.DS_Store
+Thumbs.db

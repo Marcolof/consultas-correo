@@ -1,0 +1,107 @@
+schema_version: "0.1"
+last_updated: "2026-08-31"
+
+project:
+  name: "MiCorreo — Consultas y Reclamos"
+  client: "Correo Argentino / MiCorreo"
+  scenario: evolution
+  local_root: "."
+
+strategy:
+  current_focus: "Preparar el proyecto para subir a GitHub: carpeta del prototipo renombrada, falta decidir estructura del repo y confirmar el push"
+  intervention: hybrid # reference-existing (html reference de producción) + standalone-prototype (proto navegable, código nuevo)
+  recommended_next:
+    - "Confirmar con el usuario: qué sube a GitHub (¿todo 'Reclamos claude' o sólo 'proto navegable'?), nombre del repo, visibilidad (público/privado) y si ya existe un remoto"
+    - "Antes de git init/push: agregar .gitignore a nivel de 'Reclamos claude' si se sube la carpeta completa (node_modules de 'proto navegable', logs, etc.)"
+    - "Cuando el usuario quiera avanzar: cerrar las definiciones de la sección 4 de documentation/brief-consultas-reclamos.md antes de construir pantallas de negocio"
+    - "Si se autoriza Figma, leer 'Mi Correo 2.0' como referencia de pantallas nuevas"
+  deferred:
+    - "Definición de alcance de negocio (tipos de consulta, qué es 'administrar consultas') — usuario pidió dejarla abierta por ahora"
+    - "Sincronización con Figma 'Mi Correo 2.0' — sin acceso autorizado al MCP de Figma en esta sesión"
+    - "Push a GitHub — usuario dijo 'después vemos', no autorizado todavía"
+
+knowledge:
+  confirmed:
+    - "html reference/reclaclamos.html es la pantalla de alta de reclamo en producción (2 pasos: motivo del reclamo + búsqueda del envío por filtros)"
+    - "proto navegable replica chrome, tokens y primitivos de UI del proyecto de referencia 'Envio internacional CLAUDE', sin ninguna lógica de negocio"
+    - "documentation/guia-de-estilos-ui.md documenta tokens, chrome e inventario de componentes de proto navegable"
+    - "2026-08-31: la carpeta se renombró de 'mlof-ui-base' a 'proto navegable' a pedido del usuario, de cara a subir el proyecto a GitHub. El nombre del paquete npm quedó como 'proto-navegable' (equivalente válido sin espacios); package-lock.json, README.md, documentation/*.md, hub/*.html y el launch.json de la sesión se actualizaron para reflejar el nuevo nombre."
+  assumptions:
+    - "proto navegable es la base sobre la que se construirán las pantallas de Consultas/Reclamos (no confirmado explícitamente por el usuario)"
+    - "El alcance v1 se enfoca en mejorar la experiencia de reclamos ya existente, no en sumar tipos de consulta nuevos"
+  open_questions:
+    - "¿Qué tipos de consulta existen más allá del alta de reclamo (seguimiento, listado, edición, historial)?"
+    - "¿Qué significa 'administrar consultas' en este proyecto y qué acciones comprende?"
+    - "¿proto navegable pasa a ser el repo del prototipo de Reclamos, o queda como base compartida y el prototipo real vive en otra carpeta?"
+
+sources:
+  - type: legacy-html
+    location: "html reference/reclaclamos.html"
+    purpose: "Fidelidad visual y de comportamiento de la pantalla de alta de reclamo en producción"
+    confidence: high
+  - type: reference-codebase
+    location: "../Envios internacionales/Envio internacional CLAUDE (fuera de la raíz de este proyecto, sólo lectura)"
+    purpose: "Origen de tokens, chrome y componentes extraídos a proto navegable"
+    confidence: high
+  - type: figma
+    location: "Mi Correo 2.0 (fileKey wN6vAlF1TgGc2AJdJJvsAU) — registrado en memoria de usuario"
+    purpose: "Referencia de pantallas nuevas (no de lo ya existente)"
+    confidence: unknown # sin verificar en esta sesión: MCP de Figma no autorizado
+
+capabilities:
+  prototype:
+    provider: fallback
+    scope: project
+  documentation:
+    provider: fallback
+    scope: project
+  hub:
+    provider: null
+    scope: null
+  figma-read:
+    provider: null
+    scope: null
+
+artifacts:
+  hub:
+    status: draft
+    path: "hub/index.html"
+    structure: "Hub con 2 opciones (Prototipo, Documentación). Documentación abre hub/documentacion.html con 2 cards (brief.html, guia-de-estilos.html); cada doc vuelve con flecha a documentacion.html, y ésta vuelve con flecha a index.html"
+    provider: fallback
+    served_via: "reclamos-hub (npx serve, puerto 4311) — ver .claude/launch.json en la carpeta outputs de la sesión"
+    note: "Todas las páginas del Hub llevan <base href=\"/hub/\"> para que funcionen tanto en /hub como en /hub/ (el servidor estático no redirige, y sin el <base> los links y el CSS se rompían sin la barra final)"
+    last_updated: "2026-08-31"
+  prototype:
+    status: draft
+    fidelity: high # chrome/tokens; "none" para pantallas de negocio (sólo hay un StarterPage de ejemplo)
+    path: "proto navegable"
+    provider: fallback
+    note: "Agregado HubAccessButton (src/app/HubAccessButton.tsx): botón flotante junto al ChatBubble que hoy sólo linkea al Hub (localhost:4311/hub/). Explícitamente NO es chrome de producción de MiCorreo — es tooling de este prototipo. A futuro se expande a un modal con 'Volver al Hub' + 'Casos de uso' (panel de tweaks) — pendiente, no implementado."
+    last_updated: "2026-08-31"
+  documentation:
+    status: draft
+    path: "documentation/guia-de-estilos-ui.md"
+    provider: fallback
+    last_updated: "2026-08-31"
+  brief:
+    status: draft
+    path: "documentation/brief-consultas-reclamos.md"
+    provider: fallback
+    note: "Definición general de alto nivel. Sección 4 queda explícitamente abierta a pedido del usuario."
+    last_updated: "2026-08-31"
+
+figma:
+  status: reference
+  source: "Mi Correo 2.0 — mencionado en memoria de usuario, no verificado en esta sesión"
+  sync: not-required-yet
+
+design_system:
+  status: emerging
+  source: "proto navegable/src/styles/tokens.css + documentation/guia-de-estilos-ui.md"
+
+delivery:
+  provider: github # decidido por el usuario; falta confirmar alcance del repo y hacer el push
+  repository: null # pendiente: definir si es todo "Reclamos claude" o sólo "proto navegable"
+  public_url: null
+  status: local-only
+  last_verified: null
