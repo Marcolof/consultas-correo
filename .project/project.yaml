@@ -8,17 +8,18 @@ project:
   local_root: "."
 
 strategy:
-  current_focus: "Repo publicado en GitHub; falta configurar el deploy en Vercel (fuera del alcance de esta sesión, requiere acceso a la cuenta de Vercel del usuario)"
+  current_focus: "Arquitectura de deploy definida: el Hub es la raíz pública del proyecto (consultas-correo-v1), 'proto navegable' necesita su PROPIO proyecto Vercel aparte. Falta que el usuario cree ese segundo proyecto y confirme la URL resultante."
   intervention: hybrid # reference-existing (html reference de producción) + standalone-prototype (proto navegable, código nuevo)
   recommended_next:
-    - "En Vercel: crear proyecto apuntando a github.com/Marcolof/consultas-correo con 'Root Directory' = 'proto navegable' (framework Vite se autodetecta)"
-    - "Decidir si el Hub (hub/) también se publica en Vercel (como proyecto estático aparte o integrado) o queda sólo local por ahora"
+    - "Usuario: en el proyecto Vercel existente 'consultas-correo-v1', cambiar Root Directory a 'hub' (framework 'Other', sin build command) y redeployar — esto hace que el Hub sea la raíz pública"
+    - "Usuario: crear un SEGUNDO proyecto Vercel apuntando al mismo repo, con Root Directory = 'proto navegable' (Vite se autodetecta), para publicar el prototipo por separado"
+    - "Cuando exista la URL del segundo proyecto: actualizar el href de la card 'Prototipo navegable' en hub/index.html (hoy apunta a localhost:4300, marcado con TODO) y el HUB_URL de proto navegable/src/app/HubAccessButton.tsx (hoy apunta a localhost:4311/)"
     - "Cuando el usuario quiera avanzar: cerrar las definiciones de la sección 4 de documentation/brief-consultas-reclamos.md antes de construir pantallas de negocio"
     - "Si se autoriza Figma, leer 'Mi Correo 2.0' como referencia de pantallas nuevas"
   deferred:
     - "Definición de alcance de negocio (tipos de consulta, qué es 'administrar consultas') — usuario pidió dejarla abierta por ahora"
     - "Sincronización con Figma 'Mi Correo 2.0' — sin acceso autorizado al MCP de Figma en esta sesión"
-    - "Deploy en Vercel — mencionado como intención ('pensando en publicar'), no ejecutado: requiere que el usuario lo configure desde su cuenta de Vercel"
+    - "Segundo proyecto Vercel para 'proto navegable' — requiere que el usuario lo cree desde su cuenta"
 
 knowledge:
   confirmed:
@@ -27,6 +28,7 @@ knowledge:
     - "documentation/guia-de-estilos-ui.md documenta tokens, chrome e inventario de componentes de proto navegable"
     - "2026-08-31: la carpeta se renombró de 'mlof-ui-base' a 'proto navegable' a pedido del usuario, de cara a subir el proyecto a GitHub. El nombre del paquete npm quedó como 'proto-navegable' (equivalente válido sin espacios); package-lock.json, README.md, documentation/*.md, hub/*.html y el launch.json de la sesión se actualizaron para reflejar el nuevo nombre."
     - "2026-09-01: repo git inicializado en la raíz de 'Reclamos claude' y publicado en https://github.com/Marcolof/consultas-correo (público). Excluye 'html reference/' (dominio interno + token de sesión embebido) y 'Font gilroy/' + los .ttf dentro de proto navegable/src/assets/fonts (fuente comercial sin licencia de redistribución pública) — decisión explícita del usuario. Verificado en GitHub que los 4 elementos de raíz (.project, documentation, hub, proto navegable) llegaron al remoto."
+    - "2026-09-01: usuario confirmó que el Hub debe ser la raíz pública del proyecto. Se quitó <base href=\"/hub/\"> de las 4 páginas de hub/ (sólo tenía sentido cuando el Hub vivía en un subpath) y se corrigió el link del footer de index.html para apuntar al blob de GitHub en vez de una ruta relativa fuera de hub/. El servidor local (reclamos-hub, puerto 4311) ahora sirve la carpeta hub/ directamente como raíz — deja de servir toda 'Reclamos claude' — para que el comportamiento local sea idéntico al de producción."
   assumptions:
     - "proto navegable es la base sobre la que se construirán las pantallas de Consultas/Reclamos (no confirmado explícitamente por el usuario)"
     - "El alcance v1 se enfoca en mejorar la experiencia de reclamos ya existente, no en sumar tipos de consulta nuevos"
@@ -69,15 +71,15 @@ artifacts:
     path: "hub/index.html"
     structure: "Hub con 2 opciones (Prototipo, Documentación). Documentación abre hub/documentacion.html con 2 cards (brief.html, guia-de-estilos.html); cada doc vuelve con flecha a documentacion.html, y ésta vuelve con flecha a index.html"
     provider: fallback
-    served_via: "reclamos-hub (npx serve, puerto 4311) — ver .claude/launch.json en la carpeta outputs de la sesión"
-    note: "Todas las páginas del Hub llevan <base href=\"/hub/\"> para que funcionen tanto en /hub como en /hub/ (el servidor estático no redirige, y sin el <base> los links y el CSS se rompían sin la barra final)"
-    last_updated: "2026-08-31"
+    served_via: "reclamos-hub (npx serve, puerto 4311, apuntando directo a la carpeta hub/) — ver .claude/launch.json en la carpeta outputs de la sesión"
+    note: "El Hub es la raíz pública prevista del proyecto (Vercel: Root Directory = 'hub'). La card 'Prototipo navegable' en index.html todavía apunta a localhost:4300 (marcado con TODO) hasta que exista la URL del segundo proyecto Vercel de proto navegable."
+    last_updated: "2026-09-01"
   prototype:
     status: draft
     fidelity: high # chrome/tokens; "none" para pantallas de negocio (sólo hay un StarterPage de ejemplo)
     path: "proto navegable"
     provider: fallback
-    note: "Agregado HubAccessButton (src/app/HubAccessButton.tsx): botón flotante junto al ChatBubble que hoy sólo linkea al Hub (localhost:4311/hub/). Explícitamente NO es chrome de producción de MiCorreo — es tooling de este prototipo. A futuro se expande a un modal con 'Volver al Hub' + 'Casos de uso' (panel de tweaks) — pendiente, no implementado."
+    note: "Agregado HubAccessButton (src/app/HubAccessButton.tsx): botón flotante junto al ChatBubble que hoy sólo linkea al Hub (localhost:4311/, actualizado 2026-09-01 cuando el Hub pasó a servirse desde su propia raíz). Explícitamente NO es chrome de producción de MiCorreo — es tooling de este prototipo. A futuro se expande a un modal con 'Volver al Hub' + 'Casos de uso' (panel de tweaks) — pendiente, no implementado. TODO marcado en el código: cambiar a la URL de producción del Hub cuando exista."
     last_updated: "2026-08-31"
   documentation:
     status: draft
@@ -103,8 +105,18 @@ design_system:
 delivery:
   provider: vercel
   repository: "https://github.com/Marcolof/consultas-correo"
-  vercel_project: "https://vercel.com/marcos-projects-c934fa75/consultas-correo-v1"
-  public_url: "https://consultas-correo-v1.vercel.app" # devuelve 404 NOT_FOUND por ahora
+  vercel_projects:
+    - name: "consultas-correo-v1"
+      role: hub # raíz pública del proyecto
+      dashboard: "https://vercel.com/marcos-projects-c934fa75/consultas-correo-v1"
+      public_url: "https://consultas-correo-v1.vercel.app"
+      root_directory: "hub" # pendiente: el usuario debe cambiarlo (estaba en la raíz del repo → 404)
+      status: failed # 404 NOT_FOUND verificado por el usuario; fix indicado, no confirmado todavía
+    - name: null # todavía no creado
+      role: prototype
+      dashboard: null
+      public_url: null
+      root_directory: "proto navegable"
+      status: not-configured
   status: failed
-  note: "El usuario creó el proyecto en Vercel apuntando al repo, pero el Root Directory quedó en la raíz del repo (que no tiene package.json/index.html — el prototipo vive en 'proto navegable/'). Se le indicó cambiar Root Directory a 'proto navegable' en Settings > General y redeployar. Sin acceso a la cuenta de Vercel para verificarlo directamente — pendiente de confirmación del usuario."
   last_verified: "2026-09-01"

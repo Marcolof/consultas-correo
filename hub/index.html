@@ -3,7 +3,6 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<base href="/hub/" />
 <title>Hub — Consultas y Reclamos (MiCorreo)</title>
 <link rel="stylesheet" href="hub.css" />
 </head>
@@ -27,13 +26,16 @@
     </p>
 
     <div class="cards">
+      <!-- TODO: reemplazar por la URL de producción del proyecto Vercel de
+           "proto navegable" una vez deployado por separado. Mientras tanto
+           apunta al servidor de desarrollo local. -->
       <a class="card" href="http://localhost:4300" target="_blank" rel="noopener">
         <div class="kicker">Prototipo</div>
         <h2>Prototipo navegable</h2>
         <p>Chrome de MiCorreo (header, sidebar, footer) y primitivos de formulario
         montados con los tokens reales. Todavía sin las pantallas de negocio de
         Reclamos.</p>
-        <span class="badge">draft · requiere “npm run dev” corriendo</span>
+        <span class="badge">draft · local: requiere “npm run dev” corriendo</span>
       </a>
 
       <a class="card" href="documentacion.html">
@@ -47,8 +49,9 @@
 
   <footer class="bottom">
     Generado por el Orchestrator — refleja el estado real del proyecto al
-    31/08/2026. Ver <a href="../.project/project.yaml">.project/project.yaml</a>
-    para el estado completo y las próximas acciones recomendadas.
+    01/09/2026. Ver
+    <a href="https://github.com/Marcolof/consultas-correo/blob/main/.project/project.yaml" target="_blank" rel="noopener">.project/project.yaml</a>
+    en GitHub para el estado completo y las próximas acciones recomendadas.
   </footer>
 </body>
 </html>

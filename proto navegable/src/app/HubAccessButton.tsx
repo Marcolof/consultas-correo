@@ -1,7 +1,13 @@
 import styles from './HubAccessButton.module.css'
 
-/** URL local del Hub del proyecto (ver Reclamos claude/hub/index.html). */
-const HUB_URL = 'http://localhost:4311/hub/'
+/**
+ * URL del Hub del proyecto (ver Reclamos claude/hub/index.html).
+ *
+ * TODO: en producción esto debería apuntar al proyecto Vercel del Hub
+ * (consultas-correo-v1) una vez que su Root Directory quede en "hub" — hoy
+ * sigue apuntando al servidor local porque ese deploy está en curso.
+ */
+const HUB_URL = 'http://localhost:4311/'
 
 /**
  * Botón flotante de acceso al Hub del proyecto.
