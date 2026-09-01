@@ -1,5 +1,5 @@
 schema_version: "0.1"
-last_updated: "2026-08-31"
+last_updated: "2026-09-01"
 
 project:
   name: "MiCorreo — Consultas y Reclamos"
@@ -8,17 +8,17 @@ project:
   local_root: "."
 
 strategy:
-  current_focus: "Preparar el proyecto para subir a GitHub: carpeta del prototipo renombrada, falta decidir estructura del repo y confirmar el push"
+  current_focus: "Repo publicado en GitHub; falta configurar el deploy en Vercel (fuera del alcance de esta sesión, requiere acceso a la cuenta de Vercel del usuario)"
   intervention: hybrid # reference-existing (html reference de producción) + standalone-prototype (proto navegable, código nuevo)
   recommended_next:
-    - "Confirmar con el usuario: qué sube a GitHub (¿todo 'Reclamos claude' o sólo 'proto navegable'?), nombre del repo, visibilidad (público/privado) y si ya existe un remoto"
-    - "Antes de git init/push: agregar .gitignore a nivel de 'Reclamos claude' si se sube la carpeta completa (node_modules de 'proto navegable', logs, etc.)"
+    - "En Vercel: crear proyecto apuntando a github.com/Marcolof/consultas-correo con 'Root Directory' = 'proto navegable' (framework Vite se autodetecta)"
+    - "Decidir si el Hub (hub/) también se publica en Vercel (como proyecto estático aparte o integrado) o queda sólo local por ahora"
     - "Cuando el usuario quiera avanzar: cerrar las definiciones de la sección 4 de documentation/brief-consultas-reclamos.md antes de construir pantallas de negocio"
     - "Si se autoriza Figma, leer 'Mi Correo 2.0' como referencia de pantallas nuevas"
   deferred:
     - "Definición de alcance de negocio (tipos de consulta, qué es 'administrar consultas') — usuario pidió dejarla abierta por ahora"
     - "Sincronización con Figma 'Mi Correo 2.0' — sin acceso autorizado al MCP de Figma en esta sesión"
-    - "Push a GitHub — usuario dijo 'después vemos', no autorizado todavía"
+    - "Deploy en Vercel — mencionado como intención ('pensando en publicar'), no ejecutado: requiere que el usuario lo configure desde su cuenta de Vercel"
 
 knowledge:
   confirmed:
@@ -26,6 +26,7 @@ knowledge:
     - "proto navegable replica chrome, tokens y primitivos de UI del proyecto de referencia 'Envio internacional CLAUDE', sin ninguna lógica de negocio"
     - "documentation/guia-de-estilos-ui.md documenta tokens, chrome e inventario de componentes de proto navegable"
     - "2026-08-31: la carpeta se renombró de 'mlof-ui-base' a 'proto navegable' a pedido del usuario, de cara a subir el proyecto a GitHub. El nombre del paquete npm quedó como 'proto-navegable' (equivalente válido sin espacios); package-lock.json, README.md, documentation/*.md, hub/*.html y el launch.json de la sesión se actualizaron para reflejar el nuevo nombre."
+    - "2026-09-01: repo git inicializado en la raíz de 'Reclamos claude' y publicado en https://github.com/Marcolof/consultas-correo (público). Excluye 'html reference/' (dominio interno + token de sesión embebido) y 'Font gilroy/' + los .ttf dentro de proto navegable/src/assets/fonts (fuente comercial sin licencia de redistribución pública) — decisión explícita del usuario. Verificado en GitHub que los 4 elementos de raíz (.project, documentation, hub, proto navegable) llegaron al remoto."
   assumptions:
     - "proto navegable es la base sobre la que se construirán las pantallas de Consultas/Reclamos (no confirmado explícitamente por el usuario)"
     - "El alcance v1 se enfoca en mejorar la experiencia de reclamos ya existente, no en sumar tipos de consulta nuevos"
@@ -100,8 +101,8 @@ design_system:
   source: "proto navegable/src/styles/tokens.css + documentation/guia-de-estilos-ui.md"
 
 delivery:
-  provider: github # decidido por el usuario; falta confirmar alcance del repo y hacer el push
-  repository: null # pendiente: definir si es todo "Reclamos claude" o sólo "proto navegable"
-  public_url: null
-  status: local-only
-  last_verified: null
+  provider: github
+  repository: "https://github.com/Marcolof/consultas-correo"
+  public_url: null # Vercel todavía no configurado
+  status: deployed # a GitHub; Vercel queda pendiente (fuera de alcance de esta sesión)
+  last_verified: "2026-09-01"
