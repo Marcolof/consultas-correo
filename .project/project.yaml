@@ -101,8 +101,10 @@ design_system:
   source: "proto navegable/src/styles/tokens.css + documentation/guia-de-estilos-ui.md"
 
 delivery:
-  provider: github
+  provider: vercel
   repository: "https://github.com/Marcolof/consultas-correo"
-  public_url: null # Vercel todavía no configurado
-  status: deployed # a GitHub; Vercel queda pendiente (fuera de alcance de esta sesión)
+  vercel_project: "https://vercel.com/marcos-projects-c934fa75/consultas-correo-v1"
+  public_url: "https://consultas-correo-v1.vercel.app" # devuelve 404 NOT_FOUND por ahora
+  status: failed
+  note: "El usuario creó el proyecto en Vercel apuntando al repo, pero el Root Directory quedó en la raíz del repo (que no tiene package.json/index.html — el prototipo vive en 'proto navegable/'). Se le indicó cambiar Root Directory a 'proto navegable' en Settings > General y redeployar. Sin acceso a la cuenta de Vercel para verificarlo directamente — pendiente de confirmación del usuario."
   last_verified: "2026-09-01"
