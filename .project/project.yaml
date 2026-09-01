@@ -11,16 +11,12 @@ strategy:
   current_focus: "Documentación del Hub puesta al día (4 documentos, no 2) y todo el trabajo acumulado de la sesión pusheado a GitHub."
   intervention: hybrid # reference-existing (html reference de producción + imagen de referencia de Reclamos) + standalone-prototype (proto navegable, código nuevo)
   recommended_next:
-    - "Usuario: crear un SEGUNDO proyecto Vercel apuntando al mismo repo, con Root Directory = 'proto navegable' (Vite se autodetecta), para publicar el prototipo por separado"
-    - "Cuando exista la URL del segundo proyecto: actualizar el href de la card 'Prototipo navegable' en hub/index.html (hoy apunta a localhost:4300, marcado con TODO) y el HUB_URL de proto navegable/src/app/HubAccessButton.tsx (hoy apunta a localhost:4311/)"
     - "Si se edita cualquier documentation/*.md o data/*.json, recordar copiar los cambios también a hub/downloads/ y a las páginas .html del Hub que los renderizan (no hay build step que los mantenga sincronizados solo)"
     - "Diseñar/construir la pantalla de detalle de un reclamo — hoy las filas del listado sólo muestran un Toast placeholder"
     - "Cuando el usuario quiera avanzar: cerrar las definiciones de la sección 4 de documentation/brief-consultas-reclamos.md (ahora con 2 preguntas más sobre determinación de perfil) antes de seguir sumando pantallas de negocio"
     - "Si se autoriza Figma, leer 'Mi Correo 2.0' como referencia de pantallas nuevas"
   deferred:
     - "Definición de alcance de negocio (tipos de consulta, qué es 'administrar consultas') — usuario pidió dejarla abierta por ahora"
-    - "Sincronización con Figma 'Mi Correo 2.0' — sin acceso autorizado al MCP de Figma en esta sesión"
-    - "Segundo proyecto Vercel para 'proto navegable' — requiere que el usuario lo cree desde su cuenta"
 
 knowledge:
   confirmed:
@@ -41,6 +37,7 @@ knowledge:
     - "2026-09-01: todo el trabajo acumulado de la sesión (Reclamos, Casos de uso, modo responsive, documentación del Hub) commiteado y pusheado a https://github.com/Marcolof/consultas-correo (commit c737546). Verificado en GitHub (6 commits en main) y en producción: https://consultas-correo-v1.vercel.app/documentacion.html ya muestra las 4 cards — el deploy automático de Vercel por push a main funcionó sin intervención manual."
     - "2026-09-02: 4 ajustes de UI en ReclamosListPage a pedido del usuario: contador dice 'reclamos' (antes 'consultas'), filas del listado sin sombra (sólo fondo + borde), se quitó el título 'Tipos de Reclamos' sobre los chips, y el SearchBar pasó de totalmente redondeado a radio 12px (nuevo token --radius-md-lg) por fidelidad con la propuesta de Figma. Commiteado y pusheado (commit ade88e6)."
     - "2026-09-02: corregido alineado de PageContainer — en pantallas anchas ya no centra su contenido (se sacó margin:0 auto de .narrow), y el padding horizontal en desktop se ajustó a 3rem (--space-12) por fidelidad con la web real de MiCorreo (verificado con captura de producción del usuario, clase .px-5 de Bootstrap = 3rem). Se agregó también el override :global(.force-mobile) que faltaba, para que el modo responsive forzado del prototipo (que no cambia el ancho real de la ventana) use el padding mobile real (16px) en vez de heredar el de desktop."
+    - "2026-09-02: usuario notó que la card 'Prototipo navegable' del Hub deployado apuntaba a localhost. Se creó el segundo proyecto Vercel del repo usando el atajo de import que Vercel ya sugería (Root Directory='proto navegable', Vite autodetectado) — nombre normalizado a 'proto-navegable' por validación de Vercel (minúsculas, sin espacio). Deployado y verificado en vivo: https://proto-navegable.vercel.app muestra la pantalla real de Reclamos con todos los ajustes de la sesión. Actualizados hub/index.html (href de la card) y HubAccessButton.tsx (HUB_URL ahora apunta a https://consultas-correo-v1.vercel.app/ en vez de localhost). Nota: existe un tercer proyecto 'consultas-correo' (sin sufijo) auto-creado por Vercel apuntando a la raíz del repo (404) — se dejó sin usar, no se tocó ni se borró."
     - "2026-09-02: creado documentation/analisis-funcional-reclamos.md — documento nuevo, consolida (no reemplaza) brief + motivos-reclamo-por-perfil + pantalla-reclamos-listado en formato de lectura rápida para un Analista Funcional (AFU): objetivo, alcance, perfiles, reglas de negocio (A y B), flujo funcional paso a paso, preguntas pendientes de definición y tabla de trazabilidad de fuentes. Agregado al Hub como 5ta card de documentacion.html (hub/analisis-funcional-reclamos.html + hub/downloads/analisis-funcional-reclamos.md). De paso se actualizaron pantalla-reclamos-listado.md y su .html en el Hub para reflejar los 4 ajustes de UI del ítem anterior (quedaban desactualizados)."
   assumptions:
     - "El alcance v1 se enfoca en mejorar la experiencia de reclamos ya existente, no en sumar tipos de consulta nuevos"
@@ -166,11 +163,12 @@ delivery:
       root_directory: "hub"
       status: deployed # verificado en vivo el 2026-09-01: Hub navega bien y ya muestra las 4 cards de documentación tras el push a main (deploy automático de Vercel, sin intervención manual)
       note: "Ajustado por Claude directamente en el dashboard de Vercel (con autorización del usuario, que tenía la sesión abierta): Root Directory → 'hub', Framework 'Other', luego Redeploy manual (el cambio de Root Directory no dispara deploy automático)."
-    - name: null # todavía no creado
+    - name: "proto-navegable"
       role: prototype
-      dashboard: null
-      public_url: null
+      dashboard: "https://vercel.com/marcos-projects-c934fa75/proto-navegable"
+      public_url: "https://proto-navegable.vercel.app"
       root_directory: "proto navegable"
-      status: not-configured
-  status: partial # hub deployado y verificado; falta el segundo proyecto del prototipo
-  last_verified: "2026-09-01"
+      status: deployed # verificado en vivo 2026-09-02: pantalla de Reclamos real, con todos los ajustes de UI de la sesión
+      note: "Creado usando el atajo de import pre-configurado que Vercel sugería (\"New repository detected\", detectó Root Directory='proto navegable' y framework Vite solo). Nombre de proyecto tuvo que normalizarse a 'proto-navegable' (minúsculas, sin espacio) por validación de Vercel. Existía además un proyecto 'consultas-correo' (sin -v1) auto-creado por Vercel apuntando a la raíz del repo (404, Root Directory sin configurar) — se dejó sin usar, no se tocó."
+  status: complete # hub y prototipo deployados y verificados por separado
+  last_verified: "2026-09-02"

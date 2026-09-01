@@ -8,6 +8,7 @@ navegable: el listado de Reclamos, con datos reales de qué motivo/perfil
 puede ver cada tipo de usuario.
 
 **Hub público**: https://consultas-correo-v1.vercel.app
+**Prototipo público**: https://proto-navegable.vercel.app
 
 ## Estructura del repo
 

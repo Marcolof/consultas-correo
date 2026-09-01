@@ -10,12 +10,9 @@ import styles from './HubAccessButton.module.css'
 
 /**
  * URL del Hub del proyecto (ver Reclamos claude/hub/index.html).
- *
- * TODO: en producción esto debería apuntar al proyecto Vercel del Hub
- * (consultas-correo-v1) una vez que su Root Directory quede en "hub" — hoy
- * sigue apuntando al servidor local porque ese deploy está en curso.
+ * Deployado en Vercel (proyecto "consultas-correo-v1", Root Directory="hub").
  */
-const HUB_URL = 'http://localhost:4311/'
+const HUB_URL = 'https://consultas-correo-v1.vercel.app/'
 
 function GridIcon() {
   return (
