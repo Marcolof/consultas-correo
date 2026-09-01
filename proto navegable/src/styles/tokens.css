@@ -104,6 +104,7 @@
   --radius-xs: 5px; /* inputs, tab superior */
   --radius-sm: 6px; /* error-msg */
   --radius-md: 10px; /* filas de tabla */
+  --radius-md-lg: 12px; /* searchbar de Reclamos, según propuesta Figma */
   --radius-lg: 15px; /* mapa de sucursal */
   --radius-xl: 25px; /* modales, botones pill */
   --radius-2xl: 30px; /* box-acceso */
@@ -384,5 +385,5 @@
    * A diferencia de Input/Select, no lleva label flotante: es un patrón de
    * búsqueda de una sola línea, con placeholder siempre visible. */
   --search-input-height: 48px;
-  --search-input-radius: var(--radius-pill);
+  --search-input-radius: var(--radius-md-lg);
 }

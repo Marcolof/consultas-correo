@@ -9,10 +9,11 @@
   padding: var(--space-4);
 }
 
-/* Ancho cómodo de lectura para formularios y grillas. */
+/* Ancho cómodo de lectura para formularios y grillas. Pegado a la
+ * izquierda (no centrado): en pantallas anchas el contenido no debe
+ * flotar en el medio dejando un espacio muerto simétrico a los costados. */
 .narrow {
   max-width: 1200px;
-  margin: 0 auto;
 }
 
 /* `full` deja que la pantalla maneje su propia grilla a todo el ancho. Lo usa
@@ -24,7 +25,9 @@
 
 @media (min-width: 768px) {
   .content {
-    padding: var(--space-6);
+    /* Fidelidad con la web real de MiCorreo: el contenedor de contenido
+     * usa 3rem de padding horizontal (clase `.px-5` de Bootstrap). */
+    padding: var(--space-6) var(--space-12);
   }
 
   .full {

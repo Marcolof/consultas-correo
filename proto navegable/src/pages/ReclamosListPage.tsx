@@ -42,8 +42,8 @@ function normalize(value: string): string {
 /**
  * Listado de motivos de reclamo.
  *
- * Réplica de la imagen de referencia: buscador + chips de "Tipos de
- * Reclamos" + listado. Los chips visibles, los motivos y el conteo son
+ * Réplica de la imagen de referencia: buscador + chips de filtro +
+ * listado. Los chips visibles, los motivos y el conteo son
  * datos reales (`core/reclamos/reasonProfiles.ts` +
  * `core/reclamos/profileVisibility.ts`), no maqueta.
  *
@@ -82,7 +82,7 @@ export function ReclamosListPage() {
     return reasons.filter((reason) => normalize(reason.label).includes(query))
   }, [reasons, search])
 
-  const countLabel = `${String(visibleReasons.length)} ${visibleReasons.length === 1 ? 'consulta' : 'consultas'}`
+  const countLabel = `${String(visibleReasons.length)} ${visibleReasons.length === 1 ? 'reclamo' : 'reclamos'}`
 
   return (
     <PageContainer>
@@ -95,8 +95,6 @@ export function ReclamosListPage() {
         placeholder="Buscar reclamos…"
         className={styles.search}
       />
-
-      <h2 className={styles.sectionTitle}>Tipos de Reclamos</h2>
 
       <ChipGroup
         items={visibleChips}
