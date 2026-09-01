@@ -1,5 +1,5 @@
 schema_version: "0.1"
-last_updated: "2026-09-01"
+last_updated: "2026-09-02"
 
 project:
   name: "MiCorreo — Consultas y Reclamos"
@@ -39,6 +39,9 @@ knowledge:
     - "2026-09-01 (ajuste sobre el ítem anterior, mismo día): el usuario pidió que el switch 'Responsive' angoste efectivamente el ancho visible, no sólo reacomode el layout. Se logró con `transform: translateZ(0)` en el wrapper `force-mobile` (AppShell.module.css) + `max-width: 390px` + `margin: 0 auto` — un `transform` distinto de `none` convierte al elemento en el containing block de sus descendientes `position: fixed` (Header, riel del Sidebar, ChatBubble, HubAccessButton), que dejan de posicionarse contra la ventana real y pasan a posicionarse contra esos 390px. El Modal 'Casos de uso' queda afuera del efecto a propósito (se renderiza en portal a <body>, fuera del wrapper) — el panel de control sigue a tamaño normal mientras el contenido controlado se ve angosto. Verificado en navegador: pantalla completa se angosta y centra con sombra, el cajón mobile y los botones flotantes quedan contenidos dentro del marco angosto. Build de producción limpio."
     - "2026-09-01: se agregaron hub/motivos-reclamo-por-perfil.html y hub/pantalla-reclamos-listado.html (transcripción HTML fiel de los .md, mismo patrón visual del Hub) — documentacion.html pasó de 2 a 4 cards, todas con botón de Descargar (.md real, copiado a hub/downloads/). READMEs (raíz y proto navegable) corregidos: ya no dicen 'sin funcionalidad de negocio', reflejan que existe la pantalla de Reclamos real."
     - "2026-09-01: todo el trabajo acumulado de la sesión (Reclamos, Casos de uso, modo responsive, documentación del Hub) commiteado y pusheado a https://github.com/Marcolof/consultas-correo (commit c737546). Verificado en GitHub (6 commits en main) y en producción: https://consultas-correo-v1.vercel.app/documentacion.html ya muestra las 4 cards — el deploy automático de Vercel por push a main funcionó sin intervención manual."
+    - "2026-09-02: 4 ajustes de UI en ReclamosListPage a pedido del usuario: contador dice 'reclamos' (antes 'consultas'), filas del listado sin sombra (sólo fondo + borde), se quitó el título 'Tipos de Reclamos' sobre los chips, y el SearchBar pasó de totalmente redondeado a radio 12px (nuevo token --radius-md-lg) por fidelidad con la propuesta de Figma. Commiteado y pusheado (commit ade88e6)."
+    - "2026-09-02: corregido alineado de PageContainer — en pantallas anchas ya no centra su contenido (se sacó margin:0 auto de .narrow), y el padding horizontal en desktop se ajustó a 3rem (--space-12) por fidelidad con la web real de MiCorreo (verificado con captura de producción del usuario, clase .px-5 de Bootstrap = 3rem). Se agregó también el override :global(.force-mobile) que faltaba, para que el modo responsive forzado del prototipo (que no cambia el ancho real de la ventana) use el padding mobile real (16px) en vez de heredar el de desktop."
+    - "2026-09-02: creado documentation/analisis-funcional-reclamos.md — documento nuevo, consolida (no reemplaza) brief + motivos-reclamo-por-perfil + pantalla-reclamos-listado en formato de lectura rápida para un Analista Funcional (AFU): objetivo, alcance, perfiles, reglas de negocio (A y B), flujo funcional paso a paso, preguntas pendientes de definición y tabla de trazabilidad de fuentes. Agregado al Hub como 5ta card de documentacion.html (hub/analisis-funcional-reclamos.html + hub/downloads/analisis-funcional-reclamos.md). De paso se actualizaron pantalla-reclamos-listado.md y su .html en el Hub para reflejar los 4 ajustes de UI del ítem anterior (quedaban desactualizados)."
   assumptions:
     - "El alcance v1 se enfoca en mejorar la experiencia de reclamos ya existente, no en sumar tipos de consulta nuevos"
     - "SUPERSEDED (2026-09-01, ver knowledge.confirmed): 'el filtro arranca en el perfil activo' — el usuario corrigió esto en la misma sesión. El comportamiento real es: filtro siempre en 'Todos', el perfil activo controla qué chips existen, no cuál viene elegido."
@@ -90,11 +93,11 @@ artifacts:
   hub:
     status: draft
     path: "hub/index.html"
-    structure: "Hub con 2 opciones (Prototipo, Documentación). Documentación abre hub/documentacion.html con 4 cards (brief.html, guia-de-estilos.html, motivos-reclamo-por-perfil.html, pantalla-reclamos-listado.html); cada doc vuelve con flecha a documentacion.html, y ésta vuelve con flecha a index.html"
+    structure: "Hub con 2 opciones (Prototipo, Documentación). Documentación abre hub/documentacion.html con 5 cards (brief.html, guia-de-estilos.html, motivos-reclamo-por-perfil.html, pantalla-reclamos-listado.html, analisis-funcional-reclamos.html); cada doc vuelve con flecha a documentacion.html, y ésta vuelve con flecha a index.html"
     provider: fallback
     served_via: "reclamos-hub (npx serve, puerto 4311, apuntando directo a la carpeta hub/) — ver .claude/launch.json en la carpeta outputs de la sesión"
-    note: "El Hub es la raíz pública prevista del proyecto (Vercel: Root Directory = 'hub'). La card 'Prototipo navegable' en index.html todavía apunta a localhost:4300 (marcado con TODO) hasta que exista la URL del segundo proyecto Vercel de proto navegable. Botón 'Descargar' en las 4 cards de documentacion.html y en la esquina superior derecha de cada detalle (misma fila que 'Volver a Documentación'). Descarga el .md real (y los .json de datos, para los 2 docs de negocio), no un extracto: copiados a hub/downloads/ porque Vercel (Root Directory='hub') no incluye documentation/ en el deploy. Estas copias hay que mantenerlas sincronizadas a mano si el original cambia. Estructura de card con botón: dejó de ser <a class=\"card\"> entera (no se puede anidar un <a> de descarga adentro); ahora es <div class=\"card card--doc\"> con el título como <a class=\"card-link\"> estirado (.card-link::after) y el botón de descarga como hermano con z-index mayor. 2026-09-01: agregadas motivos-reclamo-por-perfil.html y pantalla-reclamos-listado.html (transcripción HTML fiel de los .md, mismo patrón visual) — el Hub ya no estaba desactualizado."
-    last_updated: "2026-09-01"
+    note: "El Hub es la raíz pública prevista del proyecto (Vercel: Root Directory = 'hub'). La card 'Prototipo navegable' en index.html todavía apunta a localhost:4300 (marcado con TODO) hasta que exista la URL del segundo proyecto Vercel de proto navegable. Botón 'Descargar' en las 5 cards de documentacion.html y en la esquina superior derecha de cada detalle (misma fila que 'Volver a Documentación'). Descarga el .md real (y los .json de datos, para los 2 docs de negocio), no un extracto: copiados a hub/downloads/ porque Vercel (Root Directory='hub') no incluye documentation/ en el deploy. Estas copias hay que mantenerlas sincronizadas a mano si el original cambia. Estructura de card con botón: dejó de ser <a class=\"card\"> entera (no se puede anidar un <a> de descarga adentro); ahora es <div class=\"card card--doc\"> con el título como <a class=\"card-link\"> estirado (.card-link::after) y el botón de descarga como hermano con z-index mayor. 2026-09-01: agregadas motivos-reclamo-por-perfil.html y pantalla-reclamos-listado.html. 2026-09-02: agregada analisis-funcional-reclamos.html (5ta card) — el Hub ya no estaba desactualizado."
+    last_updated: "2026-09-02"
   prototype:
     status: draft
     fidelity: high # chrome/tokens con fidelidad alta; ya tiene 1 pantalla de negocio real (Reclamos)
@@ -126,8 +129,15 @@ artifacts:
     path: "documentation/pantalla-reclamos-listado.md"
     hub_path: "hub/pantalla-reclamos-listado.html"
     provider: fallback
-    note: "Documenta la primera pantalla real del prototipo: qué reutiliza, qué componentes/tokens nuevos agrega, el mecanismo 'Casos de uso' (corregido: visibilidad de chips, no preselección), y las decisiones de UX tomadas sin pedido explícito (con su razón y su corrección, con trazabilidad). Visible en el Hub desde el 2026-09-01."
-    last_updated: "2026-09-01"
+    note: "Documenta la primera pantalla real del prototipo: qué reutiliza, qué componentes/tokens nuevos agrega, el mecanismo 'Casos de uso' (corregido: visibilidad de chips, no preselección), y las decisiones de UX tomadas sin pedido explícito (con su razón y su corrección, con trazabilidad). Visible en el Hub desde el 2026-09-01. Actualizado 2026-09-02 con los 4 ajustes de UI (contador, sombra, título, searchbar) y la corrección de alineado/padding de PageContainer."
+    last_updated: "2026-09-02"
+  functional-analysis:
+    status: draft
+    path: "documentation/analisis-funcional-reclamos.md"
+    hub_path: "hub/analisis-funcional-reclamos.html"
+    provider: fallback
+    note: "Documento nuevo pedido por el usuario para su Analista Funcional (AFU). Consolida brief + motivos-reclamo-por-perfil + pantalla-reclamos-listado en formato de lectura funcional: objetivo, alcance, perfiles, reglas de negocio A y B, flujo paso a paso, preguntas pendientes de definición (9, ninguna resuelta por inferencia) y tabla de trazabilidad. No es fuente nueva de datos — ante cualquier diferencia, los 3 documentos consolidados mandan."
+    last_updated: "2026-09-02"
   profile-visibility-mapping:
     status: draft
     path: "documentation/motivos-reclamo-por-perfil.md#6-visibilidad-de-perfiles-entre-sí"

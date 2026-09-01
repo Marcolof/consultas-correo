@@ -39,10 +39,10 @@
     <p>Ruta índice (<code>/</code>) del prototipo: <code>src/pages/ReclamosListPage.tsx</code>. Muestra:</p>
     <ol>
       <li>Título "Reclamos" (<code>PageHeader</code>, sin descripción ni acciones).</li>
-      <li>Un buscador de una línea.</li>
-      <li>Sección "Tipos de Reclamos" con chips de filtro: <strong>Todos</strong>, Individuo, Franquicias, Fulfillment — el subconjunto realmente visible depende del "caso de uso" activo (ver sección 4).</li>
-      <li>Contador ("N consultas") que refleja el resultado real de filtro + búsqueda combinados.</li>
-      <li>Listado de motivos (filas clickeables con flecha), con scroll propio.</li>
+      <li>Un buscador de una línea, con esquinas de 12px — no totalmente redondeado, por fidelidad con la propuesta de Figma.</li>
+      <li>Chips de filtro directamente debajo del buscador (sin título de sección — el rótulo "Tipos de Reclamos" se sacó a pedido del usuario, 2026-09-02): <strong>Todos</strong>, Individuo, Franquicias, Fulfillment — el subconjunto realmente visible depende del "caso de uso" activo (ver sección 4).</li>
+      <li>Contador ("N reclamos", antes decía "N consultas") que refleja el resultado real de filtro + búsqueda combinados.</li>
+      <li>Listado de motivos (filas clickeables con flecha, sin sombra — sólo fondo y borde), con scroll propio.</li>
     </ol>
     <p>
       Los datos <strong>no son mock arbitrario</strong>: motivos, perfiles
@@ -162,7 +162,8 @@
       <li>Las filas del listado no navegan a ningún lado todavía — muestran un <code>Toast</code> de aviso. No hay pantalla de detalle de reclamo definida aún.</li>
       <li>El buscador filtra sólo por label del motivo, sin acentos — no busca por categoría ni por sinónimos.</li>
       <li>Sigue sin resolverse cómo se determina el perfil de un usuario real — "Casos de uso" es una simulación manual para el prototipo, no una propuesta de producción.</li>
-      <li>El modo responsive forzado sólo cubre lo explícitamente pedido (sidebar, header, drawer) — no se auditó componente por componente si algún otro <code>@media</code> propio necesitaría su override.</li>
+      <li>El modo responsive forzado cubre sidebar, header, drawer y el padding de <code>PageContainer</code> (fuerza 16px, agregado 2026-09-02) — no se auditó exhaustivamente si algún otro componente con <code>@media</code> propio necesitaría el mismo tipo de override.</li>
+      <li>En pantallas anchas, <code>PageContainer</code> ya no centra su contenido — queda pegado a la izquierda con su padding, y ese padding en desktop es de 3rem por fidelidad con la web real de MiCorreo (corregido 2026-09-02).</li>
     </ul>
 
     <a class="back-link" href="documentacion.html">&larr; Volver a Documentación</a>

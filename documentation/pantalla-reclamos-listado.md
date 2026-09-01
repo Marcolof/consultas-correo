@@ -11,13 +11,17 @@
 Ruta índice (`/`) del prototipo: `src/pages/ReclamosListPage.tsx`. Muestra:
 
 1. Título "Reclamos" (`PageHeader`, sin descripción ni acciones).
-2. Un buscador de una línea.
-3. Sección "Tipos de Reclamos" con chips de filtro: **Todos**, Individuo,
-   Franquicias, Fulfillment — el subconjunto realmente visible depende del
-   "caso de uso" activo (ver sección 4).
-4. Contador ("N consultas") que refleja el resultado real de filtro +
-   búsqueda combinados.
-5. Listado de motivos (filas clickeables con flecha), con scroll propio.
+2. Un buscador de una línea, con esquinas de 12px (`--radius-md-lg`) — no
+   totalmente redondeado, por fidelidad con la propuesta de Figma.
+3. Chips de filtro directamente debajo del buscador (sin título de
+   sección — el rótulo "Tipos de Reclamos" que estaba arriba se sacó a
+   pedido del usuario, 2026-09-02): **Todos**, Individuo, Franquicias,
+   Fulfillment — el subconjunto realmente visible depende del "caso de uso"
+   activo (ver sección 4).
+4. Contador ("N reclamos", antes decía "N consultas") que refleja el
+   resultado real de filtro + búsqueda combinados.
+5. Listado de motivos (filas clickeables con flecha, sin sombra — sólo
+   fondo y borde, a pedido del usuario), con scroll propio.
 
 Los datos **no son mock arbitrario**: motivos, perfiles y qué perfil ve qué
 motivo salen de `core/reclamos/reasonProfiles.ts`, que a su vez lee
@@ -180,8 +184,16 @@ ventana de verdad.
   sección 6 de [`motivos-reclamo-por-perfil.md`](motivos-reclamo-por-perfil.md))
   — "Casos de uso" es una simulación manual para el prototipo, no una
   propuesta de cómo funcionaría en producción.
-- El modo responsive forzado sólo cubre lo explícitamente pedido (sidebar,
-  header, drawer). No se auditó componente por componente si algún otro
-  padding/tamaño con `@media` propio (por ejemplo, `PageContainer`) también
-  necesitaría su override `:global(.force-mobile)` — puede haber detalles
-  visuales menores que sólo se vean bien angostando la ventana de verdad.
+- El modo responsive forzado cubre sidebar, header, drawer y el padding de
+  `PageContainer` (`:global(.force-mobile) .content` fuerza `--space-4`,
+  16px, agregado 2026-09-02 — antes quedaba en 48px porque el
+  `@media (min-width: 768px)` seguía activo al no cambiar el ancho real de
+  la ventana). No se auditó exhaustivamente si algún otro componente con
+  `@media` propio necesitaría el mismo tipo de override.
+- En pantallas anchas, `PageContainer` (variante `narrow`) ya no centra su
+  contenido con `margin: 0 auto` — queda pegado a la izquierda (con su
+  padding) en vez de flotar en el medio dejando espacio muerto simétrico a
+  los costados (corregido 2026-09-02, a pedido del usuario).
+- El padding horizontal de `PageContainer` en desktop se ajustó a 3rem
+  (`--space-12`) para fidelidad con la web real de MiCorreo (clase `.px-5`
+  de Bootstrap, verificado en captura de producción, 2026-09-02).

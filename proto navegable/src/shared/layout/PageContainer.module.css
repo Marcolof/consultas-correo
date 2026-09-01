@@ -34,3 +34,11 @@
     padding: 0;
   }
 }
+
+/* El modo "Responsive" forzado del prototipo achica visualmente el ancho
+ * con un `transform` (ver AppShell.module.css), pero el viewport real
+ * sigue siendo de escritorio — el `@media (min-width: 768px)` de arriba
+ * no deja de aplicar por sí solo. Forzamos acá el padding mobile (16px). */
+:global(.force-mobile) .content {
+  padding: var(--space-4) !important;
+}

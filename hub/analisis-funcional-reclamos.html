@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Análisis funcional — Reclamos — MiCorreo</title>
+<link rel="stylesheet" href="hub.css" />
+</head>
+<body>
+  <header class="top">
+    <div class="brand">Correo Argentino · MiCorreo</div>
+    <p>Documentación — Análisis funcional: Reclamos</p>
+  </header>
+
+  <main>
+    <div class="top-row">
+      <a class="back-link" href="documentacion.html">&larr; Volver a Documentación</a>
+      <a class="download-btn" href="downloads/analisis-funcional-reclamos.md" download title="Descargar analisis-funcional-reclamos.md">
+        <svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M8 1v9m0 0L4.5 6.5M8 10l3.5-3.5M2 12v1.5A1.5 1.5 0 0 0 3.5 15h9a1.5 1.5 0 0 0 1.5-1.5V12" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Descargar
+      </a>
+    </div>
+
+    <div class="status-bar">
+      <span class="pill draft">Borrador — para revisión del Analista Funcional</span>
+    </div>
+
+    <h1>Análisis funcional — Consultas y Reclamos (listado de Reclamos)</h1>
+
+    <blockquote>
+      Consolida, para lectura funcional, lo ya relevado en
+      <a href="brief.html">brief general</a>,
+      <a href="motivos-reclamo-por-perfil.html">motivos por perfil</a> y
+      <a href="pantalla-reclamos-listado.html">pantalla: listado de Reclamos</a>.
+      Ante cualquier diferencia, esos documentos (y sus JSON de datos) son la
+      fuente de verdad — éste es un resumen de lectura rápida, no una fuente
+      nueva.
+    </blockquote>
+
+    <h2>1. Objetivo del proyecto</h2>
+    <p>Mejorar la experiencia de "Consultas y Reclamos" de MiCorreo, de forma incremental: la primera entrega debe aportar valor por sí sola, sin cubrir todavía todo el alcance futuro.</p>
+
+    <h2>2. Alcance cubierto hasta hoy</h2>
+    <p>Sólo el <strong>listado de Reclamos</strong> está construido y navegable. No existen todavía: alta de un reclamo nuevo, pantalla de detalle, ni otros tipos de consulta.</p>
+
+    <h2>3. Actores / perfiles de usuario</h2>
+    <p>El negocio distingue 3 perfiles, cada uno con un subconjunto distinto de motivos de reclamo visibles:</p>
+    <table>
+      <thead><tr><th>Perfil</th><th>Label</th><th>Motivos visibles</th></tr></thead>
+      <tbody>
+        <tr><td><code>fulfillment</code></td><td>Fulfillment</td><td>17 de 19</td></tr>
+        <tr><td><code>individuo</code></td><td>Individuo</td><td>12 de 19</td></tr>
+        <tr><td><code>franquicias</code></td><td>Franquicias</td><td>4 de 19</td></tr>
+      </tbody>
+    </table>
+    <p>La pantalla de producción actual (<code>reclaclamos.html</code>) muestra los ~19 motivos por igual a cualquiera — la diferenciación por perfil es una mejora real de esta iniciativa.</p>
+
+    <h2>4. Reglas de negocio confirmadas</h2>
+    <h3>4.1 Regla A — motivos por perfil</h3>
+    <p>Matriz completa en <a href="motivos-reclamo-por-perfil.html">motivos por perfil</a>, sección 3. Motivos transversales a los 3 perfiles: "Errores en mi factura" y "Errores con el saldo de mi cuenta".</p>
+    <h3>4.2 Regla B — chips visibles por perfil activo</h3>
+    <table>
+      <thead><tr><th>Perfil activo</th><th>Chips visibles</th></tr></thead>
+      <tbody>
+        <tr><td>Individuo</td><td>Todos, Individuo</td></tr>
+        <tr><td>Franquicias</td><td>Todos, Individuo, Franquicias</td></tr>
+        <tr><td>Fulfillment</td><td>Todos, Individuo, Fulfillment</td></tr>
+      </tbody>
+    </table>
+    <p><strong>El chip "Todos" siempre viene seleccionado por defecto</strong> — el perfil activo decide qué chips existen, nunca cuál viene preseleccionado. "Todos" siempre muestra la unión completa de los 19 motivos, sin importar el perfil.</p>
+
+    <h2>5. Flujo funcional de la pantalla</h2>
+    <ol>
+      <li>El usuario ingresa con un perfil activo ya determinado (mecanismo de determinación: no definido, ver sección 6).</li>
+      <li>La pantalla muestra buscador, chips (según Regla B, "Todos" preseleccionado), contador y listado.</li>
+      <li><strong>Buscar</strong>: texto libre, filtra por coincidencia en el label del motivo (sin distinguir mayúsculas/acentos), en memoria.</li>
+      <li><strong>Filtrar por chip</strong>: acota el listado según la Regla A; se combina con la búsqueda (AND).</li>
+      <li><strong>Sin resultados</strong>: estado vacío con mensaje y sugerencia.</li>
+      <li><strong>Seleccionar un reclamo</strong>: hoy sólo muestra un aviso temporal — no hay pantalla de detalle construida.</li>
+      <li><strong>Cambio de perfil activo</strong>: panel de control de prototipo para simular los 3 perfiles en la misma sesión — no es una pantalla de producción.</li>
+    </ol>
+
+    <h2>6. Pendiente de definición (preguntas para el AFU / negocio)</h2>
+    <p>Ninguna resuelta por inferencia:</p>
+    <ol>
+      <li>¿Cómo se determina el perfil de un usuario logueado en producción?</li>
+      <li>¿Un mismo usuario puede tener más de un perfil simultáneamente?</li>
+      <li>¿Qué pasa con un usuario que no matchea ningún perfil?</li>
+      <li>¿Los 3 perfiles son estables o se espera que se agreguen más?</li>
+      <li>¿El chip "Todos" debería acotarse también por perfil, o queda como universo completo?</li>
+      <li>¿Qué tipos de consulta existen más allá del alta de reclamo?</li>
+      <li>¿Qué significa concretamente "administrar consultas"?</li>
+      <li>¿Cómo se define la pantalla de detalle de un reclamo (hoy inexistente)?</li>
+      <li>¿Cómo se va a comprobar que esta primera entrega aporta valor (criterio de aceptación)?</li>
+    </ol>
+
+    <h2>7. Documentos relacionados</h2>
+    <ul>
+      <li><a href="brief.html">Brief básico — Consultas / Reclamos</a></li>
+      <li><a href="motivos-reclamo-por-perfil.html">Motivos de reclamo por perfil</a></li>
+      <li><a href="pantalla-reclamos-listado.html">Pantalla: Listado de Reclamos</a></li>
+      <li><a href="guia-de-estilos.html">Guía de estilos, UI y front</a></li>
+    </ul>
+
+    <a class="back-link" href="documentacion.html">&larr; Volver a Documentación</a>
+  </main>
+</body>
+</html>
