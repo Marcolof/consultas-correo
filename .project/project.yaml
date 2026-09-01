@@ -8,10 +8,9 @@ project:
   local_root: "."
 
 strategy:
-  current_focus: "Arquitectura de deploy definida: el Hub es la raíz pública del proyecto (consultas-correo-v1), 'proto navegable' necesita su PROPIO proyecto Vercel aparte. Falta que el usuario cree ese segundo proyecto y confirme la URL resultante."
+  current_focus: "Hub publicado y verificado en https://consultas-correo-v1.vercel.app. Falta el segundo proyecto Vercel para 'proto navegable' (requiere crearlo desde la cuenta del usuario) y luego actualizar los 2 links que hoy apuntan a localhost."
   intervention: hybrid # reference-existing (html reference de producción) + standalone-prototype (proto navegable, código nuevo)
   recommended_next:
-    - "Usuario: en el proyecto Vercel existente 'consultas-correo-v1', cambiar Root Directory a 'hub' (framework 'Other', sin build command) y redeployar — esto hace que el Hub sea la raíz pública"
     - "Usuario: crear un SEGUNDO proyecto Vercel apuntando al mismo repo, con Root Directory = 'proto navegable' (Vite se autodetecta), para publicar el prototipo por separado"
     - "Cuando exista la URL del segundo proyecto: actualizar el href de la card 'Prototipo navegable' en hub/index.html (hoy apunta a localhost:4300, marcado con TODO) y el HUB_URL de proto navegable/src/app/HubAccessButton.tsx (hoy apunta a localhost:4311/)"
     - "Cuando el usuario quiera avanzar: cerrar las definiciones de la sección 4 de documentation/brief-consultas-reclamos.md antes de construir pantallas de negocio"
@@ -29,6 +28,7 @@ knowledge:
     - "2026-08-31: la carpeta se renombró de 'mlof-ui-base' a 'proto navegable' a pedido del usuario, de cara a subir el proyecto a GitHub. El nombre del paquete npm quedó como 'proto-navegable' (equivalente válido sin espacios); package-lock.json, README.md, documentation/*.md, hub/*.html y el launch.json de la sesión se actualizaron para reflejar el nuevo nombre."
     - "2026-09-01: repo git inicializado en la raíz de 'Reclamos claude' y publicado en https://github.com/Marcolof/consultas-correo (público). Excluye 'html reference/' (dominio interno + token de sesión embebido) y 'Font gilroy/' + los .ttf dentro de proto navegable/src/assets/fonts (fuente comercial sin licencia de redistribución pública) — decisión explícita del usuario. Verificado en GitHub que los 4 elementos de raíz (.project, documentation, hub, proto navegable) llegaron al remoto."
     - "2026-09-01: usuario confirmó que el Hub debe ser la raíz pública del proyecto. Se quitó <base href=\"/hub/\"> de las 4 páginas de hub/ (sólo tenía sentido cuando el Hub vivía en un subpath) y se corrigió el link del footer de index.html para apuntar al blob de GitHub en vez de una ruta relativa fuera de hub/. El servidor local (reclamos-hub, puerto 4311) ahora sirve la carpeta hub/ directamente como raíz — deja de servir toda 'Reclamos claude' — para que el comportamiento local sea idéntico al de producción."
+    - "2026-09-01: con autorización del usuario (sesión de Vercel ya abierta en el navegador de Claude), se configuró Root Directory='hub' en el proyecto Vercel 'consultas-correo-v1' y se disparó un Redeploy manual (cambiar Root Directory no redeploya solo). Verificado en vivo: https://consultas-correo-v1.vercel.app muestra el Hub y navega correctamente (index → documentación → doc → volver)."
   assumptions:
     - "proto navegable es la base sobre la que se construirán las pantallas de Consultas/Reclamos (no confirmado explícitamente por el usuario)"
     - "El alcance v1 se enfoca en mejorar la experiencia de reclamos ya existente, no en sumar tipos de consulta nuevos"
@@ -110,13 +110,14 @@ delivery:
       role: hub # raíz pública del proyecto
       dashboard: "https://vercel.com/marcos-projects-c934fa75/consultas-correo-v1"
       public_url: "https://consultas-correo-v1.vercel.app"
-      root_directory: "hub" # pendiente: el usuario debe cambiarlo (estaba en la raíz del repo → 404)
-      status: failed # 404 NOT_FOUND verificado por el usuario; fix indicado, no confirmado todavía
+      root_directory: "hub"
+      status: deployed # verificado en vivo el 2026-09-01: Hub navega bien (index → documentación → doc → volver)
+      note: "Ajustado por Claude directamente en el dashboard de Vercel (con autorización del usuario, que tenía la sesión abierta): Root Directory → 'hub', Framework 'Other', luego Redeploy manual (el cambio de Root Directory no dispara deploy automático)."
     - name: null # todavía no creado
       role: prototype
       dashboard: null
       public_url: null
       root_directory: "proto navegable"
       status: not-configured
-  status: failed
+  status: partial # hub deployado y verificado; falta el segundo proyecto del prototipo
   last_verified: "2026-09-01"
