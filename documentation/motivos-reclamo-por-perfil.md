@@ -1,5 +1,14 @@
 # Motivos de reclamo visibles por tipo de usuario
 
+> ⚠️ **SUPERSEDED para la pantalla de listado (2026-09-02).** La sección
+> pasó a llamarse "Mis gestiones" y sus chips de filtro ya no son estos
+> perfiles de usuario — son 7 categorías de producto/servicio. Ver
+> [`mis-gestiones-categorias.md`](mis-gestiones-categorias.md) para la
+> definición vigente. Este documento se conserva completo porque el dato
+> de negocio (qué motivo aplica a qué perfil) sigue siendo real y podría
+> volver a ser relevante; sólo dejó de ser lo que decide qué se ve en la
+> pantalla de gestiones.
+>
 > **Fuente**: definición funcional provista por el usuario el 2026-09-01,
 > confirmada como regla de negocio real (no inferencia). Archivo de datos
 > original: [`data/motivos-reclamo-por-perfil.json`](data/motivos-reclamo-por-perfil.json)

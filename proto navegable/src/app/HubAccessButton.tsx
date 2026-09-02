@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { useActiveUseCase } from '@/core/session/activeUseCase'
 import { useForcedViewport } from '@/core/session/forcedViewport'
-import { RECLAMO_PROFILES } from '@/core/reclamos/reasonProfiles'
+import { USER_PROFILES } from '@/core/gestiones/categories'
 import { ChipGroup } from '@/shared/ui/ChipGroup'
 import { Modal } from '@/shared/ui/Modal'
 import { Switch } from '@/shared/ui/Switch'
@@ -33,14 +33,20 @@ function GridIcon() {
  * Al tocarlo despliega 2 opciones:
  *   1. "Volver al Hub" — navega al Hub del proyecto.
  *   2. "Casos de uso" — abre un panel con 2 secciones:
- *      - "Usuarios": simula el perfil activo (Individuo / Franquicias /
- *        Fulfillment), que determina qué motivos y qué chips de filtro se
- *        ven en el listado de Reclamos.
+ *      - "Usuarios": simula el tipo de usuario activo (Individuo / Pyme /
+ *        Franquicias / Fulfillment), que determina qué categorías (chips)
+ *        se ven en el listado de "Mis gestiones" — ver
+ *        `core/gestiones/categories.ts` (`visibleCategoriesForProfile`).
  *      - "Pantalla": switch "Responsive" que fuerza el layout mobile
  *        (sidebar colapsado, header vacío salvo hamburguesa) sin necesidad
  *        de angostar la ventana real — ver `core/session/forcedViewport.ts`.
- *      Pensado para escalar: cada sección es independiente, se agregan más
- *      como hermanas dentro del mismo Modal.
+ *
+ * (2026-09-02, restaurado el mismo día que se había sacado): la sección
+ * "Usuarios" había quedado superada por las 7 categorías fijas, pero el
+ * usuario aclaró que el tipo de usuario SÍ sigue impactando qué categorías
+ * son visibles — sólo que ahora son 4 tipos (se agregó "Pyme") y la
+ * visibilidad es sobre categorías, no sobre el eje motivo×perfil anterior
+ * (`core/reclamos/*`, que sigue sin usarse).
  */
 export function HubAccessButton() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
@@ -115,10 +121,10 @@ export function HubAccessButton() {
         <div className={styles.section}>
           <h3 className={styles.sectionTitle}>Usuarios</h3>
           <ChipGroup
-            items={RECLAMO_PROFILES}
+            items={USER_PROFILES}
             activeId={profileId}
             onChange={setProfileId}
-            ariaLabel="Perfil de usuario activo"
+            ariaLabel="Tipo de usuario activo"
           />
         </div>
 
@@ -135,8 +141,7 @@ export function HubAccessButton() {
           />
         </div>
 
-        {/* Futuras secciones (otras "condiciones" por perfil, etc.) van acá,
-            como hermanas de "Usuarios" y "Pantalla". */}
+        {/* Futuras secciones van acá, como hermanas de "Usuarios" y "Pantalla". */}
       </Modal>
     </div>
   )

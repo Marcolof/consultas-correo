@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>"Mis gestiones" — Categorías — MiCorreo</title>
+<link rel="stylesheet" href="hub.css" />
+</head>
+<body>
+  <header class="top">
+    <div class="brand">Correo Argentino · MiCorreo</div>
+    <p>Documentación — "Mis gestiones": categorías</p>
+  </header>
+
+  <main>
+    <div class="top-row">
+      <a class="back-link" href="documentacion.html">&larr; Volver a Documentación</a>
+      <a class="download-btn" href="downloads/mis-gestiones-categorias.md" download title="Descargar mis-gestiones-categorias.md">
+        <svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M8 1v9m0 0L4.5 6.5M8 10l3.5-3.5M2 12v1.5A1.5 1.5 0 0 0 3.5 15h9a1.5 1.5 0 0 0 1.5-1.5V12" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Descargar
+      </a>
+    </div>
+
+    <div class="status-bar">
+      <span class="pill draft">Vigente al 2026-09-02 — reemplaza el eje de perfil</span>
+    </div>
+
+    <h1>"Mis gestiones" — categorías</h1>
+
+    <blockquote>Reemplaza, para esta pantalla, al eje de perfil de usuario documentado en <a href="motivos-reclamo-por-perfil.html">motivos por perfil</a> (queda como histórico).</blockquote>
+
+    <h2>0. ¿Dónde vive el archivo que filtra las agrupaciones?</h2>
+    <p>Hay 2 copias del mismo archivo: <code>documentation/data/categorias-gestiones.json</code> (fuente/documentación) y <code>proto navegable/src/core/gestiones/data/categorias-gestiones.json</code> (la que lee la app). El código que lo consume es <code>core/gestiones/categories.ts</code>, usado por <code>pages/ReclamosListPage.tsx</code> — ninguna regla está hardcodeada en el componente.</p>
+
+    <h2>1. Cambio de nombre: "Reclamos" → "Mis gestiones"</h2>
+    <p>El usuario confirmó que la sección deja de llamarse "Reclamos" y pasa a <strong>"Mis gestiones"</strong>, y aclaró que es probable que vuelva a cambiar. Por eso el nombre vive en una única constante del código (<code>core/gestiones/sectionLabel.ts</code>) en vez de estar repetido en cada pantalla.</p>
+
+    <h2>2. Las 7 categorías (chips)</h2>
+    <table>
+      <thead><tr><th>#</th><th>Categoría</th><th>Gestiones</th><th>Origen</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td>Mi Cuenta</td><td>2</td><td>Inferido por intuición</td></tr>
+        <tr><td>2</td><td>Paquetería Nacional</td><td>6</td><td>Inferido por intuición</td></tr>
+        <tr><td>3</td><td>Paquetería Internacional</td><td>4</td><td><strong>Inventado</strong></td></tr>
+        <tr><td>4</td><td>Franquicias</td><td>4</td><td><strong>Confirmado</strong> por el usuario</td></tr>
+        <tr><td>5</td><td>Fulfillment</td><td>6</td><td><strong>Confirmado</strong> por el usuario</td></tr>
+        <tr><td>6</td><td>Mis Comunicaciones Digitales</td><td>4</td><td><strong>Inventado</strong></td></tr>
+        <tr><td>7</td><td>Oficios Judiciales</td><td>1</td><td>Inferido por intuición</td></tr>
+      </tbody>
+    </table>
+    <p>Sólo Franquicias y Fulfillment tienen contenido confirmado textualmente por el negocio. El resto es agrupación por intuición sobre motivos reales ya conocidos, o contenido inventado marcado literalmente como "(Gestión inventada)" en cada label.</p>
+
+    <h2>3. Contenido confirmado</h2>
+    <p><strong>Fulfillment</strong>: Demora en el armado de los envíos; Diferencia en el armado del envío; Diferencia de stock; Inconvenientes con la carga de envíos; Inconveniente en la carga de los pedidos; No veo el stock.</p>
+    <p><strong>Franquicias</strong>: Problemas para generar el sello digital; Problema con el pago de sellos digitales; Errores en mi factura; Errores con el saldo de mi cuenta.</p>
+
+    <h2>4. Contenido inferido por intuición (pendiente de confirmación)</h2>
+    <p><strong>Mi Cuenta</strong>: Recibí un cobro erróneo; Inconvenientes para dar de alta un usuario adicional.</p>
+    <p><strong>Paquetería Nacional</strong>: Demora en el servicio; Falta o error en la información de seguimiento; Inconvenientes con la entrega; No puedo pagar mis envíos; Paquete dañado; Paquete con faltante de contenido.</p>
+    <p><strong>Oficios Judiciales</strong>: Inconvenientes con el pago de oficios judiciales.</p>
+
+    <h2>5. Contenido inventado (sin dato real)</h2>
+    <p><strong>Paquetería Internacional</strong>: Demora en la entrega internacional; Problemas con la aduana; Paquete extraviado en tránsito internacional; Costos de importación no informados (las 4, "Gestión inventada").</p>
+    <p><strong>Mis Comunicaciones Digitales</strong>: No recibí la notificación de mi envío; Error en el contenido de una comunicación digital; No puedo acceder a mis comunicaciones; Comunicación enviada a un destinatario incorrecto (las 4, "Gestión inventada").</p>
+
+    <h2>6. Nivel 1 — qué categorías ve cada tipo de usuario (vigente)</h2>
+    <blockquote>Confirmado por el usuario, 2026-09-02. Este mecanismo se había sacado del panel "Casos de uso" antes en la misma sesión y se restauró el mismo día: el tipo de usuario sigue impactando qué se ve, ahora sobre categorías (no sobre motivos individuales).</blockquote>
+    <p><strong>4 tipos de usuario</strong> (se agregó Pyme):</p>
+    <table>
+      <thead><tr><th>Tipo de usuario</th><th>Categorías que NO ve</th></tr></thead>
+      <tbody>
+        <tr><td>Individuo</td><td>Franquicias, Fulfillment</td></tr>
+        <tr><td>Pyme</td><td>Franquicias, Fulfillment</td></tr>
+        <tr><td>Franquicias</td><td>Fulfillment</td></tr>
+        <tr><td>Fulfillment</td><td>Franquicias</td></tr>
+      </tbody>
+    </table>
+    <p>Las 5 categorías restantes (Mi Cuenta, Paquetería Nacional, Paquetería Internacional, Mis Comunicaciones Digitales, Oficios Judiciales) se ven por igual en los 4 tipos — no hay ninguna exclusión mencionada sobre ellas (supuesto, no confirmado explícitamente por exclusión textual). Si la categoría elegida deja de estar visible al cambiar de tipo de usuario, el filtro vuelve solo a "Todos".</p>
+    <blockquote>⚠️ "Todos" NO es "las 27 gestiones del sistema" — es la unión de las categorías visibles para el tipo de usuario activo (corregido 2026-09-02, era un bug: mostraba las 27 sin importar el perfil). Individuo/Pyme con "Todos": 17 gestiones. Franquicias: 21. Fulfillment: 23. Verificado también que la búsqueda respeta este aislamiento (buscar "franquicia" siendo Individuo da 0 resultados).</blockquote>
+
+    <h2>7. Nivel 2 — qué gestiones agrupa cada categoría</h2>
+    <p>Ver secciones 2 a 5 más arriba — es el segundo nivel de la misma base de datos, independiente del Nivel 1.</p>
+
+    <h2>8. Qué pasó con el mecanismo anterior (motivo×perfil)</h2>
+    <p>La matriz motivo×perfil (<a href="motivos-reclamo-por-perfil.html">motivos por perfil</a>) sigue superada — lo recuperado en la sección 6 es un mecanismo nuevo sobre categorías, no una reactivación de esa regla vieja.</p>
+
+    <h2>9. Tags de búsqueda por gestión (2026-09-02)</h2>
+    <blockquote>Generados por Claude, no son un dato de negocio confirmado. Criterio: hasta 10 tags por gestión.</blockquote>
+    <table>
+      <thead><tr><th>Gestión</th><th>Tags</th></tr></thead>
+      <tbody>
+        <tr><td>Inconvenientes con el pago de oficios judiciales</td><td>justicia, citación, oficial, cobro, error, falla, judicial, pago</td></tr>
+      </tbody>
+    </table>
+    <p>El buscador matchea contra el label y los tags. Buscar "justicia" encuentra esa gestión aunque la palabra no esté en el label — verificado en navegador.</p>
+    <h3>9.1 Caso especial: tag de categoría en Fulfillment y Franquicias</h3>
+    <p>Todas las gestiones de Fulfillment llevan además el tag <code>"fulfillment"</code>, y todas las de Franquicias llevan <code>"franquicia"</code>/<code>"franquicias"</code>. Efecto: buscar "fulfillment" con el chip "Todos" seleccionado (sin tocar el chip "Fulfillment") muestra las 6 gestiones de esa categoría — verificado en navegador. No es una regla de código aparte, es sólo un tag más. Por ahora sólo se le dio este tag especial a Fulfillment y Franquicias.</p>
+
+    <h2>10. Preguntas abiertas</h2>
+    <ol>
+      <li>¿Las asignaciones "por intuición" son correctas?</li>
+      <li>¿Qué gestiones reales completarán Paquetería Internacional y Mis Comunicaciones Digitales?</li>
+      <li>¿Las 5 categorías sin exclusión mencionada son visibles para los 4 tipos por igual, o hay exclusiones adicionales no mencionadas?</li>
+      <li>Los motivos antes transversales a los 3 perfiles ("Errores en mi factura", "Errores con el saldo de mi cuenta") ahora sólo están en Franquicias — ¿deberían estar también en otras categorías?</li>
+      <li>¿"Pyme" tiene alguna diferencia real con "Individuo" más allá del nombre?</li>
+      <li>¿Los tags generados por Claude son razonables, o el negocio quiere revisarlos?</li>
+      <li>¿El tag especial de categoría debería extenderse a las otras 5 categorías?</li>
+    </ol>
+
+    <a class="back-link" href="documentacion.html">&larr; Volver a Documentación</a>
+  </main>
+</body>
+</html>

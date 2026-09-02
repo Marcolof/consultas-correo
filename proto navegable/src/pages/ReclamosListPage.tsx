@@ -1,25 +1,19 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useActiveUseCase } from '@/core/session/activeUseCase'
-import { RECLAMO_PROFILES, reasonsForFilter } from '@/core/reclamos/reasonProfiles'
-import type { ReclamoReasonFilter } from '@/core/reclamos/reasonProfiles'
-import { visibleFiltersForProfile } from '@/core/reclamos/profileVisibility'
+import { DEFAULT_CATEGORY_FILTER, itemsForFilter, visibleCategoriesForProfile } from '@/core/gestiones/categories'
+import type { CategoryFilter } from '@/core/gestiones/categories'
+import { SECTION_LABEL, ITEM_LABEL_SINGULAR, ITEM_LABEL_PLURAL } from '@/core/gestiones/sectionLabel'
 import { PageContainer, PageHeader } from '@/shared/layout'
 import { ChipGroup, EmptyState, NavListItem, SearchInput } from '@/shared/ui'
 import { useToast } from '@/shared/ui/Toast'
 import styles from './ReclamosListPage.module.css'
 
 interface FilterChipConfig {
-  readonly id: ReclamoReasonFilter
+  readonly id: CategoryFilter
   readonly label: string
 }
 
-/** Universo completo de chips, en el orden canónico en que se muestran. */
-const ALL_FILTER_CHIPS: readonly FilterChipConfig[] = [
-  { id: 'todos', label: 'Todos' },
-  ...RECLAMO_PROFILES,
-]
-
-const DEFAULT_FILTER: ReclamoReasonFilter = 'todos'
+const DEFAULT_FILTER: CategoryFilter = DEFAULT_CATEGORY_FILTER
 
 const ACCENTED_CHARS: Readonly<Record<string, string>> = {
   á: 'a',
@@ -40,85 +34,111 @@ function normalize(value: string): string {
 }
 
 /**
- * Listado de motivos de reclamo.
+ * Listado de "Mis gestiones" (nombre reformulado el 2026-09-02; antes
+ * "Reclamos" — ver `core/gestiones/sectionLabel.ts`).
  *
- * Réplica de la imagen de referencia: buscador + chips de filtro +
- * listado. Los chips visibles, los motivos y el conteo son
- * datos reales (`core/reclamos/reasonProfiles.ts` +
- * `core/reclamos/profileVisibility.ts`), no maqueta.
+ * Buscador + chips de categoría + listado. Las 7 categorías y sus
+ * gestiones salen de `core/gestiones/categories.ts` (dato real, no
+ * maqueta) — pero sólo Franquicias y Fulfillment tienen contenido
+ * confirmado por el negocio hoy; el resto es agrupación por intuición o
+ * directamente contenido inventado (marcado como tal en su propio label).
+ * Ver `documentation/mis-gestiones-categorias.md`.
  *
- * El filtro arranca siempre en "Todos" (como la imagen de referencia). El
- * "caso de uso" activo (panel del botón flotante) NO decide qué chip viene
- * elegido — decide qué chips EXISTEN para ese usuario: por ejemplo, un
- * usuario Individuo sólo puede ver "Todos" e "Individuo", nunca los chips
- * de Franquicias o Fulfillment. Si cambiás de caso de uso y el chip que
- * tenías elegido deja de ser visible, se vuelve a "Todos".
+ * El tipo de usuario activo (Individuo/Pyme/Franquicias/Fulfillment,
+ * simulado desde "Casos de uso") decide qué categorías (chips) son
+ * visibles — no cuál viene elegida: el filtro arranca siempre en "Todos",
+ * y si el chip elegido deja de estar disponible al cambiar de usuario,
+ * vuelve solo a "Todos" (mismo patrón que la versión anterior con
+ * perfiles, ahora sobre categorías — ver `core/gestiones/categories.ts`).
+ *
+ * IMPORTANTE: "Todos" NO es "todas las gestiones del sistema" — es la
+ * unión de las categorías visibles para el usuario activo. Un individuo
+ * o pyme nunca ve gestiones de Franquicias/Fulfillment, ni siquiera con
+ * "Todos" seleccionado (corregido 2026-09-02: `itemsForFilter` recibe
+ * `visibleCategories`, no opera sobre el universo completo de categorías).
  */
 export function ReclamosListPage() {
   const { profileId } = useActiveUseCase()
   const { showToast } = useToast()
-  const [filter, setFilter] = useState<ReclamoReasonFilter>(DEFAULT_FILTER)
+  const [filter, setFilter] = useState<CategoryFilter>(DEFAULT_FILTER)
   const [search, setSearch] = useState('')
 
-  const visibleFilterIds = useMemo(() => visibleFiltersForProfile(profileId), [profileId])
-  const visibleChips = useMemo(
-    () => ALL_FILTER_CHIPS.filter((chip) => visibleFilterIds.includes(chip.id)),
-    [visibleFilterIds],
+  const visibleCategories = useMemo(() => visibleCategoriesForProfile(profileId), [profileId])
+  const chips: readonly FilterChipConfig[] = useMemo(
+    () => [
+      { id: DEFAULT_CATEGORY_FILTER, label: 'Todos' },
+      ...visibleCategories.map((category) => ({ id: category.id, label: category.label })),
+    ],
+    [visibleCategories],
   )
 
-  // Si al cambiar de caso de uso el chip elegido deja de estar disponible,
-  // volvemos a "Todos" (siempre visible en la definición actual).
+  // Si al cambiar de tipo de usuario la categoría elegida deja de estar
+  // visible, volvemos a "Todos" (siempre disponible).
   useEffect(() => {
-    if (!visibleFilterIds.includes(filter)) {
+    if (!chips.some((chip) => chip.id === filter)) {
       setFilter(DEFAULT_FILTER)
     }
-  }, [visibleFilterIds, filter])
+  }, [chips, filter])
 
-  const reasons = useMemo(() => reasonsForFilter(filter), [filter])
+  const items = useMemo(
+    () => itemsForFilter(filter, visibleCategories),
+    [filter, visibleCategories],
+  )
 
-  const visibleReasons = useMemo(() => {
+  const visibleItems = useMemo(() => {
     const query = normalize(search.trim())
-    if (query === '') return reasons
-    return reasons.filter((reason) => normalize(reason.label).includes(query))
-  }, [reasons, search])
+    if (query === '') return items
+    return items.filter(
+      (item) =>
+        normalize(item.label).includes(query) ||
+        item.tags.some((tag) => normalize(tag).includes(query)),
+    )
+  }, [items, search])
 
-  const countLabel = `${String(visibleReasons.length)} ${visibleReasons.length === 1 ? 'reclamo' : 'reclamos'}`
+  const countLabel = `${String(visibleItems.length)} ${visibleItems.length === 1 ? ITEM_LABEL_SINGULAR : ITEM_LABEL_PLURAL}`
 
   return (
     <PageContainer>
-      <PageHeader title="Reclamos" />
+      <PageHeader title={SECTION_LABEL} />
 
       <SearchInput
-        id="buscar-reclamos"
+        id="buscar-gestiones"
         value={search}
         onChange={setSearch}
-        placeholder="Buscar reclamos…"
+        placeholder={`Buscar ${ITEM_LABEL_PLURAL}…`}
         className={styles.search}
       />
 
       <ChipGroup
-        items={visibleChips}
+        items={chips}
         activeId={filter}
         onChange={setFilter}
-        ariaLabel="Tipos de reclamos"
+        ariaLabel="Categorías de gestión"
         className={styles.chips}
       />
 
-      <p className={styles.count}>{countLabel}</p>
+      <div className={styles.countRow}>
+        <p className={styles.count}>{countLabel}</p>
+        {filter !== DEFAULT_FILTER && (
+          <button type="button" className={styles.clearFilter} onClick={() => setFilter(DEFAULT_FILTER)}>
+            Limpiar filtro
+          </button>
+        )}
+      </div>
 
       <div className={styles.list}>
-        {visibleReasons.length === 0 ? (
+        {visibleItems.length === 0 ? (
           <EmptyState
-            title="No encontramos reclamos"
-            description="Probá con otra búsqueda o cambiá el filtro de tipo de reclamo."
+            title={`No encontramos ${ITEM_LABEL_PLURAL}`}
+            description="Probá con otra búsqueda o cambiá la categoría."
           />
         ) : (
-          visibleReasons.map((reason) => (
+          visibleItems.map((item) => (
             <NavListItem
-              key={reason.id}
-              label={reason.label}
+              key={item.id}
+              label={item.label}
               onClick={() =>
-                showToast(`"${reason.label}" — pantalla de detalle todavía no implementada.`, 'info')
+                showToast(`"${item.label}" — pantalla de detalle todavía no implementada.`, 'info')
               }
             />
           ))

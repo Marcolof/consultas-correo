@@ -1,35 +1,48 @@
-# Pantalla: Listado de Reclamos
+# Pantalla: Listado de "Mis gestiones" (antes "Reclamos")
 
-> **Estado: draft, primera pantalla real del prototipo.** Reemplaza al
-> `StarterPage` de ejemplo. Construida el 2026-09-01 sobre
+> **Estado: draft.** Construida el 2026-09-01 sobre
 > [`proto navegable`](../proto%20navegable), basada en una imagen de
-> referencia (layout) y en la definición funcional de
-> [motivos por perfil](motivos-reclamo-por-perfil.md) (datos reales).
+> referencia (layout). **2026-09-02: la sección se renombró de "Reclamos" a
+> "Mis gestiones" y el eje de filtro pasó de perfil de usuario a 7
+> categorías de producto/servicio** — ver
+> [`mis-gestiones-categorias.md`](mis-gestiones-categorias.md) para la
+> definición completa y qué contenido es confirmado, inferido o inventado.
+> El nombre de la sección vive en una constante
+> (`core/gestiones/sectionLabel.ts`) porque el usuario avisó que es
+> probable que se vuelva a renombrar.
 
 ## 1. Qué hace
 
-Ruta índice (`/`) del prototipo: `src/pages/ReclamosListPage.tsx`. Muestra:
+Ruta índice (`/`) del prototipo: `src/pages/ReclamosListPage.tsx` (nombre
+de archivo sin cambiar — ver nota sobre alcance del renombre en
+[`mis-gestiones-categorias.md`](mis-gestiones-categorias.md#1-cambio-de-nombre-reclamos--mis-gestiones)).
+Muestra:
 
-1. Título "Reclamos" (`PageHeader`, sin descripción ni acciones).
+1. Título **"Mis gestiones"** (`PageHeader`, sin descripción ni acciones).
 2. Un buscador de una línea, con esquinas de 12px (`--radius-md-lg`) — no
-   totalmente redondeado, por fidelidad con la propuesta de Figma.
-3. Chips de filtro directamente debajo del buscador (sin título de
-   sección — el rótulo "Tipos de Reclamos" que estaba arriba se sacó a
-   pedido del usuario, 2026-09-02): **Todos**, Individuo, Franquicias,
-   Fulfillment — el subconjunto realmente visible depende del "caso de uso"
-   activo (ver sección 4).
-4. Contador ("N reclamos", antes decía "N consultas") que refleja el
-   resultado real de filtro + búsqueda combinados.
-5. Listado de motivos (filas clickeables con flecha, sin sombra — sólo
-   fondo y borde, a pedido del usuario), con scroll propio.
+   totalmente redondeado, por fidelidad con la propuesta de Figma. Ancho
+   máximo de 1000px incluyendo padding (`box-sizing: border-box`).
+3. Chips de filtro directamente debajo del buscador: **Todos** + las
+   categorías visibles para el tipo de usuario activo (hasta 7: Mi
+   Cuenta, Paquetería Nacional, Paquetería Internacional, Franquicias,
+   Fulfillment, Mis Comunicaciones Digitales, Oficios Judiciales) — ver
+   sección 4, el tipo de usuario (Individuo/Pyme/Franquicias/Fulfillment)
+   decide cuáles se ven. A la derecha aparece un link **"Limpiar
+   filtro"** sólo cuando el chip activo no es "Todos".
+4. Contador ("N gestiones") que refleja el resultado real de filtro +
+   búsqueda combinados.
+5. Listado de gestiones (filas clickeables con flecha, sin sombra — sólo
+   fondo y borde), con scroll propio.
 
-Los datos **no son mock arbitrario**: motivos, perfiles y qué perfil ve qué
-motivo salen de `core/reclamos/reasonProfiles.ts`, que a su vez lee
-`core/reclamos/data/motivos-reclamo-por-perfil.json` — una copia del mismo
-JSON documentado en [`motivos-reclamo-por-perfil.md`](motivos-reclamo-por-perfil.md).
-Cambiar de chip realmente cambia qué se ve (12 para Individuo, 4 para
-Franquicias, 17 para Fulfillment, 19 para Todos) — no es una maqueta
-estática.
+Los datos de las categorías salen de `core/gestiones/categories.ts`, que
+lee `core/gestiones/data/categorias-gestiones.json` — copia del mismo JSON
+documentado en
+[`mis-gestiones-categorias.md`](mis-gestiones-categorias.md). Sólo
+Franquicias (4) y Fulfillment (6) tienen contenido confirmado por el
+negocio; el resto es inferido por intuición o directamente inventado
+(marcado en el propio label con "(Gestión inventada)") — no es una
+maqueta estática, pero tampoco hay que confundir el contenido de relleno
+con datos reales.
 
 ## 2. Componentes reutilizados (sin cambios)
 
@@ -61,56 +74,46 @@ Se decidió que un buscador no necesita label flotante de todos modos (el
 placeholder alcanza), así que se armó como primitivo aparte en vez de forzar
 el patrón de `Field` donde no encaja.
 
-## 4. Mecanismo nuevo: "Casos de uso" (perfil activo simulado)
+## 4. "Casos de uso" — sección "Usuarios" (vigente, ahora sobre categorías)
 
-El botón flotante junto al `ChatBubble` (`app/HubAccessButton.tsx`) ahora
-despliega un menú con 2 opciones:
+El botón flotante junto al `ChatBubble` (`app/HubAccessButton.tsx`)
+despliega un menú con 2 opciones: **Volver al Hub** y **Casos de uso**
+(abre un `Modal` con 2 secciones: "Usuarios" y "Pantalla").
 
-1. **Volver al Hub** — comportamiento anterior, sin cambios.
-2. **Casos de uso** — abre un `Modal` con una sección "Usuarios": un
-   `ChipGroup` de selección única entre Individuo (default), Franquicias y
-   Fulfillment.
+> Esta sección se sacó del panel más temprano en la misma sesión del
+> 2026-09-02 (cuando se pensó que las 7 categorías eran fijas para todos)
+> y se restauró el mismo día cuando el usuario aclaró que el tipo de
+> usuario **sigue impactando** qué se ve — ahora sobre las categorías, con
+> un tipo nuevo agregado ("Pyme"). Ver
+> [`mis-gestiones-categorias.md`](mis-gestiones-categorias.md#6-nivel-1--qué-categorías-ve-cada-tipo-de-usuario-vigente)
+> para la regla completa.
 
-Este selector escribe un **contexto global** (`core/session/activeUseCase.ts`,
-provisto en `app/providers.tsx`) que representa qué perfil de usuario se
-está simulando — es tooling de prototipo, no autenticación real.
+"Usuarios" es un `ChipGroup` de selección única entre **Individuo**
+(default), **Pyme**, **Franquicias** y **Fulfillment**
+(`core/session/activeUseCase.ts` + `core/gestiones/categories.ts` →
+`visibleCategoriesForProfile()`). El tipo activo decide **qué categorías
+(chips) existen** en el listado — no cuál viene preseleccionada: el chip
+por defecto sigue siendo siempre "Todos", y si la categoría elegida deja
+de estar disponible al cambiar de tipo de usuario, el filtro vuelve solo
+a "Todos" (mismo patrón exacto que la regla anterior con perfiles, ahora
+sobre un eje distinto).
 
-**Vínculo con el listado (corregido el 2026-09-01):** el "caso de uso"
-activo **no decide qué chip viene elegido** — el chip por defecto es
-siempre **"Todos"**, en las tres identidades. Lo que decide es **qué chips
-existen** para navegar: ver
-[`motivos-reclamo-por-perfil.md`](motivos-reclamo-por-perfil.md#6-visibilidad-de-perfiles-entre-sí-regla-nueva-2026-09-01)
-para la regla completa (`core/reclamos/profileVisibility.ts`). En resumen:
+Regla de visibilidad (resumen; detalle completo en
+[`mis-gestiones-categorias.md`](mis-gestiones-categorias.md)):
 
-- Individuo ve los chips: Todos, Individuo.
-- Franquicias ve: Todos, Individuo, Franquicias.
-- Fulfillment ve: Todos, Individuo, Fulfillment.
-
-Si el chip elegido deja de estar disponible al cambiar de caso de uso (por
-ejemplo, tenías "Fulfillment" elegido y pasás a "Individuo"), el filtro
-vuelve a "Todos" automáticamente — es la única situación en la que el caso
-de uso toca la selección; nunca la fuerza a priori.
-
-> Versión anterior de este documento (2026-09-01, misma fecha, corregida
-> más tarde) decía que el filtro arrancaba en el perfil activo. Era una
-> decisión de UX no pedida explícitamente; el usuario la revirtió y aclaró
-> que el mecanismo real es de **visibilidad de opciones**, no de
-> preselección. Se deja esta nota por trazabilidad.
+- Individuo y Pyme no ven Franquicias ni Fulfillment.
+- Franquicias no ve Fulfillment.
+- Fulfillment no ve Franquicias.
+- El resto de las categorías (Mi Cuenta, Paquetería Nacional, Paquetería
+  Internacional, Mis Comunicaciones Digitales, Oficios Judiciales) se ven
+  siempre, para los 4 tipos de usuario.
 
 ### Escalabilidad
 
-- Agregar un perfil nuevo a los **motivos** que ve: un solo lugar,
-  `core/reclamos/reasonProfiles.ts` → `RECLAMO_PROFILES` (y el JSON de
-  datos, si el perfil trae motivos propios).
-- Agregar/cambiar qué **chips ve** cada perfil: un solo lugar,
-  `documentation/data/visibilidad-perfiles.json` (+ su copia en
-  `core/reclamos/data/`) — es dato, no lógica hardcodeada, así que una regla
-  irregular a futuro (por ejemplo, un perfil que no vea "Individuo") es un
-  cambio de datos, no de código.
-- Agregar más "condiciones" al panel "Casos de uso" (mencionado por el
-  usuario como algo a futuro): el `Modal` de `HubAccessButton.tsx` está
-  armado para sumar secciones hermanas de "Usuarios" y "Pantalla" — hay un
-  comentario en el código marcando dónde van.
+Agregar un tipo de usuario nuevo o cambiar qué categorías ve cada uno es
+editar `documentation/data/categorias-gestiones.json` (`user_types` +
+`profile_category_visibility`) — dato, no lógica hardcodeada — sin tocar
+código.
 
 ## 5. Sección "Pantalla" — modo responsive forzado (2026-09-01)
 
@@ -176,14 +179,14 @@ ventana de verdad.
 
 - Las filas del listado no navegan a ningún lado todavía — al tocarlas
   muestran un `Toast` de aviso ("pantalla de detalle todavía no
-  implementada"). No hay pantalla de detalle de reclamo definida aún.
-- El buscador filtra sólo por `label` del motivo, sin acentos
+  implementada"). No hay pantalla de detalle de gestión definida aún.
+- El buscador filtra sólo por `label` de la gestión, sin acentos
   (comparación normalizada a mano, sin diacríticos) — no busca por
   categoría ni por sinónimos.
-- Sigue sin resolverse cómo se determina el perfil de un usuario real (ver
-  sección 6 de [`motivos-reclamo-por-perfil.md`](motivos-reclamo-por-perfil.md))
-  — "Casos de uso" es una simulación manual para el prototipo, no una
-  propuesta de cómo funcionaría en producción.
+- 5 de las 7 categorías tienen contenido inferido por intuición o
+  directamente inventado — ver
+  [`mis-gestiones-categorias.md`](mis-gestiones-categorias.md) sección 7
+  para las preguntas abiertas sobre esto.
 - El modo responsive forzado cubre sidebar, header, drawer y el padding de
   `PageContainer` (`:global(.force-mobile) .content` fuerza `--space-4`,
   16px, agregado 2026-09-02 — antes quedaba en 48px porque el

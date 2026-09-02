@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Pantalla: Listado de Reclamos — MiCorreo</title>
+<title>Pantalla: Listado de "Mis gestiones" — MiCorreo</title>
 <link rel="stylesheet" href="hub.css" />
 </head>
 <body>
@@ -25,34 +25,32 @@
       <span class="pill draft">Draft — primera pantalla real del prototipo</span>
     </div>
 
-    <h1>Pantalla: Listado de Reclamos</h1>
+    <h1>Pantalla: Listado de "Mis gestiones" (antes "Reclamos")</h1>
 
     <blockquote>
-      Reemplaza al <code>StarterPage</code> de ejemplo. Construida el
-      2026-09-01 sobre <code>proto navegable</code>, basada en una imagen
-      de referencia (layout) y en la definición funcional de
-      <a href="motivos-reclamo-por-perfil.html">motivos por perfil</a>
-      (datos reales).
+      Construida el 2026-09-01 sobre <code>proto navegable</code>, basada
+      en una imagen de referencia (layout). <strong>2026-09-02: la sección
+      se renombró de "Reclamos" a "Mis gestiones" y el eje de filtro pasó
+      de perfil de usuario a 7 categorías</strong> — ver
+      <a href="mis-gestiones-categorias.html">"Mis gestiones" — Categorías</a>.
     </blockquote>
 
     <h2>1. Qué hace</h2>
-    <p>Ruta índice (<code>/</code>) del prototipo: <code>src/pages/ReclamosListPage.tsx</code>. Muestra:</p>
+    <p>Ruta índice (<code>/</code>) del prototipo: <code>src/pages/ReclamosListPage.tsx</code> (nombre de archivo sin cambiar). Muestra:</p>
     <ol>
-      <li>Título "Reclamos" (<code>PageHeader</code>, sin descripción ni acciones).</li>
-      <li>Un buscador de una línea, con esquinas de 12px — no totalmente redondeado, por fidelidad con la propuesta de Figma.</li>
-      <li>Chips de filtro directamente debajo del buscador (sin título de sección — el rótulo "Tipos de Reclamos" se sacó a pedido del usuario, 2026-09-02): <strong>Todos</strong>, Individuo, Franquicias, Fulfillment — el subconjunto realmente visible depende del "caso de uso" activo (ver sección 4).</li>
-      <li>Contador ("N reclamos", antes decía "N consultas") que refleja el resultado real de filtro + búsqueda combinados.</li>
-      <li>Listado de motivos (filas clickeables con flecha, sin sombra — sólo fondo y borde), con scroll propio.</li>
+      <li>Título "Mis gestiones" (<code>PageHeader</code>, sin descripción ni acciones).</li>
+      <li>Un buscador de una línea, con esquinas de 12px — no totalmente redondeado. Ancho máximo 1000px incluyendo padding.</li>
+      <li>Chips de filtro directamente debajo del buscador: <strong>Todos</strong> + las categorías visibles para el tipo de usuario activo (hasta 7: Mi Cuenta, Paquetería Nacional, Paquetería Internacional, Franquicias, Fulfillment, Mis Comunicaciones Digitales, Oficios Judiciales) — ver sección 4. A la derecha aparece un link "Limpiar filtro" sólo cuando el chip activo no es "Todos".</li>
+      <li>Contador ("N gestiones") que refleja el resultado real de filtro + búsqueda combinados.</li>
+      <li>Listado de gestiones (filas clickeables con flecha, sin sombra — sólo fondo y borde), con scroll propio.</li>
     </ol>
     <p>
-      Los datos <strong>no son mock arbitrario</strong>: motivos, perfiles
-      y qué perfil ve qué motivo salen de
-      <code>core/reclamos/reasonProfiles.ts</code>, que a su vez lee una
-      copia del JSON documentado en
-      <a href="motivos-reclamo-por-perfil.html">motivos por perfil</a>.
-      Cambiar de chip realmente cambia qué se ve (12 para Individuo, 4 para
-      Franquicias, 17 para Fulfillment, 19 para Todos) — no es una maqueta
-      estática.
+      Los datos salen de <code>core/gestiones/categories.ts</code>, que lee
+      una copia del JSON documentado en
+      <a href="mis-gestiones-categorias.html">"Mis gestiones" — Categorías</a>.
+      Sólo Franquicias (4) y Fulfillment (6) tienen contenido confirmado
+      por el negocio; el resto es inferido por intuición o inventado
+      (marcado como tal en el propio label).
     </p>
 
     <h2>2. Componentes reutilizados (sin cambios)</h2>
@@ -80,50 +78,22 @@
       en vez de forzar el patrón de <code>Field</code> donde no encaja.
     </p>
 
-    <h2>4. Mecanismo nuevo: "Casos de uso" (perfil activo simulado)</h2>
-    <p>El botón flotante junto al <code>ChatBubble</code> (<code>app/HubAccessButton.tsx</code>) despliega un menú con 2 opciones:</p>
-    <ol>
-      <li><strong>Volver al Hub</strong> — comportamiento anterior, sin cambios.</li>
-      <li><strong>Casos de uso</strong> — abre un <code>Modal</code> con 2 secciones: "Usuarios" (perfil activo) y "Pantalla" (ver sección 5).</li>
-    </ol>
-    <p>
-      El selector de perfil escribe un <strong>contexto global</strong>
-      (<code>core/session/activeUseCase.ts</code>) que representa qué
-      perfil de usuario se está simulando — es tooling de prototipo, no
-      autenticación real.
-    </p>
-    <p>
-      <strong>Vínculo con el listado (corregido el 2026-09-01):</strong> el
-      "caso de uso" activo <strong>no decide qué chip viene elegido</strong>
-      — el chip por defecto es siempre "Todos", en las tres identidades. Lo
-      que decide es <strong>qué chips existen</strong> para navegar (ver
-      <a href="motivos-reclamo-por-perfil.html">motivos por perfil</a>,
-      sección 6):
-    </p>
-    <ul>
-      <li>Individuo ve los chips: Todos, Individuo.</li>
-      <li>Franquicias ve: Todos, Individuo, Franquicias.</li>
-      <li>Fulfillment ve: Todos, Individuo, Fulfillment.</li>
-    </ul>
-    <p>
-      Si el chip elegido deja de estar disponible al cambiar de caso de
-      uso, el filtro vuelve a "Todos" automáticamente — es la única
-      situación en la que el caso de uso toca la selección; nunca la fuerza
-      a priori.
-    </p>
+    <h2>4. "Casos de uso" — sección "Usuarios" (vigente, ahora sobre categorías)</h2>
+    <p>El botón flotante junto al <code>ChatBubble</code> (<code>app/HubAccessButton.tsx</code>) despliega un menú con 2 opciones: <strong>Volver al Hub</strong> y <strong>Casos de uso</strong> (abre un <code>Modal</code> con 2 secciones: "Usuarios" y "Pantalla").</p>
     <blockquote>
-      Versión anterior de este documento (misma fecha, corregida más
-      tarde) decía que el filtro arrancaba en el perfil activo. Era una
-      decisión de UX no pedida explícitamente; el usuario la revirtió y
-      aclaró que el mecanismo real es de visibilidad de opciones, no de
-      preselección. Se deja esta nota por trazabilidad.
+      Esta sección se sacó del panel más temprano en la misma sesión del
+      2026-09-02 y se restauró el mismo día cuando el usuario aclaró que
+      el tipo de usuario sigue impactando qué se ve — ahora sobre las
+      categorías, con un tipo nuevo agregado ("Pyme"). Ver
+      <a href="mis-gestiones-categorias.html">"Mis gestiones" — Categorías</a>
+      sección 6.
     </blockquote>
-
-    <h3>Escalabilidad</h3>
+    <p>"Usuarios" es un <code>ChipGroup</code> entre <strong>Individuo</strong> (default), <strong>Pyme</strong>, <strong>Franquicias</strong> y <strong>Fulfillment</strong>. El tipo activo decide qué categorías existen — no cuál viene preseleccionada: el default sigue siendo "Todos", y si la categoría elegida deja de estar disponible al cambiar de tipo, el filtro vuelve solo a "Todos".</p>
     <ul>
-      <li>Agregar un perfil nuevo a los <strong>motivos</strong> que ve: un solo lugar, <code>core/reclamos/reasonProfiles.ts</code> → <code>RECLAMO_PROFILES</code>.</li>
-      <li>Agregar/cambiar qué <strong>chips ve</strong> cada perfil: un solo lugar, <code>visibilidad-perfiles.json</code> — es dato, no lógica hardcodeada.</li>
-      <li>Agregar más "condiciones" al panel "Casos de uso": el <code>Modal</code> está armado para sumar secciones hermanas de "Usuarios" y "Pantalla".</li>
+      <li>Individuo y Pyme no ven Franquicias ni Fulfillment.</li>
+      <li>Franquicias no ve Fulfillment.</li>
+      <li>Fulfillment no ve Franquicias.</li>
+      <li>El resto de las categorías se ven siempre, para los 4 tipos.</li>
     </ul>
 
     <h2>5. Sección "Pantalla" — modo responsive forzado</h2>
@@ -159,11 +129,11 @@
 
     <h2>6. Preguntas / límites que quedan (no resueltos acá)</h2>
     <ul>
-      <li>Las filas del listado no navegan a ningún lado todavía — muestran un <code>Toast</code> de aviso. No hay pantalla de detalle de reclamo definida aún.</li>
-      <li>El buscador filtra sólo por label del motivo, sin acentos — no busca por categoría ni por sinónimos.</li>
-      <li>Sigue sin resolverse cómo se determina el perfil de un usuario real — "Casos de uso" es una simulación manual para el prototipo, no una propuesta de producción.</li>
-      <li>El modo responsive forzado cubre sidebar, header, drawer y el padding de <code>PageContainer</code> (fuerza 16px, agregado 2026-09-02) — no se auditó exhaustivamente si algún otro componente con <code>@media</code> propio necesitaría el mismo tipo de override.</li>
-      <li>En pantallas anchas, <code>PageContainer</code> ya no centra su contenido — queda pegado a la izquierda con su padding, y ese padding en desktop es de 3rem por fidelidad con la web real de MiCorreo (corregido 2026-09-02).</li>
+      <li>Las filas del listado no navegan a ningún lado todavía — muestran un <code>Toast</code> de aviso. No hay pantalla de detalle de gestión definida aún.</li>
+      <li>El buscador filtra sólo por label de la gestión, sin acentos — no busca por categoría ni por sinónimos.</li>
+      <li>5 de las 7 categorías tienen contenido inferido por intuición o inventado — ver <a href="mis-gestiones-categorias.html">"Mis gestiones" — Categorías</a> para las preguntas abiertas.</li>
+      <li>El modo responsive forzado cubre sidebar, header, drawer y el padding de <code>PageContainer</code> (fuerza 16px) — no se auditó exhaustivamente si algún otro componente con <code>@media</code> propio necesitaría el mismo tipo de override.</li>
+      <li>En pantallas anchas, <code>PageContainer</code> ya no centra su contenido — queda pegado a la izquierda con su padding, y ese padding en desktop es de 3rem por fidelidad con la web real de MiCorreo.</li>
     </ul>
 
     <a class="back-link" href="documentacion.html">&larr; Volver a Documentación</a>

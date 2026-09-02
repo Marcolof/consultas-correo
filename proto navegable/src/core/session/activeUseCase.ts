@@ -1,26 +1,28 @@
 /**
- * "Caso de uso" activo del prototipo: qué perfil de usuario se está
- * simulando (Individuo / Franquicias / Fulfillment).
+ * "Caso de uso" activo del prototipo: qué tipo de usuario se está
+ * simulando (Individuo / Pyme / Franquicias / Fulfillment).
  *
  * Es un mecanismo de PROTOTIPO, no de producción: no hay autenticación real
- * ni permisos — es la forma de mostrar cómo cambia el listado de Reclamos
- * según el perfil, controlable desde el panel "Casos de uso" del botón
- * flotante (ver `app/HubAccessButton.tsx`). Pensado para escalar: el día que
- * haya más perfiles o condiciones, se agregan acá y en
- * `core/reclamos/reasonProfiles.ts`, sin tocar el mecanismo de contexto.
+ * ni permisos — es la forma de mostrar cómo cambian las categorías (chips)
+ * visibles en "Mis gestiones" según el tipo de usuario, controlable desde
+ * el panel "Casos de uso" del botón flotante (ver `app/HubAccessButton.tsx`).
+ * La regla de visibilidad vive en `core/gestiones/categories.ts` (dato,
+ * no lógica hardcodeada): agregar un tipo de usuario nuevo o cambiar qué
+ * categorías ve cada uno es editar `data/categorias-gestiones.json`, sin
+ * tocar este archivo.
  */
 import { createContext, useContext } from 'react'
-import { DEFAULT_RECLAMO_PROFILE } from '@/core/reclamos/reasonProfiles'
-import type { ReasonProfileId } from '@/core/reclamos/reasonProfiles'
+import { DEFAULT_USER_PROFILE } from '@/core/gestiones/categories'
+import type { UserProfileId } from '@/core/gestiones/categories'
 
 export interface ActiveUseCaseContextValue {
-  readonly profileId: ReasonProfileId
-  readonly setProfileId: (id: ReasonProfileId) => void
+  readonly profileId: UserProfileId
+  readonly setProfileId: (id: UserProfileId) => void
 }
 
 export const ActiveUseCaseContext = createContext<ActiveUseCaseContextValue | null>(null)
 
-export const DEFAULT_ACTIVE_PROFILE = DEFAULT_RECLAMO_PROFILE
+export const DEFAULT_ACTIVE_PROFILE = DEFAULT_USER_PROFILE
 
 /** Acceso al caso de uso activo. Falla fuerte si falta el provider. */
 export function useActiveUseCase(): ActiveUseCaseContextValue {

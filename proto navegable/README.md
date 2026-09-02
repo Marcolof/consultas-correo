@@ -11,8 +11,9 @@ extraído del proyecto de referencia `Envio internacional CLAUDE` con
 **fidelidad visual** (tokens, tipografía, medidas) y sin nada de su
 funcionalidad de negocio (no hay roles, permisos, envíos, mocks ni
 escenarios de ese proyecto). Sobre esa base ya se construyó la primera
-pantalla real de **este** proyecto — el listado de Reclamos — con datos
-reales de negocio (qué motivo ve cada perfil de usuario).
+pantalla real de **este** proyecto — el listado de **"Mis gestiones"**
+(antes "Reclamos") — con datos reales de negocio (qué gestión pertenece a
+qué categoría). Ver [`documentation/mis-gestiones-categorias.md`](../documentation/mis-gestiones-categorias.md).
 
 ## Qué incluye
 
@@ -30,15 +31,21 @@ reales de negocio (qué motivo ve cada perfil de usuario).
   `Stepper`, `Tabs`.
 - **Assets**: fuentes Gilroy (.ttf), logo de Correo Argentino / MiCorreo,
   íconos del sidebar y del header, botón de chat flotante.
-- **Pantallas reales**: `ReclamosListPage` (`/`) — listado de motivos de
-  reclamo filtrable por perfil de usuario, con datos reales (no mock) desde
-  `src/core/reclamos/reasonProfiles.ts`. Ver
-  [`documentation/pantalla-reclamos-listado.md`](../documentation/pantalla-reclamos-listado.md).
+- **Pantallas reales**: `ReclamosListPage` (`/`, nombre de archivo sin
+  cambiar) — listado de "Mis gestiones" filtrable por 7 categorías de
+  producto/servicio, con datos reales (no mock) desde
+  `src/core/gestiones/categories.ts`. El nombre de la sección vive en
+  `src/core/gestiones/sectionLabel.ts` (una sola constante, editable si el
+  negocio vuelve a renombrarla). Ver
+  [`documentation/pantalla-reclamos-listado.md`](../documentation/pantalla-reclamos-listado.md)
+  y [`documentation/mis-gestiones-categorias.md`](../documentation/mis-gestiones-categorias.md).
 - **Tooling de prototipo** (no es chrome de producción): el botón flotante
-  junto al `ChatBubble` abre "Volver al Hub" y "Casos de uso" — este último
-  simula qué perfil de usuario está activo (Individuo/Franquicias/Fulfillment),
-  lo que cambia qué se ve en `ReclamosListPage`. Ver
-  `src/core/session/activeUseCase.ts` y `src/app/HubAccessButton.tsx`.
+  junto al `ChatBubble` abre "Volver al Hub" y "Casos de uso" (switch
+  "Responsive"). Ver `src/app/HubAccessButton.tsx`.
+- **Histórico, sin uso hoy**: `src/core/reclamos/` (motivos por perfil de
+  usuario) y `src/core/session/activeUseCase.ts` — mecanismo superado por
+  las categorías de "Mis gestiones", conservado por si vuelve a ser
+  relevante.
 
 ## Qué NO incluye (a propósito)
 

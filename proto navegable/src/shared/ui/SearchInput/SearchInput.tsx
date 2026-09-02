@@ -18,9 +18,9 @@ export interface SearchInputProps extends NativeInputProps {
 
 function SearchIcon() {
   return (
-    <svg className={styles.icon} width="18" height="18" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+    <svg className={styles.icon} width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
       <path
-        d="M11.742 10.344a6.5 6.5 0 1 0-1.398 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"
+        d="M18 11C18 7.13401 14.866 4 11 4C7.13401 4 4 7.13401 4 11C4 14.866 7.13401 18 11 18C14.866 18 18 14.866 18 11ZM20 11C20 13.125 19.2618 15.0766 18.0303 16.6162L21.707 20.293L21.7754 20.3691C22.0957 20.7619 22.0731 21.3409 21.707 21.707C21.3409 22.0731 20.7619 22.0957 20.3691 21.7754L20.293 21.707L16.6162 18.0303C15.0766 19.2618 13.125 20 11 20C6.02944 20 2 15.9706 2 11C2 6.02944 6.02944 2 11 2C15.9706 2 20 6.02944 20 11Z"
         fill="currentColor"
       />
     </svg>
