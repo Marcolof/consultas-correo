@@ -1,7 +1,13 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useActiveUseCase } from '@/core/session/activeUseCase'
+import { useCategoryToggles } from '@/core/session/categoryToggles'
 import { readQueryParam } from '@/core/session/deepLink'
-import { DEFAULT_CATEGORY_FILTER, itemsForFilter, visibleCategoriesForProfile } from '@/core/gestiones/categories'
+import {
+  DEFAULT_CATEGORY_FILTER,
+  applyUnavailableCategoryToggles,
+  itemsForFilter,
+  visibleCategoriesForProfile,
+} from '@/core/gestiones/categories'
 import type { CategoryFilter } from '@/core/gestiones/categories'
 import { SECTION_LABEL, ITEM_LABEL_SINGULAR, ITEM_LABEL_PLURAL } from '@/core/gestiones/sectionLabel'
 import { PageContainer, PageHeader } from '@/shared/layout'
@@ -45,6 +51,12 @@ function normalize(value: string): string {
  * directamente contenido inventado (marcado como tal en su propio label).
  * Ver `documentation/mis-gestiones-categorias.md`.
  *
+ * Paquetería Internacional y Mis Comunicaciones Digitales (2026-09-03)
+ * están OCULTAS por defecto (chip + gestiones fuera de "Todos") porque su
+ * contenido es 100% inventado — se muestran sólo si se activa su switch en
+ * "Casos de uso" (`useCategoryToggles`,
+ * `applyUnavailableCategoryToggles`).
+ *
  * El tipo de usuario activo (Individuo/Pyme/Franquicias/Fulfillment,
  * simulado desde "Casos de uso") decide qué categorías (chips) son
  * visibles — no cuál viene elegida: el filtro arranca siempre en "Todos",
@@ -60,11 +72,18 @@ function normalize(value: string): string {
  */
 export function ReclamosListPage() {
   const { profileId } = useActiveUseCase()
+  const { showPaqueteriaInternacional, showComunicacionesDigitales } = useCategoryToggles()
   const { showToast } = useToast()
   const [filter, setFilter] = useState<CategoryFilter>(() => readQueryParam('category') ?? DEFAULT_FILTER)
   const [search, setSearch] = useState(() => readQueryParam('q') ?? '')
 
-  const visibleCategories = useMemo(() => visibleCategoriesForProfile(profileId), [profileId])
+  const visibleCategories = useMemo(() => {
+    const byProfile = visibleCategoriesForProfile(profileId)
+    const enabledUnavailable = new Set<string>()
+    if (showPaqueteriaInternacional) enabledUnavailable.add('paqueteria_internacional')
+    if (showComunicacionesDigitales) enabledUnavailable.add('mis_comunicaciones_digitales')
+    return applyUnavailableCategoryToggles(byProfile, enabledUnavailable)
+  }, [profileId, showPaqueteriaInternacional, showComunicacionesDigitales])
   const chips: readonly FilterChipConfig[] = useMemo(
     () => [
       { id: DEFAULT_CATEGORY_FILTER, label: 'Todos' },

@@ -63,15 +63,15 @@ riesgo de romper algo por un cambio de alcance no pedido.
 
 ## 2. Las 7 categorías (chips)
 
-| # | Categoría | Origen del contenido |
-|---|---|---|
-| 1 | Mi Cuenta | Inferido por intuición |
-| 2 | Paquetería Nacional | Inferido por intuición |
-| 3 | Paquetería Internacional | **Inventado** (sin datos reales aún) |
-| 4 | Franquicias | **Confirmado** por el usuario |
-| 5 | Fulfillment | **Confirmado** por el usuario |
-| 6 | Mis Comunicaciones Digitales | **Inventado** (sin datos reales aún) |
-| 7 | Oficios Judiciales | Inferido por intuición |
+| # | Categoría | Origen del contenido | Disponible hoy |
+|---|---|---|---|
+| 1 | Mi Cuenta | Inferido por intuición | Sí |
+| 2 | Paquetería Nacional | Inferido por intuición | Sí |
+| 3 | Paquetería Internacional | **Inventado** (sin datos reales aún) | **No** — oculta hasta que exista contenido real, ver sección 5.1 |
+| 4 | Franquicias | **Confirmado** por el usuario | Sí |
+| 5 | Fulfillment | **Confirmado** por el usuario | Sí |
+| 6 | Mis Comunicaciones Digitales | **Inventado** (sin datos reales aún) | **No** — oculta hasta que exista contenido real, ver sección 5.1 |
+| 7 | Oficios Judiciales | Inferido por intuición | Sí |
 
 Sólo 2 de las 7 categorías (Franquicias, Fulfillment) tienen contenido que
 el negocio confirmó textualmente. Las otras 5 son responsabilidad nuestra,
@@ -146,6 +146,43 @@ agregar ahí.
 - No puedo acceder a mis comunicaciones (Gestión inventada)
 - Comunicación enviada a un destinatario incorrecto (Gestión inventada)
 
+### 5.1 Ocultas por defecto hasta que exista contenido real (2026-09-03)
+
+> ⚠️ **Estado actual: Paquetería Internacional y Mis Comunicaciones
+> Digitales NO están disponibles en la pantalla.** No es un bug ni una
+> regresión — es una decisión explícita del usuario, porque su contenido
+> es 100% inventado y no quería mostrarlo por defecto.
+
+Antes de este cambio, estas 2 categorías se veían igual que las demás
+(chip + gestiones dentro de "Todos") para cualquier tipo de usuario, pese a
+ser contenido de relleno. Ahora:
+
+- **No aparecen como chip** para ningún tipo de usuario.
+- **No suman a "Todos"** — un individuo con "Todos" pasó de 17 a 9
+  gestiones (17 menos las 8 de estas 2 categorías).
+- Esto es independiente de `profile_category_visibility` (sección 6): no
+  es una regla de negocio de perfil, es "esto todavía no existe".
+
+**Cómo volver a verlas (sólo para demos puntuales):** el panel "Casos de
+uso" tiene una sección nueva, **"Categorías en construcción"**, con 2
+switches — "Ver Paquetería Internacional" y "Ver Comunicaciones
+Digitales". Activar uno agrega esa categoría al chip y a "Todos" al
+instante, para el tipo de usuario que esté simulado en ese momento.
+Apagarlo la vuelve a ocultar. Por defecto ambos arrancan apagados.
+
+Implementado en
+[`core/gestiones/categories.ts`](../proto%20navegable/src/core/gestiones/categories.ts)
+(`HIDDEN_BY_DEFAULT_CATEGORY_IDS`, `applyUnavailableCategoryToggles`) +
+[`core/session/categoryToggles.ts`](../proto%20navegable/src/core/session/categoryToggles.ts)
+(estado de los 2 switches, mismo patrón que `forcedViewport.ts`). También
+deep-linkeable: `?paqueteriaInternacional=1` / `?comunicacionesDigitales=1`
+(ver `core/session/deepLink.ts`) — pensado para poder armar un slide de
+presentación que las muestre sin tener que tocar el switch a mano.
+
+Verificado en navegador: con ambos switches apagados, perfil Individuo con
+"Todos" da 9 gestiones (antes 17); al activar "Ver Paquetería
+Internacional" el chip reaparece y el contador sube a 13 (9 + 4).
+
 ## 6. Nivel 1 — qué categorías ve cada tipo de usuario (vigente)
 
 > **Confirmado por el usuario, 2026-09-02.** Este es el mecanismo que
@@ -166,6 +203,13 @@ agregar ahí.
 Dicho en positivo — categorías visibles por tipo de usuario (además de
 "Todos", que es universal y no depende de ningún tipo):
 
+> Esta tabla describe el dato de `profile_category_visibility` tal cual
+> está, sin aplicar todavía el ocultamiento de la sección 5.1. En la
+> práctica, Paquetería Internacional y Mis Comunicaciones Digitales no se
+> muestran para NINGÚN tipo de usuario mientras sus switches estén
+> apagados — la tabla de abajo es "a quién le correspondería verlas si
+> existieran", no "qué se ve hoy en pantalla".
+
 | Tipo de usuario | Categorías visibles |
 |---|---|
 | Individuo | Mi Cuenta, Paquetería Nacional, Paquetería Internacional, Mis Comunicaciones Digitales, Oficios Judiciales |
@@ -184,13 +228,18 @@ confirmado explícitamente por exclusión textual, pero es la lectura
 directa de "sólo Franquicias/Fulfillment se restringen"**).
 
 **"Todos" siempre está disponible** para los 4 tipos de usuario — pero
-⚠️ **NO significa "todas las 27 gestiones del sistema"**. Significa la
-unión de las categorías que ESE tipo de usuario puede ver. Un Individuo o
-Pyme con "Todos" seleccionado ve 17 gestiones (nunca las de Franquicias
-ni Fulfillment); Franquicias ve 21; Fulfillment ve 23. Este era un bug
-real corregido el 2026-09-02 (`itemsForFilter` operaba sobre el universo
-completo de categorías en vez de sobre las visibles para el perfil
-activo) — el usuario lo detectó probando el prototipo.
+⚠️ **NO significa "todas las gestiones del sistema"**. Significa la unión
+de las categorías que ESE tipo de usuario puede ver, **y que además no
+estén ocultas por la sección 5.1**. Con Paquetería Internacional y Mis
+Comunicaciones Digitales apagadas (su estado por defecto): Individuo o
+Pyme con "Todos" ve 9 gestiones; Franquicias ve 13; Fulfillment ve 15. Con
+ambos switches prendidos, esos números vuelven a ser 17/21/23 — los
+números "históricos" de antes de la sección 5.1, que siguen siendo
+correctos como conteo de las 5 categorías activas hoy más las 2 ocultas.
+(Aparte: hubo un bug real corregido el 2026-09-02, `itemsForFilter`
+operaba sobre el universo completo de categorías en vez de sobre las
+visibles para el perfil activo — no relacionado con el ocultamiento de
+5.1, que es una decisión de producto, no un bug.)
 
 Fuente de datos: `user_types` + `profile_category_visibility` en
 [`proto navegable/src/core/gestiones/data/categorias-gestiones.json`](../proto%20navegable/src/core/gestiones/data/categorias-gestiones.json).

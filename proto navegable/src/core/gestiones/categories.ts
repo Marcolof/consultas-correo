@@ -101,3 +101,36 @@ export function visibleCategoriesForProfile(profileId: UserProfileId): readonly 
   const visibleIds = data.profile_category_visibility[profileId] ?? []
   return GESTION_CATEGORIES.filter((category) => visibleIds.includes(category.id))
 }
+
+/**
+ * Categorías ocultas por defecto (2026-09-03) porque todavía no tienen
+ * contenido real del negocio — sus gestiones son 100% de relleno, cada una
+ * marcada "(Gestión inventada)" (ver `mis-gestiones-categorias.md` sección
+ * 5). Se ocultan del chip Y de "Todos" para cualquier tipo de usuario,
+ * independientemente de `profile_category_visibility` — no es una regla de
+ * negocio de perfil, es "esto no existe todavía".
+ *
+ * Sólo se muestran si se activa su switch en el panel "Casos de uso" (ver
+ * `core/session/categoryToggles.ts`) — pensado para poder mostrarlas en una
+ * demo puntual sin tener que tocar código ni datos.
+ */
+export const HIDDEN_BY_DEFAULT_CATEGORY_IDS: readonly string[] = [
+  'paqueteria_internacional',
+  'mis_comunicaciones_digitales',
+]
+
+/**
+ * Aplica los switches de "mostrar igual" sobre un set de categorías ya
+ * filtrado por perfil. `visibleUnavailableIds` son los ids de
+ * `HIDDEN_BY_DEFAULT_CATEGORY_IDS` que el usuario activó a mano; cualquier
+ * categoría que NO esté en esa lista de ocultas pasa sin tocar.
+ */
+export function applyUnavailableCategoryToggles(
+  categories: readonly GestionCategory[],
+  visibleUnavailableIds: ReadonlySet<string>,
+): readonly GestionCategory[] {
+  return categories.filter(
+    (category) =>
+      !HIDDEN_BY_DEFAULT_CATEGORY_IDS.includes(category.id) || visibleUnavailableIds.has(category.id),
+  )
+}

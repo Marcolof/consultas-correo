@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { useActiveUseCase } from '@/core/session/activeUseCase'
 import { useForcedViewport } from '@/core/session/forcedViewport'
+import { useCategoryToggles } from '@/core/session/categoryToggles'
 import { readQueryParam } from '@/core/session/deepLink'
 import { USER_PROFILES } from '@/core/gestiones/categories'
 import { ChipGroup } from '@/shared/ui/ChipGroup'
@@ -45,6 +46,12 @@ function GridIcon() {
  *      - "Pantalla": switch "Responsive" que fuerza el layout mobile
  *        (sidebar colapsado, header vacío salvo hamburguesa) sin necesidad
  *        de angostar la ventana real — ver `core/session/forcedViewport.ts`.
+ *      - "Categorías en construcción": 2 switches ("Ver Paquetería
+ *        Internacional", "Ver Comunicaciones Digitales") que muestran esas
+ *        2 categorías — hoy ocultas por defecto porque su contenido es
+ *        100% inventado — junto con sus gestiones (chip + "Todos"). Ver
+ *        `core/session/categoryToggles.ts` +
+ *        `core/gestiones/categories.ts` (`HIDDEN_BY_DEFAULT_CATEGORY_IDS`).
  *
  * (2026-09-02, restaurado el mismo día que se había sacado): la sección
  * "Usuarios" había quedado superada por las 7 categorías fijas, pero el
@@ -59,6 +66,12 @@ export function HubAccessButton() {
   const menuRef = useRef<HTMLDivElement>(null)
   const { profileId, setProfileId } = useActiveUseCase()
   const { isResponsive, setIsResponsive } = useForcedViewport()
+  const {
+    showPaqueteriaInternacional,
+    setShowPaqueteriaInternacional,
+    showComunicacionesDigitales,
+    setShowComunicacionesDigitales,
+  } = useCategoryToggles()
 
   useEffect(() => {
     if (!isMenuOpen) return
@@ -146,7 +159,27 @@ export function HubAccessButton() {
           />
         </div>
 
-        {/* Futuras secciones van acá, como hermanas de "Usuarios" y "Pantalla". */}
+        <hr className={styles.sectionDivider} />
+
+        <div className={styles.section}>
+          <h3 className={styles.sectionTitle}>Categorías en construcción</h3>
+          <Switch
+            id="show-paqueteria-internacional-toggle"
+            label="Ver Paquetería Internacional"
+            description="Categoría con contenido 100% inventado — oculta por defecto hasta que exista contenido real."
+            checked={showPaqueteriaInternacional}
+            onChange={setShowPaqueteriaInternacional}
+          />
+          <Switch
+            id="show-comunicaciones-digitales-toggle"
+            label="Ver Comunicaciones Digitales"
+            description="Categoría con contenido 100% inventado — oculta por defecto hasta que exista contenido real."
+            checked={showComunicacionesDigitales}
+            onChange={setShowComunicacionesDigitales}
+          />
+        </div>
+
+        {/* Futuras secciones van acá, como hermanas de las anteriores. */}
       </Modal>
     </div>
   )

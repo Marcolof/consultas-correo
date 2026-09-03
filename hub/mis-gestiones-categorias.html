@@ -37,15 +37,15 @@
 
     <h2>2. Las 7 categorías (chips)</h2>
     <table>
-      <thead><tr><th>#</th><th>Categoría</th><th>Gestiones</th><th>Origen</th></tr></thead>
+      <thead><tr><th>#</th><th>Categoría</th><th>Gestiones</th><th>Origen</th><th>Disponible hoy</th></tr></thead>
       <tbody>
-        <tr><td>1</td><td>Mi Cuenta</td><td>2</td><td>Inferido por intuición</td></tr>
-        <tr><td>2</td><td>Paquetería Nacional</td><td>6</td><td>Inferido por intuición</td></tr>
-        <tr><td>3</td><td>Paquetería Internacional</td><td>4</td><td><strong>Inventado</strong></td></tr>
-        <tr><td>4</td><td>Franquicias</td><td>4</td><td><strong>Confirmado</strong> por el usuario</td></tr>
-        <tr><td>5</td><td>Fulfillment</td><td>6</td><td><strong>Confirmado</strong> por el usuario</td></tr>
-        <tr><td>6</td><td>Mis Comunicaciones Digitales</td><td>4</td><td><strong>Inventado</strong></td></tr>
-        <tr><td>7</td><td>Oficios Judiciales</td><td>1</td><td>Inferido por intuición</td></tr>
+        <tr><td>1</td><td>Mi Cuenta</td><td>2</td><td>Inferido por intuición</td><td>Sí</td></tr>
+        <tr><td>2</td><td>Paquetería Nacional</td><td>6</td><td>Inferido por intuición</td><td>Sí</td></tr>
+        <tr><td>3</td><td>Paquetería Internacional</td><td>4</td><td><strong>Inventado</strong></td><td><strong>No</strong> — oculta, ver sección 5.1</td></tr>
+        <tr><td>4</td><td>Franquicias</td><td>4</td><td><strong>Confirmado</strong> por el usuario</td><td>Sí</td></tr>
+        <tr><td>5</td><td>Fulfillment</td><td>6</td><td><strong>Confirmado</strong> por el usuario</td><td>Sí</td></tr>
+        <tr><td>6</td><td>Mis Comunicaciones Digitales</td><td>4</td><td><strong>Inventado</strong></td><td><strong>No</strong> — oculta, ver sección 5.1</td></tr>
+        <tr><td>7</td><td>Oficios Judiciales</td><td>1</td><td>Inferido por intuición</td><td>Sí</td></tr>
       </tbody>
     </table>
     <p>Sólo Franquicias y Fulfillment tienen contenido confirmado textualmente por el negocio. El resto es agrupación por intuición sobre motivos reales ya conocidos, o contenido inventado marcado literalmente como "(Gestión inventada)" en cada label.</p>
@@ -63,6 +63,11 @@
     <p><strong>Paquetería Internacional</strong>: Demora en la entrega internacional; Problemas con la aduana; Paquete extraviado en tránsito internacional; Costos de importación no informados (las 4, "Gestión inventada").</p>
     <p><strong>Mis Comunicaciones Digitales</strong>: No recibí la notificación de mi envío; Error en el contenido de una comunicación digital; No puedo acceder a mis comunicaciones; Comunicación enviada a un destinatario incorrecto (las 4, "Gestión inventada").</p>
 
+    <h3>5.1 Ocultas por defecto hasta que exista contenido real (2026-09-03)</h3>
+    <blockquote>⚠️ Estado actual: Paquetería Internacional y Mis Comunicaciones Digitales NO están disponibles en la pantalla. No es un bug — es una decisión explícita del usuario, porque su contenido es 100% inventado.</blockquote>
+    <p>Estas 2 categorías ya no aparecen como chip para ningún tipo de usuario, ni suman a "Todos" — independientemente de <code>profile_category_visibility</code> (sección 6). El panel "Casos de uso" tiene una sección nueva, <strong>"Categorías en construcción"</strong>, con 2 switches ("Ver Paquetería Internacional" / "Ver Comunicaciones Digitales") para mostrarlas puntualmente en una demo; por defecto ambos arrancan apagados. También deep-linkeable: <code>?paqueteriaInternacional=1</code> / <code>?comunicacionesDigitales=1</code>.</p>
+    <p>Implementado en <code>core/gestiones/categories.ts</code> (<code>HIDDEN_BY_DEFAULT_CATEGORY_IDS</code>, <code>applyUnavailableCategoryToggles</code>) + <code>core/session/categoryToggles.ts</code>. Verificado en navegador: Individuo con "Todos" y ambos switches apagados da 9 gestiones (antes 17); activar "Ver Paquetería Internacional" sube el contador a 13.</p>
+
     <h2>6. Nivel 1 — qué categorías ve cada tipo de usuario (vigente)</h2>
     <blockquote>Confirmado por el usuario, 2026-09-02. Este mecanismo se había sacado del panel "Casos de uso" antes en la misma sesión y se restauró el mismo día: el tipo de usuario sigue impactando qué se ve, ahora sobre categorías (no sobre motivos individuales).</blockquote>
     <p><strong>4 tipos de usuario</strong> (se agregó Pyme):</p>
@@ -75,8 +80,8 @@
         <tr><td>Fulfillment</td><td>Franquicias</td></tr>
       </tbody>
     </table>
-    <p>Las 5 categorías restantes (Mi Cuenta, Paquetería Nacional, Paquetería Internacional, Mis Comunicaciones Digitales, Oficios Judiciales) se ven por igual en los 4 tipos — no hay ninguna exclusión mencionada sobre ellas (supuesto, no confirmado explícitamente por exclusión textual). Si la categoría elegida deja de estar visible al cambiar de tipo de usuario, el filtro vuelve solo a "Todos".</p>
-    <blockquote>⚠️ "Todos" NO es "las 27 gestiones del sistema" — es la unión de las categorías visibles para el tipo de usuario activo (corregido 2026-09-02, era un bug: mostraba las 27 sin importar el perfil). Individuo/Pyme con "Todos": 17 gestiones. Franquicias: 21. Fulfillment: 23. Verificado también que la búsqueda respeta este aislamiento (buscar "franquicia" siendo Individuo da 0 resultados).</blockquote>
+    <p>Las 5 categorías restantes (Mi Cuenta, Paquetería Nacional, Paquetería Internacional, Mis Comunicaciones Digitales, Oficios Judiciales) se ven por igual en los 4 tipos — no hay ninguna exclusión mencionada sobre ellas (supuesto, no confirmado explícitamente por exclusión textual). Si la categoría elegida deja de estar visible al cambiar de tipo de usuario, el filtro vuelve solo a "Todos". <em>Esta tabla describe el dato tal cual está, sin aplicar el ocultamiento de la sección 5.1 — en la práctica, Paquetería Internacional y Comunicaciones Digitales no se ven para ningún tipo mientras sus switches estén apagados.</em></p>
+    <blockquote>⚠️ "Todos" NO es "todas las gestiones del sistema" — es la unión de las categorías visibles para el tipo de usuario activo, y que además no estén ocultas por 5.1. Con Paquetería Internacional/Comunicaciones Digitales apagadas (default): Individuo/Pyme con "Todos" ve 9 gestiones. Franquicias: 13. Fulfillment: 15. Con ambos switches prendidos: 17/21/23 (números "históricos" de antes de 5.1). Verificado también que la búsqueda respeta este aislamiento (buscar "franquicia" siendo Individuo da 0 resultados).</blockquote>
 
     <h2>7. Nivel 2 — qué gestiones agrupa cada categoría</h2>
     <p>Ver secciones 2 a 5 más arriba — es el segundo nivel de la misma base de datos, independiente del Nivel 1.</p>

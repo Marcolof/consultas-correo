@@ -15,6 +15,8 @@
  *   ?q=<texto de búsqueda>
  *   ?responsive=1
  *   ?useCases=1 (abre el panel "Casos de uso" ya desplegado)
+ *   ?paqueteriaInternacional=1 (muestra la categoría, oculta por defecto)
+ *   ?comunicacionesDigitales=1 (ídem, para Mis Comunicaciones Digitales)
  */
 export function readQueryParam(name: string): string | null {
   if (typeof window === 'undefined') return null
