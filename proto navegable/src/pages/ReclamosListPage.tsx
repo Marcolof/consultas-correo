@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useActiveUseCase } from '@/core/session/activeUseCase'
+import { readQueryParam } from '@/core/session/deepLink'
 import { DEFAULT_CATEGORY_FILTER, itemsForFilter, visibleCategoriesForProfile } from '@/core/gestiones/categories'
 import type { CategoryFilter } from '@/core/gestiones/categories'
 import { SECTION_LABEL, ITEM_LABEL_SINGULAR, ITEM_LABEL_PLURAL } from '@/core/gestiones/sectionLabel'
@@ -60,8 +61,8 @@ function normalize(value: string): string {
 export function ReclamosListPage() {
   const { profileId } = useActiveUseCase()
   const { showToast } = useToast()
-  const [filter, setFilter] = useState<CategoryFilter>(DEFAULT_FILTER)
-  const [search, setSearch] = useState('')
+  const [filter, setFilter] = useState<CategoryFilter>(() => readQueryParam('category') ?? DEFAULT_FILTER)
+  const [search, setSearch] = useState(() => readQueryParam('q') ?? '')
 
   const visibleCategories = useMemo(() => visibleCategoriesForProfile(profileId), [profileId])
   const chips: readonly FilterChipConfig[] = useMemo(

@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Presentación V1 · Mis gestiones — MiCorreo</title>
+<style>
+  :root {
+    --color-brand-dark: #152663;
+    --color-brand-dark-hover: #263b7f;
+    --color-brand: #ffce00;
+    --global-bg: #fafafa;
+    --border-card: #dfe3ea;
+    --gray-100: #f2f2f2;
+    --gray-200: #eeeeee;
+    --gray-900: #191919;
+    --text-primary: #191919;
+    --text-muted: #49454f;
+    --text-subtle: #79747e;
+    --color-success: #10b981;
+    --radius-md: 10px;
+    --radius-lg: 15px;
+    --radius-pill: 32px;
+  }
+
+  * { box-sizing: border-box; }
+  html, body { height: 100%; margin: 0; }
+
+  body {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    background: var(--global-bg);
+    color: var(--text-primary);
+    font-family: "Gilroy", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    font-synthesis: none;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+  /* Nota sobre la fuente: este proyecto usa Gilroy (comercial, sin licencia
+     de redistribución pública) — igual que "proto navegable" y el resto del
+     proyecto, no se empaquetan los .ttf en el repo. Sin ellos, cae al resto
+     de la pila tipográfica del sistema; no rompe nada, sólo pierde fidelidad
+     exacta. Ver proto navegable/README.md, sección "Fuentes". */
+
+  .deck-stage {
+    flex: 1 1 auto;
+    min-height: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 14px 20px;
+  }
+  .deck { max-width: 1360px; width: 100%; height: 100%; position: relative; margin: 0 auto; }
+
+  .slide {
+    display: none;
+    position: relative;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 40px 44px;
+    border: 1px solid var(--border-card);
+    border-radius: var(--radius-lg);
+    background: #fff;
+    box-shadow: 0 2px 8px rgba(21,38,99,.04);
+    overflow-y: auto;
+    box-sizing: border-box;
+  }
+  .slide.is-active { display: flex; flex-direction: column; justify-content: flex-start; }
+
+  /* Botón volver al hub — dentro de cada slide */
+  .slide-back {
+    display: inline-flex; align-items: center; gap: 8px; flex: 0 0 auto;
+    padding: .5rem 1rem; border-radius: var(--radius-pill); border: 0;
+    font-size: .9375rem; font-weight: 700;
+    text-decoration: none; white-space: nowrap;
+    transition: opacity .2s ease-in-out, transform .2s ease-in-out;
+  }
+  .slide-back:hover { opacity: .82; }
+  .slide-back svg { width: 16px; height: 16px; }
+  .slide-back--light {
+    position: absolute; top: 20px; right: 20px; z-index: 5;
+    background: rgba(255,255,255,.95); color: var(--color-brand-dark);
+    box-shadow: 0 4px 12px rgba(0,0,0,.12);
+  }
+  .slide-back--band { margin-left: auto; background: var(--color-brand-dark); color: #fff; }
+  .slide-back--outline {
+    position: absolute; top: 20px; right: 20px; z-index: 5;
+    background: #fff; color: var(--color-brand-dark); border: 1px solid var(--border-card);
+  }
+  .slide-back--outline:hover { background: var(--gray-100); opacity: 1; }
+
+  .deck-nav {
+    flex: 0 0 auto;
+    display: flex; align-items: center; justify-content: center; gap: 22px;
+    padding: 14px 20px;
+    border-top: 1px solid var(--border-card);
+    background: #fff;
+  }
+  .deck-nav__btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    min-height: 42px; padding: .6rem 1.2rem;
+    border: 1px solid var(--border-card); border-radius: var(--radius-pill);
+    background: #fff; color: var(--color-brand-dark);
+    font-size: .875rem; font-weight: 700; font-family: inherit;
+    cursor: pointer; transition: background-color .2s ease-in-out, border-color .2s ease-in-out, opacity .2s ease-in-out;
+  }
+  .deck-nav__btn:hover:not(:disabled) { background: var(--gray-100); border-color: var(--color-brand-dark); }
+  .deck-nav__btn:disabled { opacity: .35; cursor: not-allowed; }
+  .deck-nav__btn svg { width: 18px; height: 18px; }
+  .deck-nav__btn--next { background: var(--color-brand-dark); border-color: var(--color-brand-dark); color: #fff; }
+  .deck-nav__btn--next:hover:not(:disabled) { background: var(--color-brand-dark-hover); border-color: var(--color-brand-dark-hover); }
+  .deck-nav__counter { min-width: 64px; text-align: center; font-size: .8125rem; font-weight: 700; color: var(--text-subtle); font-variant-numeric: tabular-nums; }
+
+  .deck-progress { flex: 0 0 auto; height: 3px; background: var(--gray-200); }
+  .deck-progress__bar { height: 100%; background: var(--color-brand); transition: width .25s ease; }
+
+  .slide-eyebrow { display: inline-flex; align-items:center; gap:8px; margin-bottom: 12px; padding: 5px 14px; border-radius: var(--radius-pill); background: var(--gray-100); color: var(--color-brand-dark); font-size: .8125rem; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; }
+
+  .slide h2 { font-size: 1.85rem; font-weight: 700; margin: 0 0 10px; }
+  .slide h3 { font-size: 1.2rem; font-weight: 700; margin: 0 0 8px; }
+  .slide p { color: var(--text-muted); max-width: 720px; font-size: 1rem; margin: 0 0 10px; }
+
+  .crumb { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; font-size: 1.0625rem; font-weight: 700; }
+  .crumb span:not(.crumb-sep) { padding: 6px 14px; border-radius: var(--radius-pill); background: rgba(255,255,255,.12); color: #fff; }
+  .crumb-sep { color: var(--color-brand); opacity: .8; }
+
+  /* Portadas / dividers */
+  .cover-slide { padding: 0; background: var(--color-brand-dark); border-color: var(--color-brand-dark); overflow: hidden; }
+  .cover-slide.is-active { flex-direction: row; align-items: stretch; justify-content: flex-start; }
+  .cover-slide__bar { flex: 0 0 16px; background: var(--color-brand); }
+  .cover-slide__content { flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; justify-content: center; padding: 56px 64px; }
+  .cover-eyebrow { display: block; margin-bottom: 18px; color: var(--color-brand); font-size: .9375rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; }
+  .cover-title { margin: 0 0 16px; font-size: 3rem; font-weight: 700; color: #fff; line-height: 1.15; }
+  .cover-slide p.cover-subtitle { margin: 0; max-width: 640px; font-size: 1.25rem; font-weight: 600; color: #c7d0ea; }
+  .cover-slide .crumb { margin-top: 30px; }
+  @media (max-width: 900px) {
+    .cover-slide__content { padding: 40px 28px; }
+    .cover-title { font-size: 2rem; }
+  }
+
+  .obj-grid { display: grid; grid-template-columns: 1.3fr 1fr; gap: 32px; align-items: start; }
+  .obj-list { display: flex; flex-direction: column; gap: 10px; }
+  .obj-list span { display: flex; align-items: center; gap: 10px; padding: 10px 14px; border-radius: var(--radius-md); background: var(--gray-100); font-weight: 700; font-size: .9375rem; color: var(--color-brand-dark); }
+  .obj-list span::before { content: "✓"; color: var(--color-success); font-weight: 700; }
+
+  .steps-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px,1fr)); gap: 18px; margin-top: 22px; }
+  .step-card { padding: 20px; border-radius: var(--radius-md); background: var(--gray-100); }
+  .step-card b { display: inline-grid; place-items: center; width: 30px; height: 30px; margin-bottom: 12px; border-radius: 50%; background: var(--color-brand); color: var(--color-brand-dark); font-size: 1rem; font-style: normal; }
+  .step-card strong { display: block; margin-bottom: 4px; font-size: 1.0625rem; color: var(--text-primary); }
+  .step-card p { margin: 0; font-size: .9375rem; color: var(--text-muted); }
+
+  /* Slides tipo "PASO" con captura embebida */
+  .screen-slide-wrap { padding: 0; }
+  .screen-slide-wrap.is-active { flex-direction: column; justify-content: flex-start; }
+
+  .screen-topbar { flex: 0 0 auto; }
+  .screen-topbar__stripe { height: 6px; background: var(--color-brand-dark); }
+  .screen-topbar__band { display: flex; align-items: center; gap: 16px; height: 56px; padding: 0 40px; background: var(--color-brand); }
+  .screen-topbar__logo { height: 24px; width: auto; }
+  .screen-topbar__label { font-size: 1.1875rem; font-weight: 700; color: var(--color-brand-dark); }
+
+  .screen-slide-body { flex: 1 1 auto; min-height: 0; display: flex; align-items: center; padding: 26px 40px; overflow-y: auto; }
+  .plain-body { flex: 1 1 auto; min-height: 0; padding: 32px 40px; overflow-y: auto; }
+  @media (max-width: 900px) { .plain-body { padding: 22px 20px; } }
+  .screen-slide-body .screen-slide { width: 100%; }
+
+  .screen-slide { display: grid; grid-template-columns: minmax(230px, 290px) 1fr; gap: 34px; align-items: center; }
+  .screen-slide.reverse { grid-template-columns: 1fr minmax(230px, 290px); }
+  .screen-slide.reverse .screen-text { order: 2; }
+  .screen-slide.reverse .screen-frame-wrap { order: 1; }
+  .screen-slide > * { min-width: 0; }
+  .screen-text ul { margin: 14px 0 0; padding-left: 18px; color: var(--text-muted); font-size: .9375rem; line-height: 1.75; }
+  .screen-text ul li strong { color: var(--text-primary); }
+  .screen-text h2 { font-size: 1.45rem; }
+  .screen-text p { font-size: .9375rem; }
+
+  .profile-tag { display:inline-flex; align-items:center; gap:6px; margin-top:16px; padding: 5px 12px; border-radius: var(--radius-pill); font-size:.875rem; font-weight:700; }
+  .profile-tag--individuo { background:#e7edfb; color:#2563d9; }
+  .profile-tag--pyme { background:#eafaf1; color:#0f9e5e; }
+  .profile-tag--franquicias { background:#f6e8f4; color:#a02b93; }
+  .profile-tag--fulfillment { background:#fff4d6; color:#a97c00; }
+
+  .screen-frame-wrap { display: flex; justify-content: center; min-width: 0; width: 100%; }
+  .screen-frame {
+    width: 100%; max-width: 980px; max-height: 613px; aspect-ratio: 1440 / 900;
+    border-radius: var(--radius-md);
+    border: 6px solid var(--gray-900);
+    background: #fff;
+    overflow: hidden;
+    box-shadow: 0 18px 40px rgba(21,38,99,.18);
+  }
+  .screen-frame iframe { width: 1440px; height: 900px; transform: scale(var(--frame-scale, .5556)); transform-origin: top left; border: 0; pointer-events: none; }
+
+  .module-list { display:flex; flex-direction:column; gap:14px; margin-top:20px; }
+  .module-item { display:flex; gap:14px; align-items:flex-start; padding:16px; border-radius:var(--radius-md); background:var(--gray-100); }
+  .module-item svg { width:22px; height:22px; color:var(--color-brand-dark); flex:0 0 auto; margin-top:2px; }
+  .module-item strong { display:block; margin-bottom:3px; font-size:1.0625rem; }
+  .module-item p { margin:0; font-size:.9375rem; color:var(--text-muted); }
+
+  .fuente-nota { margin-top: 20px; font-size: .8125rem; color: var(--text-subtle); }
+
+  @media (max-width: 900px) {
+    .deck-stage { padding: 14px 16px; }
+    .slide { padding: 28px 22px; border-radius: var(--radius-md); }
+    .slide:not(.cover-slide):not(.screen-slide-wrap) { padding-top: 68px; }
+    .deck-nav { gap: 12px; padding: 12px 14px; }
+    .deck-nav__btn span.btn-label { display: none; }
+    .deck { padding: 0 20px 60px; }
+    .obj-grid, .screen-slide, .screen-slide.reverse { grid-template-columns: 1fr; }
+    .screen-slide.reverse .screen-text, .screen-slide.reverse .screen-frame-wrap { order: initial; }
+    .screen-topbar__band { padding: 0 20px; height: 48px; }
+    .screen-slide-body { padding: 18px 20px; }
+    .screen-frame { max-height: none; max-width: calc(44vh * 1.6); }
+  }
+</style>
+</head>
+<body>
+
+  <main class="deck-stage">
+   <div class="deck" id="deck">
+
+    <!-- 1. PORTADA -->
+    <section class="slide cover-slide">
+      <a class="slide-back slide-back--light" href="../index.html"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg>Volver al hub</a>
+      <div class="cover-slide__bar"></div>
+      <div class="cover-slide__content">
+        <span class="cover-eyebrow">MiCorreo · Correo Argentino</span>
+        <h1 class="cover-title">Mis gestiones — de "Reclamos" a un modelo por categorías</h1>
+        <p class="cover-subtitle">Recorrido funcional de la pantalla rediseñada: categorías, tipos de usuario, búsqueda inteligente y transparencia sobre qué es real y qué todavía no.</p>
+        <div class="crumb">
+          <span>Categorías</span><span class="crumb-sep">›</span>
+          <span>Tipos de usuario</span><span class="crumb-sep">›</span>
+          <span>Búsqueda</span><span class="crumb-sep">›</span>
+          <span>Transparencia</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. OBJETIVO -->
+    <section class="slide screen-slide-wrap">
+      <div class="screen-topbar">
+        <div class="screen-topbar__stripe"></div>
+        <div class="screen-topbar__band">
+          <img class="screen-topbar__logo" src="../assets/CorreoArgentino-MiCorreo.png" alt="Correo Argentino · MiCorreo" />
+          <span class="screen-topbar__label">Objetivo</span>
+          <a class="slide-back slide-back--band" href="../index.html"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg>Volver al hub</a>
+        </div>
+      </div>
+      <div class="plain-body">
+      <span class="slide-eyebrow">Objetivo de la presentación</span>
+      <div class="obj-grid">
+        <div>
+          <h2>Recorrido funcional del prototipo actual</h2>
+          <p>Este instructivo recorre "Mis gestiones" tal como está hoy en el prototipo navegable: la pantalla se rediseñó el 2026-09-02 a pedido del negocio, reemplazando el listado plano de motivos por 7 categorías de producto/servicio. Refleja el estado consolidado en <strong>documentation/mis-gestiones-categorias.md</strong> y <strong>documentation/pantalla-reclamos-listado.md</strong>.</p>
+        </div>
+        <div class="obj-list">
+          <span>Las 7 categorías y su contenido</span>
+          <span>Tipos de usuario y qué categorías ven</span>
+          <span>Búsqueda por tags y sinónimos</span>
+          <span>Qué es confirmado, inferido o inventado</span>
+          <span>Modo responsive</span>
+        </div>
+      </div>
+      </div>
+    </section>
+
+    <!-- 3. EL RECORRIDO -->
+    <section class="slide screen-slide-wrap">
+      <div class="screen-topbar">
+        <div class="screen-topbar__stripe"></div>
+        <div class="screen-topbar__band">
+          <img class="screen-topbar__logo" src="../assets/CorreoArgentino-MiCorreo.png" alt="Correo Argentino · MiCorreo" />
+          <span class="screen-topbar__label">Recorrido</span>
+          <a class="slide-back slide-back--band" href="../index.html"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg>Volver al hub</a>
+        </div>
+      </div>
+      <div class="plain-body">
+      <span class="slide-eyebrow">Cinco ideas centrales</span>
+      <h2>El modelo tiene dos niveles independientes</h2>
+      <p>Por un lado, qué gestiones agrupa cada categoría. Por otro, qué categorías puede ver cada tipo de usuario. Son reglas distintas, editables por separado.</p>
+      <div class="steps-row">
+        <div class="step-card"><b>1</b><strong>Categorías</strong><p>7 categorías reemplazan el listado plano de 19 motivos.</p></div>
+        <div class="step-card"><b>2</b><strong>Tipos de usuario</strong><p>4 perfiles deciden qué categorías (chips) se muestran.</p></div>
+        <div class="step-card"><b>3</b><strong>Buscador</strong><p>Tags de sinónimo y el nombre de la categoría también matchean.</p></div>
+        <div class="step-card"><b>4</b><strong>Transparencia</strong><p>Confirmado, inferido por intuición o directamente inventado.</p></div>
+        <div class="step-card"><b>5</b><strong>Responsive</strong><p>El mismo modelo, angostado a ancho de smartphone.</p></div>
+      </div>
+      </div>
+    </section>
+
+    <!-- 4. DIVIDER PANTALLAS -->
+    <section class="slide cover-slide">
+      <a class="slide-back slide-back--light" href="../index.html"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg>Volver al hub</a>
+      <div class="cover-slide__bar"></div>
+      <div class="cover-slide__content">
+        <span class="cover-eyebrow">Pantallas</span>
+        <h1 class="cover-title">"Mis gestiones" — recorrido pantalla por pantalla</h1>
+        <p class="cover-subtitle">Cada paso siguiente muestra el prototipo real y en vivo, embebido tal cual está deployado.</p>
+      </div>
+    </section>
+
+    <!-- PASO 1: VISTA DEFAULT -->
+    <section class="slide screen-slide-wrap">
+      <div class="screen-topbar">
+        <div class="screen-topbar__stripe"></div>
+        <div class="screen-topbar__band">
+          <img class="screen-topbar__logo" src="../assets/CorreoArgentino-MiCorreo.png" alt="Correo Argentino · MiCorreo" />
+          <span class="screen-topbar__label">Mis gestiones</span>
+          <a class="slide-back slide-back--band" href="../index.html"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg>Volver al hub</a>
+        </div>
+      </div>
+      <div class="screen-slide-body">
+      <div class="screen-slide">
+        <div class="screen-text">
+          <span class="slide-eyebrow">Paso 1 · Punto de partida</span>
+          <h2>Perfil Individuo, chip "Todos"</h2>
+          <p>El nombre de la sección ya no es "Reclamos" — es "Mis gestiones", y vive en una única constante por si vuelve a cambiar.</p>
+          <ul>
+            <li><strong>17 gestiones</strong>, no 27: "Todos" es la unión de las categorías visibles para <em>este</em> usuario, nunca el sistema completo.</li>
+            <li>Buscador, chips y listado comparten el mismo ancho máximo, alineados.</li>
+            <li>El chip por defecto es siempre "Todos".</li>
+          </ul>
+          <span class="profile-tag profile-tag--individuo">Individuo</span>
+        </div>
+        <div class="screen-frame-wrap">
+          <div class="screen-frame"><iframe src="https://proto-navegable.vercel.app/?profile=individuo" title="Mis gestiones — Individuo, Todos"></iframe></div>
+        </div>
+      </div>
+      </div>
+    </section>
+
+    <!-- PASO 2: FILTRAR POR CATEGORÍA -->
+    <section class="slide screen-slide-wrap">
+      <div class="screen-topbar">
+        <div class="screen-topbar__stripe"></div>
+        <div class="screen-topbar__band">
+          <img class="screen-topbar__logo" src="../assets/CorreoArgentino-MiCorreo.png" alt="Correo Argentino · MiCorreo" />
+          <span class="screen-topbar__label">Categorías</span>
+          <a class="slide-back slide-back--band" href="../index.html"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg>Volver al hub</a>
+        </div>
+      </div>
+      <div class="screen-slide-body">
+      <div class="screen-slide reverse">
+        <div class="screen-frame-wrap">
+          <div class="screen-frame"><iframe src="https://proto-navegable.vercel.app/?profile=individuo&amp;category=mi_cuenta" title="Mis gestiones — filtrado por Mi Cuenta"></iframe></div>
+        </div>
+        <div class="screen-text">
+          <span class="slide-eyebrow">Paso 2 · Elegir una categoría</span>
+          <h2>El chip acota listado y contador juntos</h2>
+          <p>Al elegir "Mi Cuenta", el listado baja a sus 2 gestiones y aparece el link "Limpiar filtro".</p>
+          <ul>
+            <li>"Limpiar filtro" vive en la misma línea que el contador, alineado a la derecha.</li>
+            <li>Buscador + chip se combinan con AND.</li>
+            <li>Si el chip elegido deja de estar visible al cambiar de usuario, el filtro vuelve solo a "Todos".</li>
+          </ul>
+          <span class="profile-tag profile-tag--individuo">Individuo</span>
+        </div>
+      </div>
+      </div>
+    </section>
+
+    <!-- PASO 3: TRANSPARENCIA - CONTENIDO INVENTADO -->
+    <section class="slide screen-slide-wrap">
+      <div class="screen-topbar">
+        <div class="screen-topbar__stripe"></div>
+        <div class="screen-topbar__band">
+          <img class="screen-topbar__logo" src="../assets/CorreoArgentino-MiCorreo.png" alt="Correo Argentino · MiCorreo" />
+          <span class="screen-topbar__label">Transparencia</span>
+          <a class="slide-back slide-back--band" href="../index.html"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg>Volver al hub</a>
+        </div>
+      </div>
+      <div class="screen-slide-body">
+      <div class="screen-slide">
+        <div class="screen-text">
+          <span class="slide-eyebrow">Paso 3 · Qué es real y qué no</span>
+          <h2>El contenido inventado se marca en el propio texto</h2>
+          <p>2 de las 7 categorías todavía no tienen datos reales del negocio.</p>
+          <ul>
+            <li>Cada gestión de relleno termina literalmente en <strong>"(Gestión inventada)"</strong>.</li>
+            <li>No se inventan reglas de negocio — sólo contenido de layout, para que la pantalla no se vea vacía.</li>
+            <li>Franquicias y Fulfillment, en cambio, sí tienen contenido confirmado textualmente por el usuario.</li>
+          </ul>
+          <span class="profile-tag profile-tag--individuo">Individuo</span>
+        </div>
+        <div class="screen-frame-wrap">
+          <div class="screen-frame"><iframe src="https://proto-navegable.vercel.app/?profile=individuo&amp;category=paqueteria_internacional" title="Mis gestiones — Paquetería Internacional (inventado)"></iframe></div>
+        </div>
+      </div>
+      </div>
+    </section>
+
+    <!-- 5. DIVIDER TIPOS DE USUARIO -->
+    <section class="slide cover-slide">
+      <a class="slide-back slide-back--light" href="../index.html"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg>Volver al hub</a>
+      <div class="cover-slide__bar"></div>
+      <div class="cover-slide__content">
+        <span class="cover-eyebrow">Tipos de usuario</span>
+        <h1 class="cover-title">Individuo, Pyme, Franquicias y Fulfillment</h1>
+        <p class="cover-subtitle">El tipo de usuario no se ve como chip — pero decide qué chips existen para navegar.</p>
+      </div>
+    </section>
+
+    <!-- PASO: CASOS DE USO (PANEL) -->
+    <section class="slide screen-slide-wrap">
+      <div class="screen-topbar">
+        <div class="screen-topbar__stripe"></div>
+        <div class="screen-topbar__band">
+          <img class="screen-topbar__logo" src="../assets/CorreoArgentino-MiCorreo.png" alt="Correo Argentino · MiCorreo" />
+          <span class="screen-topbar__label">Casos de uso</span>
+          <a class="slide-back slide-back--band" href="../index.html"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg>Volver al hub</a>
+        </div>
+      </div>
+      <div class="screen-slide-body">
+      <div class="screen-slide reverse">
+        <div class="screen-frame-wrap">
+          <div class="screen-frame"><iframe src="https://proto-navegable.vercel.app/?useCases=1" title="Panel Casos de uso"></iframe></div>
+        </div>
+        <div class="screen-text">
+          <span class="slide-eyebrow">Herramienta de prototipo</span>
+          <h2>Simular el tipo de usuario activo</h2>
+          <p>El botón flotante abre un panel con 2 secciones independientes.</p>
+          <ul>
+            <li><strong>Usuarios</strong>: elegir entre Individuo, Pyme, Franquicias o Fulfillment.</li>
+            <li><strong>Pantalla</strong>: switch "Responsive" para simular mobile sin achicar la ventana.</li>
+            <li>No es autenticación real — es tooling del prototipo, no chrome de producción.</li>
+          </ul>
+        </div>
+      </div>
+      </div>
+    </section>
+
+    <!-- PASO: PERFIL FRANQUICIAS -->
+    <section class="slide screen-slide-wrap">
+      <div class="screen-topbar">
+        <div class="screen-topbar__stripe"></div>
+        <div class="screen-topbar__band">
+          <img class="screen-topbar__logo" src="../assets/CorreoArgentino-MiCorreo.png" alt="Correo Argentino · MiCorreo" />
+          <span class="screen-topbar__label">Franquicias</span>
+          <a class="slide-back slide-back--band" href="../index.html"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg>Volver al hub</a>
+        </div>
+      </div>
+      <div class="screen-slide-body">
+      <div class="screen-slide">
+        <div class="screen-text">
+          <span class="slide-eyebrow">Regla de visibilidad</span>
+          <h2>Franquicias no ve la categoría Fulfillment</h2>
+          <p>Ve todo lo demás que ve Individuo, más su propia categoría.</p>
+          <ul>
+            <li>6 categorías visibles: Mi Cuenta, Paquetería Nacional, Paquetería Internacional, <strong>Franquicias</strong>, Mis Comunicaciones Digitales, Oficios Judiciales.</li>
+            <li>"Todos" para este usuario trae <strong>21 gestiones</strong>, no 27.</li>
+            <li>El chip "Fulfillment" directamente no existe en esta vista.</li>
+          </ul>
+          <span class="profile-tag profile-tag--franquicias">Franquicias</span>
+        </div>
+        <div class="screen-frame-wrap">
+          <div class="screen-frame"><iframe src="https://proto-navegable.vercel.app/?profile=franquicias" title="Mis gestiones — perfil Franquicias"></iframe></div>
+        </div>
+      </div>
+      </div>
+    </section>
+
+    <!-- PASO: PERFIL FULFILLMENT -->
+    <section class="slide screen-slide-wrap">
+      <div class="screen-topbar">
+        <div class="screen-topbar__stripe"></div>
+        <div class="screen-topbar__band">
+          <img class="screen-topbar__logo" src="../assets/CorreoArgentino-MiCorreo.png" alt="Correo Argentino · MiCorreo" />
+          <span class="screen-topbar__label">Fulfillment</span>
+          <a class="slide-back slide-back--band" href="../index.html"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg>Volver al hub</a>
+        </div>
+      </div>
+      <div class="screen-slide-body">
+      <div class="screen-slide reverse">
+        <div class="screen-frame-wrap">
+          <div class="screen-frame"><iframe src="https://proto-navegable.vercel.app/?profile=fulfillment&amp;category=fulfillment" title="Mis gestiones — perfil Fulfillment"></iframe></div>
+        </div>
+        <div class="screen-text">
+          <span class="slide-eyebrow">Regla simétrica</span>
+          <h2>Fulfillment no ve la categoría Franquicias</h2>
+          <p>La regla es simétrica a la anterior — nunca conviven ambos chips para un mismo usuario.</p>
+          <ul>
+            <li>6 categorías visibles, con <strong>Fulfillment</strong> en vez de Franquicias.</li>
+            <li>Acá filtrado por su propia categoría: 6 gestiones confirmadas por el negocio.</li>
+            <li>Individuo y Pyme, en cambio, no ven ni Franquicias ni Fulfillment.</li>
+          </ul>
+          <span class="profile-tag profile-tag--fulfillment">Fulfillment</span>
+        </div>
+      </div>
+      </div>
+    </section>
+
+    <!-- 6. DIVIDER BÚSQUEDA -->
+    <section class="slide cover-slide">
+      <a class="slide-back slide-back--light" href="../index.html"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg>Volver al hub</a>
+      <div class="cover-slide__bar"></div>
+      <div class="cover-slide__content">
+        <span class="cover-eyebrow">Búsqueda</span>
+        <h1 class="cover-title">Encontrar sin escribir el texto exacto</h1>
+        <p class="cover-subtitle">Cada gestión tiene hasta 10 tags de búsqueda — sinónimos y nombre de categoría.</p>
+      </div>
+    </section>
+
+    <!-- PASO: BÚSQUEDA POR TAG -->
+    <section class="slide screen-slide-wrap">
+      <div class="screen-topbar">
+        <div class="screen-topbar__stripe"></div>
+        <div class="screen-topbar__band">
+          <img class="screen-topbar__logo" src="../assets/CorreoArgentino-MiCorreo.png" alt="Correo Argentino · MiCorreo" />
+          <span class="screen-topbar__label">Buscador</span>
+          <a class="slide-back slide-back--band" href="../index.html"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg>Volver al hub</a>
+        </div>
+      </div>
+      <div class="screen-slide-body">
+      <div class="screen-slide">
+        <div class="screen-text">
+          <span class="slide-eyebrow">Paso 7 · Tags de sinónimo</span>
+          <h2>"Justicia" encuentra un motivo que no dice "justicia"</h2>
+          <p>La gestión se llama "Inconvenientes con el pago de oficios judiciales" — la palabra no está en el label.</p>
+          <ul>
+            <li>Tags de esa gestión: <em>justicia, citación, oficial, cobro, error, falla, judicial, pago, problema</em>.</li>
+            <li>Reglas de patrón aplicadas a las 27 gestiones: "error" → tag <strong>falla</strong>; "demora"/"problema(s)" → tag <strong>problema</strong>.</li>
+            <li>Los tags fueron generados por el equipo de diseño — no son un dato de negocio confirmado.</li>
+          </ul>
+        </div>
+        <div class="screen-frame-wrap">
+          <div class="screen-frame"><iframe src="https://proto-navegable.vercel.app/?profile=individuo&amp;q=justicia" title="Buscar justicia"></iframe></div>
+        </div>
+      </div>
+      </div>
+    </section>
+
+    <!-- PASO: BÚSQUEDA POR NOMBRE DE CATEGORÍA -->
+    <section class="slide screen-slide-wrap">
+      <div class="screen-topbar">
+        <div class="screen-topbar__stripe"></div>
+        <div class="screen-topbar__band">
+          <img class="screen-topbar__logo" src="../assets/CorreoArgentino-MiCorreo.png" alt="Correo Argentino · MiCorreo" />
+          <span class="screen-topbar__label">Buscador</span>
+          <a class="slide-back slide-back--band" href="../index.html"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg>Volver al hub</a>
+        </div>
+      </div>
+      <div class="screen-slide-body">
+      <div class="screen-slide reverse">
+        <div class="screen-frame-wrap">
+          <div class="screen-frame"><iframe src="https://proto-navegable.vercel.app/?profile=individuo&amp;q=Mi%20Cuenta" title="Buscar Mi Cuenta"></iframe></div>
+        </div>
+        <div class="screen-text">
+          <span class="slide-eyebrow">Paso 8 · Nombre de categoría como tag</span>
+          <h2>Buscar "Mi Cuenta" trae todo su contenido</h2>
+          <p>Sin tocar ningún chip — con "Todos" seleccionado, escribir el nombre de una categoría alcanza.</p>
+          <ul>
+            <li>Cada gestión lleva el nombre de su propia categoría como tag más.</li>
+            <li>No es una regla de código aparte: se matchea igual que cualquier otro tag.</li>
+            <li>Nació como caso especial de Fulfillment/Franquicias y se generalizó a las 7 categorías.</li>
+          </ul>
+        </div>
+      </div>
+      </div>
+    </section>
+
+    <!-- PASO: RESPONSIVE -->
+    <section class="slide screen-slide-wrap">
+      <div class="screen-topbar">
+        <div class="screen-topbar__stripe"></div>
+        <div class="screen-topbar__band">
+          <img class="screen-topbar__logo" src="../assets/CorreoArgentino-MiCorreo.png" alt="Correo Argentino · MiCorreo" />
+          <span class="screen-topbar__label">Responsive</span>
+          <a class="slide-back slide-back--band" href="../index.html"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg>Volver al hub</a>
+        </div>
+      </div>
+      <div class="screen-slide-body">
+      <div class="screen-slide">
+        <div class="screen-text">
+          <span class="slide-eyebrow">Paso 9 · Pantalla angosta</span>
+          <h2>El mismo modelo en ancho de smartphone</h2>
+          <p>El switch "Responsive" simula mobile sin depender del tamaño real de la ventana.</p>
+          <ul>
+            <li>Sidebar colapsado a hamburguesa; header vacío salvo el menú.</li>
+            <li>El padding lateral del contenido pasa de 3rem a 16px.</li>
+            <li>Categorías, buscador y listado se recalculan igual que en desktop.</li>
+          </ul>
+        </div>
+        <div class="screen-frame-wrap">
+          <div class="screen-frame"><iframe src="https://proto-navegable.vercel.app/?profile=individuo&amp;responsive=1" title="Mis gestiones — modo responsive"></iframe></div>
+        </div>
+      </div>
+      </div>
+    </section>
+
+    <!-- PENDIENTE DE DEFINICIÓN -->
+    <section class="slide screen-slide-wrap">
+      <div class="screen-topbar">
+        <div class="screen-topbar__stripe"></div>
+        <div class="screen-topbar__band">
+          <img class="screen-topbar__logo" src="../assets/CorreoArgentino-MiCorreo.png" alt="Correo Argentino · MiCorreo" />
+          <span class="screen-topbar__label">Pendiente</span>
+          <a class="slide-back slide-back--band" href="../index.html"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg>Volver al hub</a>
+        </div>
+      </div>
+      <div class="plain-body">
+      <span class="slide-eyebrow">Lo que falta cerrar con el negocio</span>
+      <h2>Definiciones abiertas, ninguna resuelta por inferencia</h2>
+      <p>Ninguno de estos puntos fue asumido — quedan documentados como preguntas explícitas.</p>
+      <div class="module-list">
+        <div class="module-item">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg>
+          <div><strong>Agrupaciones por intuición</strong><p>Mi Cuenta, Paquetería Nacional y Oficios Judiciales se armaron reagrupando motivos ya conocidos — el negocio todavía no las validó.</p></div>
+        </div>
+        <div class="module-item">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg>
+          <div><strong>Contenido real pendiente</strong><p>Paquetería Internacional y Mis Comunicaciones Digitales necesitan gestiones reales que reemplacen el contenido inventado.</p></div>
+        </div>
+        <div class="module-item">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg>
+          <div><strong>Pantalla de detalle</strong><p>Al tocar una gestión hoy sólo se muestra un aviso — la pantalla de detalle todavía no está definida.</p></div>
+        </div>
+        <div class="module-item">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg>
+          <div><strong>Nombre definitivo</strong><p>"Mis gestiones" es el nombre vigente — el propio negocio avisó que es probable que se vuelva a renombrar.</p></div>
+        </div>
+      </div>
+      <p class="fuente-nota">Fuente: documentation/mis-gestiones-categorias.md, sección "Preguntas abiertas".</p>
+      </div>
+    </section>
+
+    <!-- CIERRE -->
+    <section class="slide cover-slide">
+      <a class="slide-back slide-back--light" href="../index.html"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg>Volver al hub</a>
+      <div class="cover-slide__bar"></div>
+      <div class="cover-slide__content">
+        <span class="cover-eyebrow">Fin del recorrido</span>
+        <h1 class="cover-title">Categorías reales, transparencia sobre lo inventado</h1>
+        <div class="crumb">
+          <span>Categorías</span><span class="crumb-sep">›</span>
+          <span>Tipos de usuario</span><span class="crumb-sep">›</span>
+          <span>Búsqueda</span><span class="crumb-sep">›</span>
+          <span>Transparencia</span>
+        </div>
+        <p class="cover-subtitle" style="margin-top:22px;">Presentación V1 · "Mis gestiones" — MiCorreo · Correo Argentino</p>
+      </div>
+    </section>
+
+   </div>
+  </main>
+
+  <div class="deck-progress"><div class="deck-progress__bar" id="progressBar"></div></div>
+  <nav class="deck-nav">
+    <button type="button" class="deck-nav__btn" id="prevBtn" aria-label="Slide anterior">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+      <span class="btn-label">Anterior</span>
+    </button>
+    <div class="deck-nav__counter"><span id="slideCurrent">1</span> / <span id="slideTotal">1</span></div>
+    <button type="button" class="deck-nav__btn deck-nav__btn--next" id="nextBtn" aria-label="Siguiente slide">
+      <span class="btn-label">Siguiente</span>
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+    </button>
+  </nav>
+
+  <script>
+    (function () {
+      const slides = Array.from(document.querySelectorAll('#deck .slide'));
+      const total = slides.length;
+      const currentEl = document.getElementById('slideCurrent');
+      const totalEl = document.getElementById('slideTotal');
+      const prevBtn = document.getElementById('prevBtn');
+      const nextBtn = document.getElementById('nextBtn');
+      const progressBar = document.getElementById('progressBar');
+      totalEl.textContent = total;
+
+      let index = Math.min(Math.max(parseInt((location.hash || '').replace('#', ''), 10) - 1 || 0, 0), total - 1);
+
+      function syncFrameScale() {
+        const active = slides[index];
+        active.querySelectorAll('.screen-frame').forEach(frame => {
+          const iframe = frame.querySelector('iframe');
+          if (!iframe || !frame.clientWidth) return;
+          const scale = frame.clientWidth / 1440;
+          iframe.style.transform = 'scale(' + scale + ')';
+        });
+      }
+      function scheduleFrameSync() {
+        requestAnimationFrame(() => requestAnimationFrame(syncFrameScale));
+        setTimeout(syncFrameScale, 60);
+      }
+
+      function render() {
+        slides.forEach((s, i) => s.classList.toggle('is-active', i === index));
+        currentEl.textContent = index + 1;
+        prevBtn.disabled = index === 0;
+        nextBtn.disabled = index === total - 1;
+        progressBar.style.width = ((index + 1) / total * 100) + '%';
+        history.replaceState(null, '', '#' + (index + 1));
+        slides[index].scrollTop = 0;
+        scheduleFrameSync();
+      }
+
+      window.addEventListener('resize', () => scheduleFrameSync());
+
+      function go(delta) {
+        const next = index + delta;
+        if (next < 0 || next >= total) return;
+        index = next;
+        render();
+      }
+
+      prevBtn.addEventListener('click', () => go(-1));
+      nextBtn.addEventListener('click', () => go(1));
+
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') { e.preventDefault(); go(1); }
+        else if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); go(-1); }
+      });
+
+      let touchX = null;
+      const stage = document.querySelector('.deck-stage');
+      stage.addEventListener('touchstart', e => { touchX = e.changedTouches[0].clientX; }, { passive: true });
+      stage.addEventListener('touchend', e => {
+        if (touchX === null) return;
+        const dx = e.changedTouches[0].clientX - touchX;
+        if (Math.abs(dx) > 50) go(dx < 0 ? 1 : -1);
+        touchX = null;
+      }, { passive: true });
+
+      render();
+    })();
+  </script>
+
+</body>
+</html>

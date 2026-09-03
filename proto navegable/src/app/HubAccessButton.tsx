@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { useActiveUseCase } from '@/core/session/activeUseCase'
 import { useForcedViewport } from '@/core/session/forcedViewport'
+import { readQueryParam } from '@/core/session/deepLink'
 import { USER_PROFILES } from '@/core/gestiones/categories'
 import { ChipGroup } from '@/shared/ui/ChipGroup'
 import { Modal } from '@/shared/ui/Modal'
@@ -50,7 +51,7 @@ function GridIcon() {
  */
 export function HubAccessButton() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
-  const [isUseCasesOpen, setIsUseCasesOpen] = useState(false)
+  const [isUseCasesOpen, setIsUseCasesOpen] = useState(() => readQueryParam('useCases') === '1')
   const menuRef = useRef<HTMLDivElement>(null)
   const { profileId, setProfileId } = useActiveUseCase()
   const { isResponsive, setIsResponsive } = useForcedViewport()
