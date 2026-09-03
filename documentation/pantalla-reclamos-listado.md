@@ -181,9 +181,12 @@ ventana de verdad.
 - Las filas del listado no navegan a ningún lado todavía — al tocarlas
   muestran un `Toast` de aviso ("pantalla de detalle todavía no
   implementada"). No hay pantalla de detalle de gestión definida aún.
-- El buscador filtra sólo por `label` de la gestión, sin acentos
-  (comparación normalizada a mano, sin diacríticos) — no busca por
-  categoría ni por sinónimos.
+- El buscador filtra por `label` **y** por `tags` de cada gestión (hasta
+  50 por gestión, ver [`mis-gestiones-categorias.md`](mis-gestiones-categorias.md#9-tags-de-búsqueda-por-gestión-2026-09-02-ampliado-2026-09-03)
+  sección 9), sin acentos (comparación normalizada a mano, sin
+  diacríticos). Con una frase de varias palabras alcanza con que una sola
+  matchee (relleno como "no"/"me"/"la" no bloquea el resultado) y los
+  resultados se ordenan por cantidad de palabras que matchearon.
 - 5 de las 7 categorías tienen contenido inferido por intuición o
   directamente inventado — ver
   [`mis-gestiones-categorias.md`](mis-gestiones-categorias.md) sección 7

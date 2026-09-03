@@ -1,10 +1,11 @@
 # "Mis gestiones" — categorías y visibilidad por tipo de usuario
 
-> **Vigente al 2026-09-02, consolidado el mismo día.** Fuente: definición
-> provista por el usuario el 2026-09-02, ampliada dos veces. Ver el dato
-> crudo (la "base de datos" de 2 niveles, con tags de búsqueda) en
+> **Vigente al 2026-09-03.** Fuente: definición provista por el usuario el
+> 2026-09-02, ampliada varias veces (la última, 2026-09-03, sube el límite
+> de tags y mejora el buscador — ver sección 9). Ver el dato crudo (la
+> "base de datos" de 2 niveles, con tags de búsqueda) en
 > [`../proto navegable/src/core/gestiones/data/categorias-gestiones.json`](../proto%20navegable/src/core/gestiones/data/categorias-gestiones.json)
-> (`schema_version: 5`) — **única copia**, pensada para que un dev la edite
+> (`schema_version: 6`) — **única copia**, pensada para que un dev la edite
 > directamente, sin tocar código de lógica.
 >
 > **Reemplaza, para esta pantalla,** a la matriz motivo×perfil documentada
@@ -216,11 +217,12 @@ propio de las categorías, no una reactivación de esa regla vieja.
 `core/reclamos/reasonProfiles.ts` y `core/reclamos/profileVisibility.ts`
 (+ sus JSON) siguen sin uso, documentados como histórico.
 
-## 9. Tags de búsqueda por gestión (2026-09-02)
+## 9. Tags de búsqueda por gestión (2026-09-02, ampliado 2026-09-03)
 
 > **Generados por Claude, no son un dato de negocio confirmado.** El
-> criterio: hasta 10 tags por gestión, palabras o sinónimos que alguien
-> podría escribir en el buscador sin acertar el texto exacto del label.
+> criterio: hasta **50** tags por gestión (subido de 10 el 2026-09-03, a
+> pedido del usuario), palabras o sinónimos que alguien podría escribir en
+> el buscador sin acertar el texto exacto del label.
 
 Cada gestión tiene un array `tags` en
 [`proto navegable/src/core/gestiones/data/categorias-gestiones.json`](../proto%20navegable/src/core/gestiones/data/categorias-gestiones.json). El
@@ -275,11 +277,57 @@ como ejemplo):
   "inconveniente(s)" y todavía no tenía el tag `problema` → se agregó
   también, por coherencia con la regla anterior.
 
-Ningún ítem superó el máximo de 10 tags (quedaron entre 5 y 9). Ejemplo
-verificado en navegador: con perfil Individuo activo, buscar "falla"
-da 5 gestiones y buscar "problema" da 6 — ambos números coinciden
-exactamente con la cuenta manual de qué ítems, dentro de las categorías
-visibles para ese perfil, llevan cada tag.
+Ningún ítem superó el máximo vigente en ese momento (10 tags; quedaron
+entre 5 y 9). Ejemplo verificado en navegador: con perfil Individuo
+activo, buscar "falla" da 5 gestiones y buscar "problema" da 6 — ambos
+números coinciden exactamente con la cuenta manual de qué ítems, dentro
+de las categorías visibles para ese perfil, llevan cada tag.
+
+### 9.3 Límite subido a 50 y sinónimos coloquiales (2026-09-03)
+
+El usuario pidió dos cosas en la misma sesión:
+
+1. **Subir el límite de 10 a 50 tags por gestión** — 10 quedaba corto para
+   cubrir variantes de lenguaje natural.
+2. **Agregar muchos más sinónimos coloquiales**, con ejemplos explícitos:
+   toda gestión relacionada con "paquete" suma tags como `caja`, `envio`,
+   `bulto`; "faltante" suma `robo`, `vacio`, `incompleto`. Se aplicó el
+   mismo criterio (frases que un usuario real escribiría, no sólo palabras
+   sueltas) a las 27 gestiones: cada una subió de 5-10 tags a un rango de
+   13-25, incluyendo frases cortas ("no me deja pagar", "no llego nunca",
+   "no puedo agregar") además de palabras sueltas. `categorias-gestiones.json`
+   subió a `schema_version: 6`. Ningún ítem se acerca al nuevo máximo de 50
+   — hay margen amplio para seguir ampliando sin tocar código ni límites.
+
+### 9.4 Mejora del algoritmo de búsqueda (2026-09-03)
+
+Dos problemas reportados por el usuario probando el buscador con más de
+una palabra:
+
+- **Antes de este cambio** (fix intermedio del mismo día): la búsqueda
+  exigía que **todas** las palabras escritas aparecieran, cada una en
+  cualquier combinación de `label`/`tags` — resolvía "error justicia"
+  (dos tags de la misma gestión) pero **rompía frases naturales**: escribir
+  "no me acepta pago" daba **0 resultados**, porque "no", "me" y "acepta"
+  no son tags de ninguna gestión y el AND fallaba por esas palabras, aunque
+  "pago" sí matcheaba.
+- **Fix definitivo**: en
+  [`ReclamosListPage.tsx`](../proto%20navegable/src/pages/ReclamosListPage.tsx),
+  la búsqueda ahora:
+  1. Descarta palabras de relleno de 1-2 letras ("no", "me", "la", "un") a
+     la hora de exigir el match — si la frase entera fuera sólo relleno,
+     usa todas las palabras igual (fallback).
+  2. Alcanza con que **una sola** palabra significativa matchee `label` o
+     algún `tag` — ya no hace falta que matcheen todas.
+  3. Ordena los resultados por **cantidad de palabras que matchearon**,
+     de mayor a menor — una gestión que matchea 2 palabras de la frase
+     aparece antes que una que sólo matchea 1.
+
+Verificado en navegador (perfil Individuo): "no me acepta pago" → 4
+resultados, con "No puedo pagar mis envíos" primero (tiene el tag
+`acepta`, agregado en 9.3). "error justicia" → 6 resultados, con
+"Inconvenientes con el pago de oficios judiciales" primero (matchea
+ambas palabras); el resto matchea sólo "error", ordenado después.
 
 ## 10. Preguntas abiertas
 
@@ -298,11 +346,16 @@ visibles para ese perfil, llevan cada tag.
 5. ¿"Pyme" tiene alguna diferencia de negocio real con "Individuo" más
    allá del nombre, o por ahora son equivalentes en todo (mismas
    categorías visibles, sin motivos propios documentados)?
-6. ¿Los tags generados por Claude (sección 9) son razonables, o el negocio
-   quiere revisarlos/reemplazarlos? Ninguno fue validado.
+6. ¿Los tags generados por Claude (sección 9, ahora 13-25 por gestión) son
+   razonables, o el negocio quiere revisarlos/reemplazarlos? Ninguno fue
+   validado.
 7. ¿El tag especial de categoría (Fulfillment/Franquicias) debería
    extenderse a las otras 5 categorías, o queda exclusivo de estas 2 por
    ahora?
+8. La búsqueda ahora es más permisiva (con que una palabra de la frase
+   matchee alcanza, sección 9.4) — ¿el negocio prefiere este comportamiento
+   más amplio, o volver a exigir que matcheen todas las palabras a costa de
+   frases naturales más largas?
 
 ## 11. Nota de consolidación (2026-09-02)
 

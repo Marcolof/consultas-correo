@@ -22,7 +22,7 @@
     </div>
 
     <div class="status-bar">
-      <span class="pill draft">Vigente al 2026-09-02 — reemplaza el eje de perfil</span>
+      <span class="pill draft">Vigente al 2026-09-03 — reemplaza el eje de perfil</span>
     </div>
 
     <h1>"Mis gestiones" — categorías</h1>
@@ -84,12 +84,12 @@
     <h2>8. Qué pasó con el mecanismo anterior (motivo×perfil)</h2>
     <p>La matriz motivo×perfil (<a href="motivos-reclamo-por-perfil.html">motivos por perfil</a>) sigue superada — lo recuperado en la sección 6 es un mecanismo nuevo sobre categorías, no una reactivación de esa regla vieja.</p>
 
-    <h2>9. Tags de búsqueda por gestión (2026-09-02)</h2>
-    <blockquote>Generados por Claude, no son un dato de negocio confirmado. Criterio: hasta 10 tags por gestión.</blockquote>
+    <h2>9. Tags de búsqueda por gestión (2026-09-02, ampliado 2026-09-03)</h2>
+    <blockquote>Generados por Claude, no son un dato de negocio confirmado. Criterio: hasta <strong>50</strong> tags por gestión (subido de 10 el 2026-09-03).</blockquote>
     <table>
       <thead><tr><th>Gestión</th><th>Tags</th></tr></thead>
       <tbody>
-        <tr><td>Inconvenientes con el pago de oficios judiciales</td><td>justicia, citación, oficial, cobro, error, falla, judicial, pago</td></tr>
+        <tr><td>Inconvenientes con el pago de oficios judiciales</td><td>justicia, citación, oficial, cobro, error, falla, judicial, pago, tribunal, juzgado, embargo…</td></tr>
       </tbody>
     </table>
     <p>El buscador matchea contra el label y los tags. Buscar "justicia" encuentra esa gestión aunque la palabra no esté en el label — verificado en navegador.</p>
@@ -97,7 +97,13 @@
     <p>Empezó como caso especial de Fulfillment/Franquicias y se generalizó a las 7 categorías: cada gestión lleva el nombre de su propia categoría como tag (Mi Cuenta → <code>mi cuenta</code>, Paquetería Nacional → <code>paqueteria nacional</code>, Paquetería Internacional → <code>paqueteria internacional</code>, Franquicias → <code>franquicia</code>/<code>franquicias</code>, Fulfillment → <code>fulfillment</code>, Mis Comunicaciones Digitales → <code>comunicaciones digitales</code>, Oficios Judiciales → <code>oficios judiciales</code>). Efecto: escribir el nombre de una categoría en el buscador (con "Todos" seleccionado) muestra todas sus gestiones sin tocar ningún chip — verificado en navegador ("Mi Cuenta" → 2 gestiones exactas; "Paquetería Nacional" → 6 exactas). No es una regla de código aparte, es sólo un tag más.</p>
 
     <h3>9.2 Ampliación por patrón en el label (2026-09-02)</h3>
-    <p>Reglas pedidas por el usuario, aplicadas a las 27 gestiones (no sólo a los ejemplos dados): label contiene "error"/"erróneo"/"incorrecto" → tag <code>falla</code>; label contiene "demora" → tag <code>problema</code>; extendido por coherencia a "problema(s)"/"inconveniente(s)" → tag <code>problema</code> donde faltaba. Ningún ítem superó 10 tags (quedaron entre 5 y 9). Verificado en navegador: con perfil Individuo, buscar "falla" da 5 gestiones y "problema" da 6 — coincide con la cuenta manual de qué ítems, dentro de las categorías visibles para ese perfil, llevan cada tag.</p>
+    <p>Reglas pedidas por el usuario, aplicadas a las 27 gestiones (no sólo a los ejemplos dados): label contiene "error"/"erróneo"/"incorrecto" → tag <code>falla</code>; label contiene "demora" → tag <code>problema</code>; extendido por coherencia a "problema(s)"/"inconveniente(s)" → tag <code>problema</code> donde faltaba. En ese momento ningún ítem superó el máximo vigente de 10 tags (quedaron entre 5 y 9). Verificado en navegador: con perfil Individuo, buscar "falla" da 5 gestiones y "problema" da 6 — coincide con la cuenta manual de qué ítems, dentro de las categorías visibles para ese perfil, llevan cada tag.</p>
+
+    <h3>9.3 Límite subido a 50 y sinónimos coloquiales (2026-09-03)</h3>
+    <p>El usuario pidió subir el límite de 10 a 50 tags y sumar sinónimos de lenguaje natural (ej. "paquete" → <code>caja</code>, <code>envio</code>, <code>bulto</code>; "faltante" → <code>robo</code>, <code>vacio</code>, <code>incompleto</code>). Aplicado a las 27 gestiones: cada una pasó de 5-10 a 13-25 tags, incluyendo frases cortas ("no me deja pagar", "no llego nunca") además de palabras sueltas. <code>categorias-gestiones.json</code> subió a <code>schema_version: 6</code>. Ningún ítem se acerca al nuevo máximo de 50.</p>
+
+    <h3>9.4 Mejora del algoritmo de búsqueda (2026-09-03)</h3>
+    <p>Antes de este fix, la búsqueda exigía que <strong>todas</strong> las palabras escritas matchearan (en cualquier combinación de label/tags) — resolvía "error justicia" pero rompía frases naturales: "no me acepta pago" daba 0 resultados porque "no"/"me"/"acepta" no son tags de ninguna gestión. Fix definitivo en <code>ReclamosListPage.tsx</code>: se ignoran palabras de relleno de 1-2 letras al exigir el match, alcanza con que <strong>una sola</strong> palabra significativa matchee, y los resultados se ordenan por cantidad de palabras coincidentes (más relevante primero). Verificado en navegador: "no me acepta pago" → 4 resultados con "No puedo pagar mis envíos" primero (tag <code>acepta</code>); "error justicia" → 6 resultados con "Inconvenientes con el pago de oficios judiciales" primero (matchea ambas palabras).</p>
 
     <h2>10. Preguntas abiertas</h2>
     <ol>
@@ -106,8 +112,9 @@
       <li>¿Las 5 categorías sin exclusión mencionada son visibles para los 4 tipos por igual, o hay exclusiones adicionales no mencionadas?</li>
       <li>Los motivos antes transversales a los 3 perfiles ("Errores en mi factura", "Errores con el saldo de mi cuenta") ahora sólo están en Franquicias — ¿deberían estar también en otras categorías?</li>
       <li>¿"Pyme" tiene alguna diferencia real con "Individuo" más allá del nombre?</li>
-      <li>¿Los tags generados por Claude son razonables, o el negocio quiere revisarlos?</li>
+      <li>¿Los tags generados por Claude (ahora 13-25 por gestión) son razonables, o el negocio quiere revisarlos?</li>
       <li>¿El tag especial de categoría debería extenderse a las otras 5 categorías?</li>
+      <li>La búsqueda ahora es más permisiva (con una palabra alcanza) — ¿el negocio prefiere esto o volver a exigir todas las palabras?</li>
     </ol>
 
     <a class="back-link" href="documentacion.html">&larr; Volver a Documentación</a>

@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "proto-navegable",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["--prefix", "proto navegable", "run", "dev"],
+      "port": 4300
+    }
+  ]
+}

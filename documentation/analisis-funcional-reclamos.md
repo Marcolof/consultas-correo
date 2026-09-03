@@ -124,9 +124,14 @@ patrón que la regla anterior con perfiles).
    ("Todos" preseleccionado), contador de resultados y el listado de
    gestiones.
 3. **Buscar**: el usuario escribe texto libre; el listado se filtra por
-   coincidencia de texto en el label de la gestión (sin distinguir
-   mayúsculas ni acentos). No dispara ningún llamado a backend en el
-   prototipo — es filtrado en memoria sobre datos estáticos.
+   coincidencia contra el label **y** los tags de búsqueda de cada gestión
+   (hasta 50 por gestión, sinónimos generados por Claude — ver
+   [`mis-gestiones-categorias.md`](mis-gestiones-categorias.md) sección 9),
+   sin distinguir mayúsculas ni acentos. Si se escriben varias palabras,
+   alcanza con que una sola matchee (palabras de relleno como "no"/"me" no
+   bloquean el resultado) y los resultados más relevantes (más palabras
+   coincidentes) aparecen primero. No dispara ningún llamado a backend en
+   el prototipo — es filtrado en memoria sobre datos estáticos.
 4. **Filtrar por categoría**: el usuario elige un chip; el listado se
    acota a las gestiones de esa categoría (o a la unión completa si el
    chip es "Todos"). Buscador y chip se combinan (AND). Aparece un link

@@ -130,7 +130,7 @@
     <h2>6. Preguntas / límites que quedan (no resueltos acá)</h2>
     <ul>
       <li>Las filas del listado no navegan a ningún lado todavía — muestran un <code>Toast</code> de aviso. No hay pantalla de detalle de gestión definida aún.</li>
-      <li>El buscador filtra sólo por label de la gestión, sin acentos — no busca por categoría ni por sinónimos.</li>
+      <li>El buscador filtra por label <strong>y</strong> por tags de cada gestión (hasta 50, ver <a href="mis-gestiones-categorias.html">categorías</a> sección 9), sin acentos. Con una frase de varias palabras alcanza con que una sola matchee, y los resultados se ordenan por relevancia (más palabras coincidentes primero).</li>
       <li>5 de las 7 categorías tienen contenido inferido por intuición o inventado — ver <a href="mis-gestiones-categorias.html">"Mis gestiones" — Categorías</a> para las preguntas abiertas.</li>
       <li>El modo responsive forzado cubre sidebar, header, drawer y el padding de <code>PageContainer</code> (fuerza 16px) — no se auditó exhaustivamente si algún otro componente con <code>@media</code> propio necesitaría el mismo tipo de override.</li>
       <li>En pantallas anchas, <code>PageContainer</code> ya no centra su contenido — queda pegado a la izquierda con su padding, y ese padding en desktop es de 3rem por fidelidad con la web real de MiCorreo.</li>

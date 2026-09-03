@@ -87,13 +87,28 @@ export function ReclamosListPage() {
   )
 
   const visibleItems = useMemo(() => {
-    const query = normalize(search.trim())
-    if (query === '') return items
-    return items.filter(
-      (item) =>
-        normalize(item.label).includes(query) ||
-        item.tags.some((tag) => normalize(tag).includes(query)),
-    )
+    const allWords = normalize(search.trim())
+      .split(/\s+/)
+      .filter((word) => word !== '')
+    if (allWords.length === 0) return items
+
+    // Palabras de relleno ("no", "me", "la"...) no deben tapar un match real
+    // en el resto de la frase — sólo cuentan las de 3+ letras. Si la frase
+    // entera es de relleno (raro), se cae a buscar con todas igual.
+    const words = allWords.filter((word) => word.length >= 3)
+    const effectiveWords = words.length > 0 ? words : allWords
+
+    return items
+      .map((item) => {
+        const haystack = [normalize(item.label), ...item.tags.map(normalize)]
+        const matchCount = effectiveWords.filter((word) => haystack.some((field) => field.includes(word))).length
+        return { item, matchCount }
+      })
+      // Con que UNA palabra de la frase matchee alcanza — así "no me acepta
+      // pago" encuentra la gestión aunque "no"/"me"/"acepta" no sean tags.
+      .filter(({ matchCount }) => matchCount > 0)
+      .sort((a, b) => b.matchCount - a.matchCount)
+      .map(({ item }) => item)
   }, [items, search])
 
   const countLabel = `${String(visibleItems.length)} ${visibleItems.length === 1 ? ITEM_LABEL_SINGULAR : ITEM_LABEL_PLURAL}`

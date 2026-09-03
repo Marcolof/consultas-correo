@@ -9,7 +9,7 @@
  *   Nivel 1 — `profile_category_visibility`: qué categorías (chips) ve cada
  *   tipo de usuario (Individuo, Pyme, Franquicias, Fulfillment).
  *   Nivel 2 — `categories`: qué gestiones agrupa cada categoría, cada una
- *   con `tags` de búsqueda (máx. 10, generados por Claude — no son un dato
+ *   con `tags` de búsqueda (máx. 50, generados por Claude — no son un dato
  *   de negocio confirmado). Los ítems de Fulfillment y Franquicias llevan
  *   además el tag literal 'fulfillment'/'franquicia': buscar esa palabra
  *   muestra todas las gestiones de esa categoría sin tocar el chip — no es
