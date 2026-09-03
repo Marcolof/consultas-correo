@@ -65,15 +65,15 @@ mensajes de la misma sesión. Detalle completo en
 
 ### 4.1 Las 7 categorías (contenido)
 
-| # | Categoría | Gestiones | Origen del contenido |
-|---|---|:---:|---|
-| 1 | Mi Cuenta | 2 | Inferido por intuición |
-| 2 | Paquetería Nacional | 6 | Inferido por intuición |
-| 3 | Paquetería Internacional | 4 | **Inventado** |
-| 4 | Franquicias | 4 | **Confirmado** por el usuario |
-| 5 | Fulfillment | 6 | **Confirmado** por el usuario |
-| 6 | Mis Comunicaciones Digitales | 4 | **Inventado** |
-| 7 | Oficios Judiciales | 1 | Inferido por intuición |
+| # | Categoría | Gestiones | Origen del contenido | Disponible hoy |
+|---|---|:---:|---|---|
+| 1 | Mi Cuenta | 2 | Inferido por intuición | Sí |
+| 2 | Paquetería Nacional | 6 | Inferido por intuición | Sí |
+| 3 | Paquetería Internacional | 4 | **Inventado** | **No — fuera del alcance de este MVP** |
+| 4 | Franquicias | 4 | **Confirmado** por el usuario | Sí |
+| 5 | Fulfillment | 6 | **Confirmado** por el usuario | Sí |
+| 6 | Mis Comunicaciones Digitales | 4 | **Inventado** | **No — fuera del alcance de este MVP** |
+| 7 | Oficios Judiciales | 1 | Inferido por intuición | Sí |
 
 **Sólo Franquicias y Fulfillment tienen contenido que el negocio confirmó
 textualmente.** Las otras 5 categorías se completaron con dos criterios
@@ -88,10 +88,20 @@ distintos que no hay que confundir:
   por categoría, cada una con el label terminado en literalmente
   **"(Gestión inventada)"**, para que la pantalla no se vea vacía.
 
+> ⚠️ **2026-09-03 — decisión de alcance del usuario:** Paquetería
+> Internacional y Mis Comunicaciones Digitales quedan **fuera del alcance
+> de este MVP**, planificadas para una **próxima salida** una vez que
+> exista contenido real. No aparecen como chip ni suman a "Todos" para
+> ningún tipo de usuario. Detalle técnico e implementación en
+> [`mis-gestiones-categorias.md`](mis-gestiones-categorias.md) sección 5.1.
+
 ⚠️ **"Todos" NO es "las 27 gestiones del sistema"** — es la unión de las
 categorías visibles para el tipo de usuario activo (corregido 2026-09-02,
-era un bug: mostraba las 27 sin importar el perfil). Individuo/Pyme con
-"Todos": 17 gestiones. Franquicias: 21. Fulfillment: 23. Ver sección 4.2.
+era un bug: mostraba las 27 sin importar el perfil) **y que además no
+estén fuera de este MVP** (ver el recuadro de arriba). Con Paquetería
+Internacional y Mis Comunicaciones Digitales fuera de alcance:
+Individuo/Pyme con "Todos": 9 gestiones. Franquicias: 13. Fulfillment: 15.
+Ver sección 4.2.
 
 ### 4.2 Visibilidad por tipo de usuario (quién ve qué categoría)
 
@@ -155,7 +165,9 @@ inferencia ni se asumió una respuesta por defecto en el prototipo:
    Paquetería Nacional y Oficios Judiciales son correctas? (detalle en
    [`mis-gestiones-categorias.md`](mis-gestiones-categorias.md) sección 4).
 2. ¿Qué gestiones reales van a completar **Paquetería Internacional** y
-   **Mis Comunicaciones Digitales**, hoy con contenido inventado?
+   **Mis Comunicaciones Digitales**? Quedaron fuera del alcance de este
+   MVP (2026-09-03) para una próxima salida — la pregunta sigue abierta
+   para esa salida futura, no para esta entrega.
 3. ¿Las 5 categorías sin exclusión mencionada (Mi Cuenta, Paquetería
    Nacional, Paquetería Internacional, Mis Comunicaciones Digitales,
    Oficios Judiciales) son realmente visibles para los 4 tipos de usuario
@@ -194,6 +206,7 @@ detección de motivo por IA (texto libre) es visión a futuro,
 | Contenido de Franquicias y Fulfillment (sección 4) | Mensaje explícito del usuario, 2026-09-02 | Alta — listas dadas textualmente |
 | Contenido de Mi Cuenta, Paquetería Nacional, Oficios Judiciales | Agrupación por intuición de Claude sobre motivos ya confirmados | Media-baja — el motivo es real, la categoría asignada no está validada |
 | Contenido de Paquetería Internacional y Mis Comunicaciones Digitales | Inventado por pedido explícito del usuario | N/A — es contenido de relleno, marcado como tal |
+| Paquetería Internacional y Mis Comunicaciones Digitales fuera del MVP actual | Decisión explícita del usuario, 2026-09-03 | Alta — decisión de alcance textual, no inferida |
 | 4 tipos de usuario y qué categorías ve cada uno (sección 4.2) | Mensaje explícito del usuario, 2026-09-02 | Alta — regla textual, sin inferencia en las exclusiones dadas |
 | 3 perfiles y matriz motivo×perfil (sección 3, histórico) | JSON provisto por el usuario, 2026-09-01 | Alta en su momento — superado el 2026-09-02 para esta pantalla |
 | Flujo de alta de reclamo en producción (2 pasos) | `html reference/reclaclamos.html` | Alta — observación directa de producción |

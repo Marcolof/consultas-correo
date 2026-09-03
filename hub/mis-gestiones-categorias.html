@@ -63,8 +63,8 @@
     <p><strong>Paquetería Internacional</strong>: Demora en la entrega internacional; Problemas con la aduana; Paquete extraviado en tránsito internacional; Costos de importación no informados (las 4, "Gestión inventada").</p>
     <p><strong>Mis Comunicaciones Digitales</strong>: No recibí la notificación de mi envío; Error en el contenido de una comunicación digital; No puedo acceder a mis comunicaciones; Comunicación enviada a un destinatario incorrecto (las 4, "Gestión inventada").</p>
 
-    <h3>5.1 Ocultas por defecto hasta que exista contenido real (2026-09-03)</h3>
-    <blockquote>⚠️ Estado actual: Paquetería Internacional y Mis Comunicaciones Digitales NO están disponibles en la pantalla. No es un bug — es una decisión explícita del usuario, porque su contenido es 100% inventado.</blockquote>
+    <h3>5.1 Fuera del alcance de este MVP, para una próxima salida (2026-09-03)</h3>
+    <blockquote>⚠️ Estado actual: Paquetería Internacional y Mis Comunicaciones Digitales NO están disponibles en la pantalla. No es un bug — es una decisión de alcance explícita del usuario: quedan fuera del MVP actual, planificadas para una próxima salida una vez que exista contenido real.</blockquote>
     <p>Estas 2 categorías ya no aparecen como chip para ningún tipo de usuario, ni suman a "Todos" — independientemente de <code>profile_category_visibility</code> (sección 6). El panel "Casos de uso" tiene una sección nueva, <strong>"Categorías en construcción"</strong>, con 2 switches ("Ver Paquetería Internacional" / "Ver Comunicaciones Digitales") para mostrarlas puntualmente en una demo; por defecto ambos arrancan apagados. También deep-linkeable: <code>?paqueteriaInternacional=1</code> / <code>?comunicacionesDigitales=1</code>.</p>
     <p>Implementado en <code>core/gestiones/categories.ts</code> (<code>HIDDEN_BY_DEFAULT_CATEGORY_IDS</code>, <code>applyUnavailableCategoryToggles</code>) + <code>core/session/categoryToggles.ts</code>. Verificado en navegador: Individuo con "Todos" y ambos switches apagados da 9 gestiones (antes 17); activar "Ver Paquetería Internacional" sube el contador a 13.</p>
 

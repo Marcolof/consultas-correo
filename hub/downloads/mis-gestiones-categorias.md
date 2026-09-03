@@ -146,12 +146,14 @@ agregar ahí.
 - No puedo acceder a mis comunicaciones (Gestión inventada)
 - Comunicación enviada a un destinatario incorrecto (Gestión inventada)
 
-### 5.1 Ocultas por defecto hasta que exista contenido real (2026-09-03)
+### 5.1 Fuera del alcance de este MVP, para una próxima salida (2026-09-03)
 
 > ⚠️ **Estado actual: Paquetería Internacional y Mis Comunicaciones
 > Digitales NO están disponibles en la pantalla.** No es un bug ni una
-> regresión — es una decisión explícita del usuario, porque su contenido
-> es 100% inventado y no quería mostrarlo por defecto.
+> regresión — es una **decisión de alcance explícita del usuario**: estas
+> 2 categorías quedan **fuera del MVP actual**, planificadas para una
+> **próxima salida** una vez que exista contenido real del negocio. Su
+> contenido es 100% inventado, por eso no se quiso mostrarlo por defecto.
 
 Antes de este cambio, estas 2 categorías se veían igual que las demás
 (chip + gestiones dentro de "Todos") para cualquier tipo de usuario, pese a
@@ -383,7 +385,9 @@ ambas palabras); el resto matchea sólo "error", ordenado después.
 1. ¿Las asignaciones "por intuición" de la sección 4 son correctas? Hay
    que validarlas con el negocio antes de tratarlas como definitivas.
 2. ¿Qué gestiones reales van a completar Paquetería Internacional y Mis
-   Comunicaciones Digitales una vez que existan?
+   Comunicaciones Digitales? Quedaron fuera del alcance de este MVP
+   (2026-09-03, ver sección 5.1) para una próxima salida — sigue abierta
+   para esa entrega futura.
 3. ¿Las 5 categorías sin exclusión mencionada (Mi Cuenta, Paquetería
    Nacional, Paquetería Internacional, Mis Comunicaciones Digitales,
    Oficios Judiciales) son realmente visibles para los 4 tipos de usuario
