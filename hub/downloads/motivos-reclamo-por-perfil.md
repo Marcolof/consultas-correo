@@ -11,7 +11,8 @@
 >
 > **Fuente**: definición funcional provista por el usuario el 2026-09-01,
 > confirmada como regla de negocio real (no inferencia). Archivo de datos
-> original: [`data/motivos-reclamo-por-perfil.json`](data/motivos-reclamo-por-perfil.json)
+> (única copia desde 2026-09-02, antes duplicado también en
+> `documentation/data/`): [`../proto navegable/src/core/reclamos/data/motivos-reclamo-por-perfil.json`](../proto%20navegable/src/core/reclamos/data/motivos-reclamo-por-perfil.json)
 > (`schema_version: 1`).
 >
 > **Estado: confirmado, pero incompleto** — define QUÉ motivo ve cada perfil,
@@ -119,7 +120,7 @@ todavía un changelog de qué cambiaría en una v2.
 
 > **Fuente**: definición funcional provista por el usuario el 2026-09-01,
 > a raíz de construir la pantalla de Reclamos. Archivo de datos:
-> [`data/visibilidad-perfiles.json`](data/visibilidad-perfiles.json)
+> [`../proto navegable/src/core/reclamos/data/visibilidad-perfiles.json`](../proto%20navegable/src/core/reclamos/data/visibilidad-perfiles.json)
 > (`schema_version: 1`).
 
 Es una regla **distinta** de la de la sección 3: acá no se trata de qué
@@ -150,7 +151,7 @@ elegido deja de estar disponible al cambiar de perfil activo, el prototipo
 vuelve a "Todos" automáticamente.
 
 **Para agregar un perfil nuevo** a esta regla: una entrada más en
-`visibility` (`data/visibilidad-perfiles.json`) con la lista de chips que
+`visibility` (`proto navegable/src/core/reclamos/data/visibilidad-perfiles.json`, única copia) con la lista de chips que
 puede ver. No hay que tocar la matriz de la sección 3 salvo que ese perfil
 también tenga motivos propios.
 

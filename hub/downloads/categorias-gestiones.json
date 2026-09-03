@@ -1,8 +1,8 @@
 {
-  "schema_version": 3,
+  "schema_version": 5,
   "purpose": "Base de datos de 'Mis gestiones': 2 niveles. Nivel 1 (user_types + profile_category_visibility) = qué categorías (chips) ve cada tipo de usuario. Nivel 2 (categories) = qué gestiones agrupa cada categoría, con tags de búsqueda por gestión.",
   "vigente_al": "2026-09-02",
-  "note": "Pensado para que un dev lo edite directamente como fuente de datos, sin tocar lógica de código. El campo 'source' de cada categoría indica el origen real del contenido: 'confirmed' = provisto textualmente por el usuario; 'inferred' = agrupación por intuición de Claude sobre los 19 motivos ya conocidos, a la espera de que el negocio confirme; 'invented' = categoría sin datos reales todavía, gestiones de relleno explícitamente marcadas como inventadas en el propio label. Reemplaza, para esta pantalla, a motivos-reclamo-por-perfil.json/visibilidad-perfiles.json (histórico, marcado SUPERSEDED). El campo 'tags' de cada gestión (máx. 10) fue generado por Claude, no provisto por el negocio — sirve para que el buscador encuentre una gestión aunque el texto ingresado no sea exacto al label. Los ítems de Fulfillment y Franquicias llevan además el tag literal 'fulfillment'/'franquicia' — buscar esa palabra en el buscador muestra todas las gestiones de esa categoría sin necesidad de tocar el chip, sin lógica especial de código: es sólo un tag más.",
+  "note": "Pensado para que un dev lo edite directamente como fuente de datos, sin tocar lógica de código. El campo 'source' de cada categoría indica el origen real del contenido: 'confirmed' = provisto textualmente por el usuario; 'inferred' = agrupación por intuición de Claude sobre los 19 motivos ya conocidos, a la espera de que el negocio confirme; 'invented' = categoría sin datos reales todavía, gestiones de relleno explícitamente marcadas como inventadas en el propio label. Reemplaza, para esta pantalla, a motivos-reclamo-por-perfil.json/visibilidad-perfiles.json (histórico, marcado SUPERSEDED). El campo 'tags' de cada gestión (máx. 10) fue generado por Claude, no provisto por el negocio — sirve para que el buscador encuentre una gestión aunque el texto ingresado no sea exacto al label. Todas las gestiones llevan además el nombre de su propia categoría como tag (ej. las de 'Mi Cuenta' llevan el tag 'mi cuenta') — buscar el nombre de una categoría en el buscador muestra todas sus gestiones sin necesidad de tocar el chip, sin lógica especial de código: es sólo un tag más. 2026-09-02 (ampliación de tags): se agregó 'falla' como sinónimo a toda gestión cuyo label contiene 'error'/'erróneo'/'incorrecto', y 'problema' a toda gestión cuyo label contiene 'demora' o 'problema(s)'/'inconveniente(s)' (donde todavía no lo tenía) — reglas de patrón pedidas explícitamente por el usuario, aplicadas de forma consistente a las 27 gestiones. 2026-09-02 (2da ampliación): se generalizó a las 7 categorías el tag de nombre de categoría que antes sólo tenían Fulfillment/Franquicias.",
   "user_types": [
     { "id": "individuo", "label": "Individuo" },
     { "id": "pyme", "label": "Pyme" },
@@ -22,8 +22,8 @@
       "order": 1,
       "source": "inferred",
       "items": [
-        { "id": "recibi_un_cobro_erroneo", "label": "Recibí un cobro erróneo", "invented": false, "tags": ["cobro", "error", "incorrecto", "dinero", "monto", "pago", "factura"] },
-        { "id": "inconvenientes_para_dar_de_alta_un_usuario_adicional", "label": "Inconvenientes para dar de alta un usuario adicional", "invented": false, "tags": ["usuario", "alta", "adicional", "cuenta", "permisos", "acceso", "agregar"] }
+        { "id": "recibi_un_cobro_erroneo", "label": "Recibí un cobro erróneo", "invented": false, "tags": ["cobro", "error", "incorrecto", "dinero", "monto", "pago", "factura", "falla", "mi cuenta"] },
+        { "id": "inconvenientes_para_dar_de_alta_un_usuario_adicional", "label": "Inconvenientes para dar de alta un usuario adicional", "invented": false, "tags": ["usuario", "alta", "adicional", "cuenta", "permisos", "acceso", "agregar", "problema", "mi cuenta"] }
       ]
     },
     {
@@ -32,12 +32,12 @@
       "order": 2,
       "source": "inferred",
       "items": [
-        { "id": "demora_en_el_servicio", "label": "Demora en el servicio", "invented": false, "tags": ["demora", "atraso", "tardanza", "servicio", "lento", "tiempo"] },
-        { "id": "falta_o_error_en_la_informacion_de_seguimiento", "label": "Falta o error en la información de seguimiento", "invented": false, "tags": ["seguimiento", "tracking", "error", "informacion", "estado", "envio"] },
-        { "id": "inconvenientes_con_la_entrega", "label": "Inconvenientes con la entrega", "invented": false, "tags": ["entrega", "delivery", "problema", "domicilio", "recepcion"] },
-        { "id": "no_puedo_pagar_mis_envios", "label": "No puedo pagar mis envíos", "invented": false, "tags": ["pago", "envio", "cobro", "tarjeta", "error", "transaccion"] },
-        { "id": "paquete_danado", "label": "Paquete dañado", "invented": false, "tags": ["dañado", "roto", "deterioro", "paquete", "golpeado"] },
-        { "id": "paquete_con_faltante_de_contenido", "label": "Paquete con faltante de contenido", "invented": false, "tags": ["faltante", "incompleto", "contenido", "falta", "robo"] }
+        { "id": "demora_en_el_servicio", "label": "Demora en el servicio", "invented": false, "tags": ["demora", "atraso", "tardanza", "servicio", "lento", "tiempo", "problema", "paqueteria nacional"] },
+        { "id": "falta_o_error_en_la_informacion_de_seguimiento", "label": "Falta o error en la información de seguimiento", "invented": false, "tags": ["seguimiento", "tracking", "error", "informacion", "estado", "envio", "falla", "paqueteria nacional"] },
+        { "id": "inconvenientes_con_la_entrega", "label": "Inconvenientes con la entrega", "invented": false, "tags": ["entrega", "delivery", "problema", "domicilio", "recepcion", "paqueteria nacional"] },
+        { "id": "no_puedo_pagar_mis_envios", "label": "No puedo pagar mis envíos", "invented": false, "tags": ["pago", "envio", "cobro", "tarjeta", "error", "transaccion", "paqueteria nacional"] },
+        { "id": "paquete_danado", "label": "Paquete dañado", "invented": false, "tags": ["dañado", "roto", "deterioro", "paquete", "golpeado", "paqueteria nacional"] },
+        { "id": "paquete_con_faltante_de_contenido", "label": "Paquete con faltante de contenido", "invented": false, "tags": ["faltante", "incompleto", "contenido", "falta", "robo", "paqueteria nacional"] }
       ]
     },
     {
@@ -46,10 +46,10 @@
       "order": 3,
       "source": "invented",
       "items": [
-        { "id": "demora_en_la_entrega_internacional", "label": "Demora en la entrega internacional (Gestión inventada)", "invented": true, "tags": ["internacional", "demora", "exterior", "envio", "atraso"] },
-        { "id": "problemas_con_la_aduana", "label": "Problemas con la aduana (Gestión inventada)", "invented": true, "tags": ["aduana", "importacion", "arancel", "retencion", "customs"] },
-        { "id": "paquete_extraviado_en_transito_internacional", "label": "Paquete extraviado en tránsito internacional (Gestión inventada)", "invented": true, "tags": ["extraviado", "perdido", "transito", "internacional", "envio"] },
-        { "id": "costos_de_importacion_no_informados", "label": "Costos de importación no informados (Gestión inventada)", "invented": true, "tags": ["costos", "importacion", "arancel", "sorpresa", "cobro"] }
+        { "id": "demora_en_la_entrega_internacional", "label": "Demora en la entrega internacional (Gestión inventada)", "invented": true, "tags": ["internacional", "demora", "exterior", "envio", "atraso", "problema", "paqueteria internacional"] },
+        { "id": "problemas_con_la_aduana", "label": "Problemas con la aduana (Gestión inventada)", "invented": true, "tags": ["aduana", "importacion", "arancel", "retencion", "customs", "problema", "paqueteria internacional"] },
+        { "id": "paquete_extraviado_en_transito_internacional", "label": "Paquete extraviado en tránsito internacional (Gestión inventada)", "invented": true, "tags": ["extraviado", "perdido", "transito", "internacional", "envio", "paqueteria internacional"] },
+        { "id": "costos_de_importacion_no_informados", "label": "Costos de importación no informados (Gestión inventada)", "invented": true, "tags": ["costos", "importacion", "arancel", "sorpresa", "cobro", "paqueteria internacional"] }
       ]
     },
     {
@@ -58,10 +58,10 @@
       "order": 4,
       "source": "confirmed",
       "items": [
-        { "id": "problemas_para_generar_el_sello_digital", "label": "Problemas para generar el sello digital", "invented": false, "tags": ["sello", "digital", "generar", "error", "firma", "franquicia", "franquicias"] },
-        { "id": "problema_con_el_pago_de_sellos_digitales", "label": "Problema con el pago de sellos digitales", "invented": false, "tags": ["sello", "digital", "pago", "cobro", "error", "franquicia", "franquicias"] },
-        { "id": "errores_en_mi_factura", "label": "Errores en mi factura", "invented": false, "tags": ["factura", "error", "facturacion", "cobro", "franquicia", "franquicias"] },
-        { "id": "errores_con_el_saldo_de_mi_cuenta", "label": "Errores con el saldo de mi cuenta", "invented": false, "tags": ["saldo", "cuenta", "error", "dinero", "franquicia", "franquicias"] }
+        { "id": "problemas_para_generar_el_sello_digital", "label": "Problemas para generar el sello digital", "invented": false, "tags": ["sello", "digital", "generar", "error", "firma", "franquicia", "franquicias", "problema"] },
+        { "id": "problema_con_el_pago_de_sellos_digitales", "label": "Problema con el pago de sellos digitales", "invented": false, "tags": ["sello", "digital", "pago", "cobro", "error", "franquicia", "franquicias", "problema"] },
+        { "id": "errores_en_mi_factura", "label": "Errores en mi factura", "invented": false, "tags": ["factura", "error", "facturacion", "cobro", "franquicia", "franquicias", "falla"] },
+        { "id": "errores_con_el_saldo_de_mi_cuenta", "label": "Errores con el saldo de mi cuenta", "invented": false, "tags": ["saldo", "cuenta", "error", "dinero", "franquicia", "franquicias", "falla"] }
       ]
     },
     {
@@ -70,7 +70,7 @@
       "order": 5,
       "source": "confirmed",
       "items": [
-        { "id": "demora_en_el_armado_de_los_envios", "label": "Demora en el armado de los envíos", "invented": false, "tags": ["armado", "demora", "preparacion", "envio", "atraso", "fulfillment"] },
+        { "id": "demora_en_el_armado_de_los_envios", "label": "Demora en el armado de los envíos", "invented": false, "tags": ["armado", "demora", "preparacion", "envio", "atraso", "fulfillment", "problema"] },
         { "id": "diferencia_en_el_armado_del_envio", "label": "Diferencia en el armado del envío", "invented": false, "tags": ["diferencia", "armado", "envio", "error", "discrepancia", "fulfillment"] },
         { "id": "diferencia_de_stock", "label": "Diferencia de stock", "invented": false, "tags": ["stock", "diferencia", "inventario", "faltante", "discrepancia", "fulfillment"] },
         { "id": "inconvenientes_con_la_carga_de_envios", "label": "Inconvenientes con la carga de envíos", "invented": false, "tags": ["carga", "envios", "problema", "sistema", "subir", "fulfillment"] },
@@ -84,10 +84,10 @@
       "order": 6,
       "source": "invented",
       "items": [
-        { "id": "no_recibi_la_notificacion_de_mi_envio", "label": "No recibí la notificación de mi envío (Gestión inventada)", "invented": true, "tags": ["notificacion", "aviso", "comunicacion", "envio", "alerta"] },
-        { "id": "error_en_el_contenido_de_una_comunicacion_digital", "label": "Error en el contenido de una comunicación digital (Gestión inventada)", "invented": true, "tags": ["comunicacion", "contenido", "error", "digital", "mensaje"] },
-        { "id": "no_puedo_acceder_a_mis_comunicaciones", "label": "No puedo acceder a mis comunicaciones (Gestión inventada)", "invented": true, "tags": ["acceso", "comunicaciones", "ingreso", "digital", "bloqueo"] },
-        { "id": "comunicacion_enviada_a_un_destinatario_incorrecto", "label": "Comunicación enviada a un destinatario incorrecto (Gestión inventada)", "invented": true, "tags": ["destinatario", "incorrecto", "comunicacion", "error", "envio"] }
+        { "id": "no_recibi_la_notificacion_de_mi_envio", "label": "No recibí la notificación de mi envío (Gestión inventada)", "invented": true, "tags": ["notificacion", "aviso", "comunicacion", "envio", "alerta", "comunicaciones digitales"] },
+        { "id": "error_en_el_contenido_de_una_comunicacion_digital", "label": "Error en el contenido de una comunicación digital (Gestión inventada)", "invented": true, "tags": ["comunicacion", "contenido", "error", "digital", "mensaje", "falla", "comunicaciones digitales"] },
+        { "id": "no_puedo_acceder_a_mis_comunicaciones", "label": "No puedo acceder a mis comunicaciones (Gestión inventada)", "invented": true, "tags": ["acceso", "comunicaciones", "ingreso", "digital", "bloqueo", "comunicaciones digitales"] },
+        { "id": "comunicacion_enviada_a_un_destinatario_incorrecto", "label": "Comunicación enviada a un destinatario incorrecto (Gestión inventada)", "invented": true, "tags": ["destinatario", "incorrecto", "comunicacion", "error", "envio", "falla", "comunicaciones digitales"] }
       ]
     },
     {
@@ -96,7 +96,7 @@
       "order": 7,
       "source": "inferred",
       "items": [
-        { "id": "inconvenientes_con_el_pago_de_oficios_judiciales", "label": "Inconvenientes con el pago de oficios judiciales", "invented": false, "tags": ["justicia", "citacion", "oficial", "cobro", "error", "falla", "judicial", "pago"] }
+        { "id": "inconvenientes_con_el_pago_de_oficios_judiciales", "label": "Inconvenientes con el pago de oficios judiciales", "invented": false, "tags": ["justicia", "citacion", "oficial", "cobro", "error", "falla", "judicial", "pago", "problema", "oficios judiciales"] }
       ]
     }
   ]

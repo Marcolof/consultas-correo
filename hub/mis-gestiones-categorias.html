@@ -30,7 +30,7 @@
     <blockquote>Reemplaza, para esta pantalla, al eje de perfil de usuario documentado en <a href="motivos-reclamo-por-perfil.html">motivos por perfil</a> (queda como histórico).</blockquote>
 
     <h2>0. ¿Dónde vive el archivo que filtra las agrupaciones?</h2>
-    <p>Hay 2 copias del mismo archivo: <code>documentation/data/categorias-gestiones.json</code> (fuente/documentación) y <code>proto navegable/src/core/gestiones/data/categorias-gestiones.json</code> (la que lee la app). El código que lo consume es <code>core/gestiones/categories.ts</code>, usado por <code>pages/ReclamosListPage.tsx</code> — ninguna regla está hardcodeada en el componente.</p>
+    <p><strong>Una sola copia</strong> (consolidado 2026-09-02, antes había 2): <code>proto navegable/src/core/gestiones/data/categorias-gestiones.json</code>. El código que lo consume es <code>core/gestiones/categories.ts</code>, usado por <code>pages/ReclamosListPage.tsx</code> — ninguna regla está hardcodeada en el componente. La única otra copia que existe (<code>hub/downloads/categorias-gestiones.json</code>) es por un motivo distinto: el Hub deployado no incluye ni <code>documentation/</code> ni <code>proto navegable/</code>, así que necesita su propia copia para el botón de descarga.</p>
 
     <h2>1. Cambio de nombre: "Reclamos" → "Mis gestiones"</h2>
     <p>El usuario confirmó que la sección deja de llamarse "Reclamos" y pasa a <strong>"Mis gestiones"</strong>, y aclaró que es probable que vuelva a cambiar. Por eso el nombre vive en una única constante del código (<code>core/gestiones/sectionLabel.ts</code>) en vez de estar repetido en cada pantalla.</p>
@@ -93,8 +93,11 @@
       </tbody>
     </table>
     <p>El buscador matchea contra el label y los tags. Buscar "justicia" encuentra esa gestión aunque la palabra no esté en el label — verificado en navegador.</p>
-    <h3>9.1 Caso especial: tag de categoría en Fulfillment y Franquicias</h3>
-    <p>Todas las gestiones de Fulfillment llevan además el tag <code>"fulfillment"</code>, y todas las de Franquicias llevan <code>"franquicia"</code>/<code>"franquicias"</code>. Efecto: buscar "fulfillment" con el chip "Todos" seleccionado (sin tocar el chip "Fulfillment") muestra las 6 gestiones de esa categoría — verificado en navegador. No es una regla de código aparte, es sólo un tag más. Por ahora sólo se le dio este tag especial a Fulfillment y Franquicias.</p>
+    <h3>9.1 Tag de categoría — generalizado a las 7 (2026-09-02)</h3>
+    <p>Empezó como caso especial de Fulfillment/Franquicias y se generalizó a las 7 categorías: cada gestión lleva el nombre de su propia categoría como tag (Mi Cuenta → <code>mi cuenta</code>, Paquetería Nacional → <code>paqueteria nacional</code>, Paquetería Internacional → <code>paqueteria internacional</code>, Franquicias → <code>franquicia</code>/<code>franquicias</code>, Fulfillment → <code>fulfillment</code>, Mis Comunicaciones Digitales → <code>comunicaciones digitales</code>, Oficios Judiciales → <code>oficios judiciales</code>). Efecto: escribir el nombre de una categoría en el buscador (con "Todos" seleccionado) muestra todas sus gestiones sin tocar ningún chip — verificado en navegador ("Mi Cuenta" → 2 gestiones exactas; "Paquetería Nacional" → 6 exactas). No es una regla de código aparte, es sólo un tag más.</p>
+
+    <h3>9.2 Ampliación por patrón en el label (2026-09-02)</h3>
+    <p>Reglas pedidas por el usuario, aplicadas a las 27 gestiones (no sólo a los ejemplos dados): label contiene "error"/"erróneo"/"incorrecto" → tag <code>falla</code>; label contiene "demora" → tag <code>problema</code>; extendido por coherencia a "problema(s)"/"inconveniente(s)" → tag <code>problema</code> donde faltaba. Ningún ítem superó 10 tags (quedaron entre 5 y 9). Verificado en navegador: con perfil Individuo, buscar "falla" da 5 gestiones y "problema" da 6 — coincide con la cuenta manual de qué ítems, dentro de las categorías visibles para ese perfil, llevan cada tag.</p>
 
     <h2>10. Preguntas abiertas</h2>
     <ol>

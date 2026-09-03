@@ -4,10 +4,11 @@
  * Fuente de verdad: definición funcional provista por el usuario el
  * 2026-09-01 (ver `documentation/motivos-reclamo-por-perfil.md` en la raíz
  * del proyecto). El JSON de acá (`data/motivos-reclamo-por-perfil.json`) es
- * una COPIA deliberada de ese mismo archivo — no hay build step compartido
- * entre `documentation/` y esta app, así que si el original cambia hay que
- * actualizar también este. Es un dataset chico: el riesgo de que se
- * desincronicen es bajo, pero está anotado acá para que no sea una sorpresa.
+ * la única copia — consolidado 2026-09-02, antes también vivía duplicado
+ * en `documentation/data/`.
+ *
+ * SUPERSEDED (2026-09-02): esta regla ya no filtra nada en la pantalla de
+ * "Mis gestiones" — ver `core/gestiones/categories.ts`.
  */
 import rawData from './data/motivos-reclamo-por-perfil.json'
 

@@ -1,11 +1,11 @@
 # "Mis gestiones" — categorías y visibilidad por tipo de usuario
 
-> **Vigente al 2026-09-02.** Fuente: definición provista por el usuario el
-> 2026-09-02, ampliada el mismo día (dos veces). Ver el dato crudo (la
-> "base de datos" de 2 niveles, ahora con tags de búsqueda) en
-> [`data/categorias-gestiones.json`](data/categorias-gestiones.json)
-> (`schema_version: 3`) — pensado para que un dev lo edite directamente,
-> sin tocar código.
+> **Vigente al 2026-09-02, consolidado el mismo día.** Fuente: definición
+> provista por el usuario el 2026-09-02, ampliada dos veces. Ver el dato
+> crudo (la "base de datos" de 2 niveles, con tags de búsqueda) en
+> [`../proto navegable/src/core/gestiones/data/categorias-gestiones.json`](../proto%20navegable/src/core/gestiones/data/categorias-gestiones.json)
+> (`schema_version: 5`) — **única copia**, pensada para que un dev la edite
+> directamente, sin tocar código de lógica.
 >
 > **Reemplaza, para esta pantalla,** a la matriz motivo×perfil documentada
 > en [`motivos-reclamo-por-perfil.md`](motivos-reclamo-por-perfil.md) —
@@ -17,12 +17,15 @@
 
 ## 0. ¿Dónde vive el archivo que filtra las agrupaciones?
 
-Hay **2 copias del mismo archivo** (duplicación deliberada, mismo patrón
-que el resto del proyecto — no hay build step que las mantenga
-sincronizadas solas, hay que editar ambas si cambia una):
+**Una sola copia** (consolidado 2026-09-02 — antes había 2, una en
+`documentation/data/` y otra en la app, ver sección "Nota de
+consolidación" al final):
 
-- **Fuente/documentación**: [`documentation/data/categorias-gestiones.json`](data/categorias-gestiones.json)
-- **La que realmente lee la app**: `proto navegable/src/core/gestiones/data/categorias-gestiones.json`
+- [`proto navegable/src/core/gestiones/data/categorias-gestiones.json`](../proto%20navegable/src/core/gestiones/data/categorias-gestiones.json)
+
+Es también la fuente de documentación: no hay una copia separada "para
+leer" y otra "para que corra la app" — es el mismo archivo. Editarlo ahí
+alcanza; no hay nada que sincronizar a mano.
 
 El código que lo consume es `proto navegable/src/core/gestiones/categories.ts`
 (`visibleCategoriesForProfile()` lee `profile_category_visibility`;
@@ -189,7 +192,7 @@ completo de categorías en vez de sobre las visibles para el perfil
 activo) — el usuario lo detectó probando el prototipo.
 
 Fuente de datos: `user_types` + `profile_category_visibility` en
-[`data/categorias-gestiones.json`](data/categorias-gestiones.json).
+[`proto navegable/src/core/gestiones/data/categorias-gestiones.json`](../proto%20navegable/src/core/gestiones/data/categorias-gestiones.json).
 Implementado en `core/gestiones/categories.ts` →
 `visibleCategoriesForProfile()`, consumido por `ReclamosListPage.tsx` y
 simulable desde el panel "Casos de uso" (sección "Usuarios", restaurada).
@@ -220,7 +223,7 @@ propio de las categorías, no una reactivación de esa regla vieja.
 > podría escribir en el buscador sin acertar el texto exacto del label.
 
 Cada gestión tiene un array `tags` en
-[`data/categorias-gestiones.json`](data/categorias-gestiones.json). El
+[`proto navegable/src/core/gestiones/data/categorias-gestiones.json`](../proto%20navegable/src/core/gestiones/data/categorias-gestiones.json). El
 buscador de la pantalla matchea contra `label` **y** `tags` (no distingue
 mayúsculas ni acentos, igual que antes). Ejemplo pedido por el usuario:
 
@@ -231,20 +234,52 @@ mayúsculas ni acentos, igual que antes). Ejemplo pedido por el usuario:
 Buscar "justicia" encuentra esa gestión aunque la palabra no aparezca en
 el label — verificado en navegador.
 
-### 9.1 Caso especial: tag de categoría en Fulfillment y Franquicias
+### 9.1 Tag de categoría — generalizado a las 7 (2026-09-02, 2da ampliación)
 
-Además de sus tags semánticos propios, **todas las gestiones de
-Fulfillment** llevan el tag literal `"fulfillment"`, y **todas las de
-Franquicias** llevan `"franquicia"`/`"franquicias"`. Efecto: un usuario
-puede escribir "fulfillment" en el buscador (con el chip "Todos"
-seleccionado, sin tocar el chip "Fulfillment") y ve las 6 gestiones de esa
-categoría — verificado en navegador.
+Empezó como caso especial de Fulfillment/Franquicias y **se generalizó a
+las 7 categorías** el mismo día, a pedido del usuario: cada gestión lleva
+el nombre de su propia categoría como tag además de sus tags semánticos
+propios.
+
+| Categoría | Tag agregado |
+|---|---|
+| Mi Cuenta | `mi cuenta` |
+| Paquetería Nacional | `paqueteria nacional` |
+| Paquetería Internacional | `paqueteria internacional` |
+| Franquicias | `franquicia` / `franquicias` |
+| Fulfillment | `fulfillment` |
+| Mis Comunicaciones Digitales | `comunicaciones digitales` |
+| Oficios Judiciales | `oficios judiciales` |
+
+Efecto: escribir el nombre de una categoría en el buscador (con el chip
+"Todos" seleccionado, sin tocar ningún chip) muestra todas sus gestiones.
+Verificado en navegador: "Mi Cuenta" → 2 gestiones exactas; "Paquetería
+Nacional" (con tilde y mayúsculas) → las 6 gestiones exactas.
 
 **No es una regla de código aparte** — es literalmente un tag más,
-matcheado por el mismo mecanismo de búsqueda que cualquier otro. Por
-pedido explícito del usuario, este comportamiento hoy sólo se dio a
-Fulfillment y Franquicias; las demás categorías no tienen ese tag de
-categoría (aunque nada impide agregarlo a futuro, es sólo editar el JSON).
+matcheado por el mismo mecanismo de búsqueda que cualquier otro.
+
+### 9.2 Ampliación por patrón en el label (2026-09-02)
+
+El usuario pidió reglas explícitas de sinónimo, dadas como ejemplo:
+"si el nombre de la gestión dice 'error', agregar un tag 'falla'"; "si
+dice 'demora', agregar un tag 'problema'". Se aplicaron de forma
+consistente a las 27 gestiones (no sólo a las que el usuario mencionó
+como ejemplo):
+
+- **Label contiene "error"/"erróneo"/"incorrecto"** → se agregó el tag
+  `falla` (si no lo tenía ya).
+- **Label contiene "demora"** → se agregó el tag `problema` (si no lo
+  tenía ya).
+- **Extensión del mismo criterio**: label contiene "problema(s)" o
+  "inconveniente(s)" y todavía no tenía el tag `problema` → se agregó
+  también, por coherencia con la regla anterior.
+
+Ningún ítem superó el máximo de 10 tags (quedaron entre 5 y 9). Ejemplo
+verificado en navegador: con perfil Individuo activo, buscar "falla"
+da 5 gestiones y buscar "problema" da 6 — ambos números coinciden
+exactamente con la cuenta manual de qué ítems, dentro de las categorías
+visibles para ese perfil, llevan cada tag.
 
 ## 10. Preguntas abiertas
 
@@ -268,3 +303,27 @@ categoría (aunque nada impide agregarlo a futuro, es sólo editar el JSON).
 7. ¿El tag especial de categoría (Fulfillment/Franquicias) debería
    extenderse a las otras 5 categorías, o queda exclusivo de estas 2 por
    ahora?
+
+## 11. Nota de consolidación (2026-09-02)
+
+El usuario preguntó si tener el mismo JSON duplicado en `documentation/`
+y en la app era correcto — no lo era: eran 2 copias manuales sin ningún
+mecanismo que las mantuviera sincronizadas (mismo riesgo que dos fuentes
+de verdad). Se verificó que ambas copias eran idénticas byte a byte (sin
+drift todavía) y se eliminó `documentation/data/categorias-gestiones.json`,
+dejando **una sola copia real**: la de
+`proto navegable/src/core/gestiones/data/`. Esta sección y el resto del
+documento ahora enlazan directamente a esa ruta.
+
+Se aplicó el mismo criterio a los 2 datasets históricos/superseded
+(`motivos-reclamo-por-perfil.json`, `visibilidad-perfiles.json`): también
+tenían copia en `documentation/data/`, también idénticas, también
+eliminadas — ver [`motivos-reclamo-por-perfil.md`](motivos-reclamo-por-perfil.md).
+
+**Lo que NO se tocó**: las copias en `hub/downloads/*.json`. Esas
+cumplen un propósito distinto (no es el problema de "doc vs. código" que
+preguntó el usuario) — el Hub deployado en Vercel usa Root Directory=`hub`,
+así que ese deploy no incluye ni `documentation/` ni `proto navegable/`;
+sin una copia propia, el botón de descarga del Hub no tendría qué servir.
+Es una duplicación justificada por el entorno de deploy, documentada como
+tal — no un descuido.

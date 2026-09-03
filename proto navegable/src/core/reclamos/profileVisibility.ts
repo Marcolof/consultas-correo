@@ -7,10 +7,12 @@
  *
  * Fuente de verdad: definición funcional provista por el usuario el
  * 2026-09-01 (ver `documentation/motivos-reclamo-por-perfil.md`, sección
- * "Visibilidad de perfiles entre sí"). Mismo criterio que
- * `reasonProfiles.ts`: el JSON de acá es una copia deliberada de
- * `documentation/data/visibilidad-perfiles.json` — sin build step
- * compartido, hay que mantenerlas sincronizadas a mano.
+ * "Visibilidad de perfiles entre sí"). El JSON de acá (`data/visibilidad-perfiles.json`)
+ * es la única copia — consolidado 2026-09-02, antes también vivía
+ * duplicado en `documentation/data/`.
+ *
+ * SUPERSEDED (2026-09-02): esta regla de perfil ya no filtra nada en la
+ * pantalla de "Mis gestiones" — ver `core/gestiones/categories.ts`.
  *
  * Reglas de hoy (pueden cambiar — están en datos, no hardcodeadas):
  *   - Individuo sólo ve "Todos" e "Individuo".

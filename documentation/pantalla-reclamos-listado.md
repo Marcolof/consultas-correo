@@ -35,9 +35,10 @@ Muestra:
    fondo y borde), con scroll propio.
 
 Los datos de las categorías salen de `core/gestiones/categories.ts`, que
-lee `core/gestiones/data/categorias-gestiones.json` — copia del mismo JSON
-documentado en
-[`mis-gestiones-categorias.md`](mis-gestiones-categorias.md). Sólo
+lee `core/gestiones/data/categorias-gestiones.json` — única copia (2026-09-02:
+se eliminó la copia que existía en `documentation/data/`, ver
+[`mis-gestiones-categorias.md`](mis-gestiones-categorias.md) sección 11).
+Sólo
 Franquicias (4) y Fulfillment (6) tienen contenido confirmado por el
 negocio; el resto es inferido por intuición o directamente inventado
 (marcado en el propio label con "(Gestión inventada)") — no es una
@@ -111,9 +112,9 @@ Regla de visibilidad (resumen; detalle completo en
 ### Escalabilidad
 
 Agregar un tipo de usuario nuevo o cambiar qué categorías ve cada uno es
-editar `documentation/data/categorias-gestiones.json` (`user_types` +
-`profile_category_visibility`) — dato, no lógica hardcodeada — sin tocar
-código.
+editar `proto navegable/src/core/gestiones/data/categorias-gestiones.json`
+(`user_types` + `profile_category_visibility`) — dato, no lógica
+hardcodeada — sin tocar código.
 
 ## 5. Sección "Pantalla" — modo responsive forzado (2026-09-01)
 
