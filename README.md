@@ -8,14 +8,18 @@ para las preguntas abiertas — pero ya hay una primera pantalla real
 navegable: el listado de "Mis gestiones", filtrable por 7 categorías de
 producto/servicio (ver [`documentation/mis-gestiones-categorias.md`](documentation/mis-gestiones-categorias.md)).
 
-**Hub público**: https://consultas-correo-v1.vercel.app
-**Prototipo público**: https://proto-navegable.vercel.app
+**Sitio público (único)**: https://consultas-correo-v1.vercel.app
+El prototipo vive dentro del mismo sitio, en
+[`/prototipo/`](https://consultas-correo-v1.vercel.app/prototipo/) — no hay
+una segunda URL que mantener.
 
 ## Estructura del repo
 
-- **[`hub/`](hub)** — portada estática, es la **raíz pública** del proyecto
-  (deployada en Vercel con Root Directory = `hub`). Enlaza el prototipo y
-  los 6 documentos, con botón de descarga en cada uno.
+- **[`hub/`](hub)** — portada estática, es la **raíz pública** del proyecto.
+  Enlaza el prototipo y los 6 documentos, con botón de descarga en cada uno.
+  En el deploy se le agrega `hub/prototipo/` (el prototipo ya compilado):
+  esa carpeta es **salida de build**, está en `.gitignore` y la genera
+  [`scripts/build-hub.mjs`](scripts/build-hub.mjs) — no se edita a mano.
 - **[`proto navegable/`](proto%20navegable)** — prototipo navegable en React +
   TypeScript + Vite. Chrome de MiCorreo (header, sidebar, footer) con
   fidelidad visual + la primera pantalla de negocio real (listado de
@@ -29,18 +33,18 @@ producto/servicio (ver [`documentation/mis-gestiones-categorias.md`](documentati
 
 ## Cómo correrlo localmente
 
-**Prototipo** (React + Vite):
+**Prototipo solo** (React + Vite, con hot reload):
 
 ```bash
-cd "proto navegable"
-npm install
-npm run dev        # http://localhost:4300
+npm install        # instala también las deps de "proto navegable"
+npm run dev        # http://localhost:4300/prototipo/
 ```
 
-**Hub** (estático, sin build):
+**Sitio completo** (Hub + prototipo compilado adentro, como en producción):
 
 ```bash
-npx serve hub       # o cualquier servidor estático apuntando a hub/
+npm run build      # compila el prototipo y lo copia a hub/prototipo/
+npx serve hub      # o cualquier servidor estático apuntando a hub/
 ```
 
 ## Nota sobre fuentes

@@ -20,6 +20,11 @@ dist-ssr/
 *.local
 .tmp/
 
+# Salida del build unificado: el prototipo compilado se copia acá para que
+# el Hub se deploye como un sitio único (ver scripts/build-hub.mjs). Es
+# artefacto de build, se regenera en cada deploy — no va al repo.
+/hub/prototipo/
+
 # Editor / OS
 .DS_Store
 Thumbs.db

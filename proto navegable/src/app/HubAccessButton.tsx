@@ -11,9 +11,13 @@ import styles from './HubAccessButton.module.css'
 
 /**
  * URL del Hub del proyecto (ver Reclamos claude/hub/index.html).
- * Deployado en Vercel (proyecto "consultas-correo-v1", Root Directory="hub").
+ *
+ * Desde la unificación en un solo deploy, el Hub es la raíz del mismo sitio
+ * que sirve este prototipo (que vive en /prototipo/) — por eso alcanza con
+ * una ruta absoluta del propio sitio, sin dominio hardcodeado: funciona
+ * igual en local, en preview de Vercel y en producción.
  */
-const HUB_URL = 'https://consultas-correo-v1.vercel.app/'
+const HUB_URL = '/'
 
 function GridIcon() {
   return (

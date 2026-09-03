@@ -1,0 +1,13 @@
+{
+  "name": "consultas-correo",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Monorepo de 'Consultas y Reclamos' (MiCorreo). Un solo sitio deployado: el Hub estático (hub/) con el prototipo compilado adentro, en hub/prototipo/.",
+  "scripts": {
+    "build": "npm --prefix \"proto navegable\" run build && node scripts/build-hub.mjs",
+    "dev": "npm --prefix \"proto navegable\" run dev",
+    "typecheck": "npm --prefix \"proto navegable\" run typecheck",
+    "postinstall": "npm --prefix \"proto navegable\" install"
+  }
+}
