@@ -38,11 +38,6 @@
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
   }
-  /* Nota sobre la fuente: este proyecto usa Gilroy (comercial, sin licencia
-     de redistribución pública) — igual que "proto navegable" y el resto del
-     proyecto, no se empaquetan los .ttf en el repo. Sin ellos, cae al resto
-     de la pila tipográfica del sistema; no rompe nada, sólo pierde fidelidad
-     exacta. Ver proto navegable/README.md, sección "Fuentes". */
 
   .deck-stage {
     flex: 1 1 auto;
@@ -69,28 +64,6 @@
     box-sizing: border-box;
   }
   .slide.is-active { display: flex; flex-direction: column; justify-content: flex-start; }
-
-  /* Botón volver al hub — dentro de cada slide */
-  .slide-back {
-    display: inline-flex; align-items: center; gap: 8px; flex: 0 0 auto;
-    padding: .5rem 1rem; border-radius: var(--radius-pill); border: 0;
-    font-size: .9375rem; font-weight: 700;
-    text-decoration: none; white-space: nowrap;
-    transition: opacity .2s ease-in-out, transform .2s ease-in-out;
-  }
-  .slide-back:hover { opacity: .82; }
-  .slide-back svg { width: 16px; height: 16px; }
-  .slide-back--light {
-    position: absolute; top: 20px; right: 20px; z-index: 5;
-    background: rgba(255,255,255,.95); color: var(--color-brand-dark);
-    box-shadow: 0 4px 12px rgba(0,0,0,.12);
-  }
-  .slide-back--band { margin-left: auto; background: var(--color-brand-dark); color: #fff; }
-  .slide-back--outline {
-    position: absolute; top: 20px; right: 20px; z-index: 5;
-    background: #fff; color: var(--color-brand-dark); border: 1px solid var(--border-card);
-  }
-  .slide-back--outline:hover { background: var(--gray-100); opacity: 1; }
 
   .deck-nav {
     flex: 0 0 auto;
@@ -200,12 +173,9 @@
   .module-item strong { display:block; margin-bottom:3px; font-size:1.0625rem; }
   .module-item p { margin:0; font-size:.9375rem; color:var(--text-muted); }
 
-  .fuente-nota { margin-top: 20px; font-size: .8125rem; color: var(--text-subtle); }
-
   @media (max-width: 900px) {
     .deck-stage { padding: 14px 16px; }
     .slide { padding: 28px 22px; border-radius: var(--radius-md); }
-    .slide:not(.cover-slide):not(.screen-slide-wrap) { padding-top: 68px; }
     .deck-nav { gap: 12px; padding: 12px 14px; }
     .deck-nav__btn span.btn-label { display: none; }
     .deck { padding: 0 20px 60px; }
@@ -224,12 +194,11 @@
 
     <!-- 1. PORTADA -->
     <section class="slide cover-slide">
-      <a class="slide-back slide-back--light" href="../index.html"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg>Volver al hub</a>
       <div class="cover-slide__bar"></div>
       <div class="cover-slide__content">
         <span class="cover-eyebrow">MiCorreo · Correo Argentino</span>
         <h1 class="cover-title">Mis gestiones — de "Reclamos" a un modelo por categorías</h1>
-        <p class="cover-subtitle">Recorrido funcional de la pantalla rediseñada: categorías, tipos de usuario, búsqueda inteligente y transparencia sobre qué es real y qué todavía no.</p>
+        <p class="cover-subtitle">Propuesta de pantalla: categorías, tipos de usuario, búsqueda inteligente y transparencia sobre qué es real y qué todavía no.</p>
         <div class="crumb">
           <span>Categorías</span><span class="crumb-sep">›</span>
           <span>Tipos de usuario</span><span class="crumb-sep">›</span>
@@ -246,22 +215,21 @@
         <div class="screen-topbar__band">
           <img class="screen-topbar__logo" src="../assets/CorreoArgentino-MiCorreo.png" alt="Correo Argentino · MiCorreo" />
           <span class="screen-topbar__label">Objetivo</span>
-          <a class="slide-back slide-back--band" href="../index.html"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg>Volver al hub</a>
         </div>
       </div>
       <div class="plain-body">
-      <span class="slide-eyebrow">Objetivo de la presentación</span>
+      <span class="slide-eyebrow">Objetivo</span>
       <div class="obj-grid">
         <div>
-          <h2>Recorrido funcional del prototipo actual</h2>
-          <p>Este instructivo recorre "Mis gestiones" tal como está hoy en el prototipo navegable: la pantalla se rediseñó el 2026-09-02 a pedido del negocio, reemplazando el listado plano de motivos por 7 categorías de producto/servicio. Refleja el estado consolidado en <strong>documentation/mis-gestiones-categorias.md</strong> y <strong>documentation/pantalla-reclamos-listado.md</strong>.</p>
+          <h2>Rediseño de la pantalla de gestiones</h2>
+          <p>La pantalla se rediseñó reemplazando el listado plano de motivos por 7 categorías de producto/servicio, con reglas propias de visibilidad según el tipo de usuario.</p>
         </div>
         <div class="obj-list">
           <span>Las 7 categorías y su contenido</span>
           <span>Tipos de usuario y qué categorías ven</span>
           <span>Búsqueda por tags y sinónimos</span>
           <span>Qué es confirmado, inferido o inventado</span>
-          <span>Modo responsive</span>
+          <span>Adaptación a smartphone</span>
         </div>
       </div>
       </div>
@@ -274,7 +242,6 @@
         <div class="screen-topbar__band">
           <img class="screen-topbar__logo" src="../assets/CorreoArgentino-MiCorreo.png" alt="Correo Argentino · MiCorreo" />
           <span class="screen-topbar__label">Recorrido</span>
-          <a class="slide-back slide-back--band" href="../index.html"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg>Volver al hub</a>
         </div>
       </div>
       <div class="plain-body">
@@ -286,19 +253,18 @@
         <div class="step-card"><b>2</b><strong>Tipos de usuario</strong><p>4 perfiles deciden qué categorías (chips) se muestran.</p></div>
         <div class="step-card"><b>3</b><strong>Buscador</strong><p>Tags de sinónimo y el nombre de la categoría también matchean.</p></div>
         <div class="step-card"><b>4</b><strong>Transparencia</strong><p>Confirmado, inferido por intuición o directamente inventado.</p></div>
-        <div class="step-card"><b>5</b><strong>Responsive</strong><p>El mismo modelo, angostado a ancho de smartphone.</p></div>
+        <div class="step-card"><b>5</b><strong>Responsive</strong><p>El mismo modelo, adaptado a smartphone.</p></div>
       </div>
       </div>
     </section>
 
     <!-- 4. DIVIDER PANTALLAS -->
     <section class="slide cover-slide">
-      <a class="slide-back slide-back--light" href="../index.html"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg>Volver al hub</a>
       <div class="cover-slide__bar"></div>
       <div class="cover-slide__content">
         <span class="cover-eyebrow">Pantallas</span>
         <h1 class="cover-title">"Mis gestiones" — recorrido pantalla por pantalla</h1>
-        <p class="cover-subtitle">Cada paso siguiente muestra el prototipo real y en vivo, embebido tal cual está deployado.</p>
+        <p class="cover-subtitle">Cada paso siguiente muestra la pantalla completa.</p>
       </div>
     </section>
 
@@ -309,24 +275,23 @@
         <div class="screen-topbar__band">
           <img class="screen-topbar__logo" src="../assets/CorreoArgentino-MiCorreo.png" alt="Correo Argentino · MiCorreo" />
           <span class="screen-topbar__label">Mis gestiones</span>
-          <a class="slide-back slide-back--band" href="../index.html"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg>Volver al hub</a>
         </div>
       </div>
       <div class="screen-slide-body">
       <div class="screen-slide">
         <div class="screen-text">
           <span class="slide-eyebrow">Paso 1 · Punto de partida</span>
-          <h2>Perfil Individuo, chip "Todos"</h2>
-          <p>El nombre de la sección ya no es "Reclamos" — es "Mis gestiones", y vive en una única constante por si vuelve a cambiar.</p>
+          <h2>Vista general, categoría "Todos"</h2>
+          <p>El nombre de la sección es "Mis gestiones".</p>
           <ul>
-            <li><strong>17 gestiones</strong>, no 27: "Todos" es la unión de las categorías visibles para <em>este</em> usuario, nunca el sistema completo.</li>
+            <li><strong>17 gestiones</strong>: "Todos" es la unión de las categorías visibles para <em>este</em> tipo de usuario, nunca el universo completo.</li>
             <li>Buscador, chips y listado comparten el mismo ancho máximo, alineados.</li>
-            <li>El chip por defecto es siempre "Todos".</li>
+            <li>La categoría por defecto es siempre "Todos".</li>
           </ul>
           <span class="profile-tag profile-tag--individuo">Individuo</span>
         </div>
         <div class="screen-frame-wrap">
-          <div class="screen-frame"><iframe src="https://proto-navegable.vercel.app/?profile=individuo" title="Mis gestiones — Individuo, Todos"></iframe></div>
+          <div class="screen-frame"><iframe src="https://proto-navegable.vercel.app/?profile=individuo" title="Mis gestiones — vista general"></iframe></div>
         </div>
       </div>
       </div>
@@ -339,7 +304,6 @@
         <div class="screen-topbar__band">
           <img class="screen-topbar__logo" src="../assets/CorreoArgentino-MiCorreo.png" alt="Correo Argentino · MiCorreo" />
           <span class="screen-topbar__label">Categorías</span>
-          <a class="slide-back slide-back--band" href="../index.html"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg>Volver al hub</a>
         </div>
       </div>
       <div class="screen-slide-body">
@@ -349,12 +313,12 @@
         </div>
         <div class="screen-text">
           <span class="slide-eyebrow">Paso 2 · Elegir una categoría</span>
-          <h2>El chip acota listado y contador juntos</h2>
-          <p>Al elegir "Mi Cuenta", el listado baja a sus 2 gestiones y aparece el link "Limpiar filtro".</p>
+          <h2>La categoría acota listado y contador juntos</h2>
+          <p>Con "Mi Cuenta" seleccionada, el listado baja a sus 2 gestiones y aparece el link "Limpiar filtro".</p>
           <ul>
             <li>"Limpiar filtro" vive en la misma línea que el contador, alineado a la derecha.</li>
-            <li>Buscador + chip se combinan con AND.</li>
-            <li>Si el chip elegido deja de estar visible al cambiar de usuario, el filtro vuelve solo a "Todos".</li>
+            <li>Buscador y categoría se combinan entre sí.</li>
+            <li>Si la categoría elegida deja de estar disponible para el tipo de usuario, el filtro vuelve solo a "Todos".</li>
           </ul>
           <span class="profile-tag profile-tag--individuo">Individuo</span>
         </div>
@@ -369,7 +333,6 @@
         <div class="screen-topbar__band">
           <img class="screen-topbar__logo" src="../assets/CorreoArgentino-MiCorreo.png" alt="Correo Argentino · MiCorreo" />
           <span class="screen-topbar__label">Transparencia</span>
-          <a class="slide-back slide-back--band" href="../index.html"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg>Volver al hub</a>
         </div>
       </div>
       <div class="screen-slide-body">
@@ -381,7 +344,7 @@
           <ul>
             <li>Cada gestión de relleno termina literalmente en <strong>"(Gestión inventada)"</strong>.</li>
             <li>No se inventan reglas de negocio — sólo contenido de layout, para que la pantalla no se vea vacía.</li>
-            <li>Franquicias y Fulfillment, en cambio, sí tienen contenido confirmado textualmente por el usuario.</li>
+            <li>Franquicias y Fulfillment, en cambio, sí tienen contenido confirmado por el negocio.</li>
           </ul>
           <span class="profile-tag profile-tag--individuo">Individuo</span>
         </div>
@@ -394,41 +357,11 @@
 
     <!-- 5. DIVIDER TIPOS DE USUARIO -->
     <section class="slide cover-slide">
-      <a class="slide-back slide-back--light" href="../index.html"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg>Volver al hub</a>
       <div class="cover-slide__bar"></div>
       <div class="cover-slide__content">
         <span class="cover-eyebrow">Tipos de usuario</span>
         <h1 class="cover-title">Individuo, Pyme, Franquicias y Fulfillment</h1>
-        <p class="cover-subtitle">El tipo de usuario no se ve como chip — pero decide qué chips existen para navegar.</p>
-      </div>
-    </section>
-
-    <!-- PASO: CASOS DE USO (PANEL) -->
-    <section class="slide screen-slide-wrap">
-      <div class="screen-topbar">
-        <div class="screen-topbar__stripe"></div>
-        <div class="screen-topbar__band">
-          <img class="screen-topbar__logo" src="../assets/CorreoArgentino-MiCorreo.png" alt="Correo Argentino · MiCorreo" />
-          <span class="screen-topbar__label">Casos de uso</span>
-          <a class="slide-back slide-back--band" href="../index.html"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg>Volver al hub</a>
-        </div>
-      </div>
-      <div class="screen-slide-body">
-      <div class="screen-slide reverse">
-        <div class="screen-frame-wrap">
-          <div class="screen-frame"><iframe src="https://proto-navegable.vercel.app/?useCases=1" title="Panel Casos de uso"></iframe></div>
-        </div>
-        <div class="screen-text">
-          <span class="slide-eyebrow">Herramienta de prototipo</span>
-          <h2>Simular el tipo de usuario activo</h2>
-          <p>El botón flotante abre un panel con 2 secciones independientes.</p>
-          <ul>
-            <li><strong>Usuarios</strong>: elegir entre Individuo, Pyme, Franquicias o Fulfillment.</li>
-            <li><strong>Pantalla</strong>: switch "Responsive" para simular mobile sin achicar la ventana.</li>
-            <li>No es autenticación real — es tooling del prototipo, no chrome de producción.</li>
-          </ul>
-        </div>
-      </div>
+        <p class="cover-subtitle">El tipo de usuario no se ve como categoría — pero decide qué categorías existen para navegar.</p>
       </div>
     </section>
 
@@ -439,7 +372,6 @@
         <div class="screen-topbar__band">
           <img class="screen-topbar__logo" src="../assets/CorreoArgentino-MiCorreo.png" alt="Correo Argentino · MiCorreo" />
           <span class="screen-topbar__label">Franquicias</span>
-          <a class="slide-back slide-back--band" href="../index.html"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg>Volver al hub</a>
         </div>
       </div>
       <div class="screen-slide-body">
@@ -451,7 +383,7 @@
           <ul>
             <li>6 categorías visibles: Mi Cuenta, Paquetería Nacional, Paquetería Internacional, <strong>Franquicias</strong>, Mis Comunicaciones Digitales, Oficios Judiciales.</li>
             <li>"Todos" para este usuario trae <strong>21 gestiones</strong>, no 27.</li>
-            <li>El chip "Fulfillment" directamente no existe en esta vista.</li>
+            <li>La categoría "Fulfillment" directamente no existe en esta vista.</li>
           </ul>
           <span class="profile-tag profile-tag--franquicias">Franquicias</span>
         </div>
@@ -469,7 +401,6 @@
         <div class="screen-topbar__band">
           <img class="screen-topbar__logo" src="../assets/CorreoArgentino-MiCorreo.png" alt="Correo Argentino · MiCorreo" />
           <span class="screen-topbar__label">Fulfillment</span>
-          <a class="slide-back slide-back--band" href="../index.html"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg>Volver al hub</a>
         </div>
       </div>
       <div class="screen-slide-body">
@@ -480,7 +411,7 @@
         <div class="screen-text">
           <span class="slide-eyebrow">Regla simétrica</span>
           <h2>Fulfillment no ve la categoría Franquicias</h2>
-          <p>La regla es simétrica a la anterior — nunca conviven ambos chips para un mismo usuario.</p>
+          <p>La regla es simétrica a la anterior — nunca conviven ambas categorías para un mismo usuario.</p>
           <ul>
             <li>6 categorías visibles, con <strong>Fulfillment</strong> en vez de Franquicias.</li>
             <li>Acá filtrado por su propia categoría: 6 gestiones confirmadas por el negocio.</li>
@@ -494,7 +425,6 @@
 
     <!-- 6. DIVIDER BÚSQUEDA -->
     <section class="slide cover-slide">
-      <a class="slide-back slide-back--light" href="../index.html"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg>Volver al hub</a>
       <div class="cover-slide__bar"></div>
       <div class="cover-slide__content">
         <span class="cover-eyebrow">Búsqueda</span>
@@ -510,19 +440,18 @@
         <div class="screen-topbar__band">
           <img class="screen-topbar__logo" src="../assets/CorreoArgentino-MiCorreo.png" alt="Correo Argentino · MiCorreo" />
           <span class="screen-topbar__label">Buscador</span>
-          <a class="slide-back slide-back--band" href="../index.html"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg>Volver al hub</a>
         </div>
       </div>
       <div class="screen-slide-body">
       <div class="screen-slide">
         <div class="screen-text">
-          <span class="slide-eyebrow">Paso 7 · Tags de sinónimo</span>
+          <span class="slide-eyebrow">Paso 6 · Tags de sinónimo</span>
           <h2>"Justicia" encuentra un motivo que no dice "justicia"</h2>
-          <p>La gestión se llama "Inconvenientes con el pago de oficios judiciales" — la palabra no está en el label.</p>
+          <p>La gestión se llama "Inconvenientes con el pago de oficios judiciales" — la palabra no está en el texto visible.</p>
           <ul>
             <li>Tags de esa gestión: <em>justicia, citación, oficial, cobro, error, falla, judicial, pago, problema</em>.</li>
             <li>Reglas de patrón aplicadas a las 27 gestiones: "error" → tag <strong>falla</strong>; "demora"/"problema(s)" → tag <strong>problema</strong>.</li>
-            <li>Los tags fueron generados por el equipo de diseño — no son un dato de negocio confirmado.</li>
+            <li>Los tags no son un dato de negocio confirmado — son una propuesta de diseño.</li>
           </ul>
         </div>
         <div class="screen-frame-wrap">
@@ -539,7 +468,6 @@
         <div class="screen-topbar__band">
           <img class="screen-topbar__logo" src="../assets/CorreoArgentino-MiCorreo.png" alt="Correo Argentino · MiCorreo" />
           <span class="screen-topbar__label">Buscador</span>
-          <a class="slide-back slide-back--band" href="../index.html"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg>Volver al hub</a>
         </div>
       </div>
       <div class="screen-slide-body">
@@ -548,13 +476,13 @@
           <div class="screen-frame"><iframe src="https://proto-navegable.vercel.app/?profile=individuo&amp;q=Mi%20Cuenta" title="Buscar Mi Cuenta"></iframe></div>
         </div>
         <div class="screen-text">
-          <span class="slide-eyebrow">Paso 8 · Nombre de categoría como tag</span>
+          <span class="slide-eyebrow">Paso 7 · Nombre de categoría como tag</span>
           <h2>Buscar "Mi Cuenta" trae todo su contenido</h2>
-          <p>Sin tocar ningún chip — con "Todos" seleccionado, escribir el nombre de una categoría alcanza.</p>
+          <p>Sin tocar ninguna categoría — con "Todos" seleccionado, escribir el nombre de una categoría alcanza.</p>
           <ul>
             <li>Cada gestión lleva el nombre de su propia categoría como tag más.</li>
-            <li>No es una regla de código aparte: se matchea igual que cualquier otro tag.</li>
-            <li>Nació como caso especial de Fulfillment/Franquicias y se generalizó a las 7 categorías.</li>
+            <li>Se matchea igual que cualquier otro tag de búsqueda.</li>
+            <li>Aplica a las 7 categorías por igual.</li>
           </ul>
         </div>
       </div>
@@ -568,23 +496,22 @@
         <div class="screen-topbar__band">
           <img class="screen-topbar__logo" src="../assets/CorreoArgentino-MiCorreo.png" alt="Correo Argentino · MiCorreo" />
           <span class="screen-topbar__label">Responsive</span>
-          <a class="slide-back slide-back--band" href="../index.html"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg>Volver al hub</a>
         </div>
       </div>
       <div class="screen-slide-body">
       <div class="screen-slide">
         <div class="screen-text">
-          <span class="slide-eyebrow">Paso 9 · Pantalla angosta</span>
+          <span class="slide-eyebrow">Paso 8 · Pantalla angosta</span>
           <h2>El mismo modelo en ancho de smartphone</h2>
-          <p>El switch "Responsive" simula mobile sin depender del tamaño real de la ventana.</p>
+          <p>La misma pantalla, adaptada a un ancho típico de mobile.</p>
           <ul>
-            <li>Sidebar colapsado a hamburguesa; header vacío salvo el menú.</li>
-            <li>El padding lateral del contenido pasa de 3rem a 16px.</li>
+            <li>El menú lateral se colapsa a un ícono de hamburguesa; el encabezado queda vacío salvo ese menú.</li>
+            <li>El padding lateral del contenido se reduce.</li>
             <li>Categorías, buscador y listado se recalculan igual que en desktop.</li>
           </ul>
         </div>
         <div class="screen-frame-wrap">
-          <div class="screen-frame"><iframe src="https://proto-navegable.vercel.app/?profile=individuo&amp;responsive=1" title="Mis gestiones — modo responsive"></iframe></div>
+          <div class="screen-frame"><iframe src="https://proto-navegable.vercel.app/?profile=individuo&amp;responsive=1" title="Mis gestiones — versión mobile"></iframe></div>
         </div>
       </div>
       </div>
@@ -597,13 +524,12 @@
         <div class="screen-topbar__band">
           <img class="screen-topbar__logo" src="../assets/CorreoArgentino-MiCorreo.png" alt="Correo Argentino · MiCorreo" />
           <span class="screen-topbar__label">Pendiente</span>
-          <a class="slide-back slide-back--band" href="../index.html"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg>Volver al hub</a>
         </div>
       </div>
       <div class="plain-body">
       <span class="slide-eyebrow">Lo que falta cerrar con el negocio</span>
       <h2>Definiciones abiertas, ninguna resuelta por inferencia</h2>
-      <p>Ninguno de estos puntos fue asumido — quedan documentados como preguntas explícitas.</p>
+      <p>Ninguno de estos puntos fue asumido — quedan como preguntas explícitas.</p>
       <div class="module-list">
         <div class="module-item">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg>
@@ -615,20 +541,18 @@
         </div>
         <div class="module-item">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg>
-          <div><strong>Pantalla de detalle</strong><p>Al tocar una gestión hoy sólo se muestra un aviso — la pantalla de detalle todavía no está definida.</p></div>
+          <div><strong>Pantalla de detalle</strong><p>La pantalla de detalle de una gestión todavía no está definida.</p></div>
         </div>
         <div class="module-item">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg>
-          <div><strong>Nombre definitivo</strong><p>"Mis gestiones" es el nombre vigente — el propio negocio avisó que es probable que se vuelva a renombrar.</p></div>
+          <div><strong>Nombre definitivo</strong><p>"Mis gestiones" es el nombre vigente de la propuesta, sujeto a validación.</p></div>
         </div>
       </div>
-      <p class="fuente-nota">Fuente: documentation/mis-gestiones-categorias.md, sección "Preguntas abiertas".</p>
       </div>
     </section>
 
     <!-- CIERRE -->
     <section class="slide cover-slide">
-      <a class="slide-back slide-back--light" href="../index.html"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg>Volver al hub</a>
       <div class="cover-slide__bar"></div>
       <div class="cover-slide__content">
         <span class="cover-eyebrow">Fin del recorrido</span>
