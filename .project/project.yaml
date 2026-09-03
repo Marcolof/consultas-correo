@@ -207,18 +207,18 @@ delivery:
   repository: "https://github.com/Marcolof/consultas-correo"
   vercel_projects:
     - name: "consultas-correo-v1"
-      role: hub # raíz pública del proyecto
+      role: site # ÚNICO sitio del proyecto desde 2026-09-03: Hub en la raíz + prototipo en /prototipo/
       dashboard: "https://vercel.com/marcos-projects-c934fa75/consultas-correo-v1"
       public_url: "https://consultas-correo-v1.vercel.app"
-      root_directory: "hub"
-      status: deployed # verificado en vivo el 2026-09-01: Hub navega bien y ya muestra las 4 cards de documentación tras el push a main (deploy automático de Vercel, sin intervención manual)
-      note: "Ajustado por Claude directamente en el dashboard de Vercel (con autorización del usuario, que tenía la sesión abierta): Root Directory → 'hub', Framework 'Other', luego Redeploy manual (el cambio de Root Directory no dispara deploy automático)."
+      root_directory: "" # raíz del repo (antes 'hub'), para que Vercel lea el vercel.json de la raíz
+      status: deployed # verificado en vivo 2026-09-03 tras la unificación: Hub OK, /prototipo/ OK con deep-link (?profile=fulfillment&category=fulfillment -> 6 gestiones), deck cargando el prototipo por iframe relativo, sin errores de consola
+      note: "2026-09-03: único cambio necesario en el dashboard fue vaciar Root Directory (de 'hub' a la raíz). El resto de la config vive ahora en vercel.json del repo (buildCommand/outputDirectory='hub'/installCommand + rewrite SPA de /prototipo/). El primer deploy tras el push falló ('No Output Directory named hub found') porque corrió en la ventana en que se estaba guardando el setting; el Redeploy posterior, ya con la config firme, quedó Ready en 13s. Cambiar Root Directory sigue sin disparar deploy automático — hay que redeployar a mano."
     - name: "proto-navegable"
-      role: prototype
+      role: prototype # REDUNDANTE desde 2026-09-03: el prototipo ya se sirve desde consultas-correo-v1/prototipo/
       dashboard: "https://vercel.com/marcos-projects-c934fa75/proto-navegable"
       public_url: "https://proto-navegable.vercel.app"
       root_directory: "proto navegable"
-      status: deployed # verificado en vivo 2026-09-02: pantalla de Reclamos real, con todos los ajustes de UI de la sesión
-      note: "Creado usando el atajo de import pre-configurado que Vercel sugería (\"New repository detected\", detectó Root Directory='proto navegable' y framework Vite solo). Nombre de proyecto tuvo que normalizarse a 'proto-navegable' (minúsculas, sin espacio) por validación de Vercel. Existía además un proyecto 'consultas-correo' (sin -v1) auto-creado por Vercel apuntando a la raíz del repo (404, Root Directory sin configurar) — se dejó sin usar, no se tocó."
-  status: complete # hub y prototipo deployados y verificados por separado
-  last_verified: "2026-09-02"
+      status: stale # 2026-09-03: su último deploy OK es a24e050; el build del commit de unificación (0b13790) falla en este proyecto. La URL sigue online sirviendo el build viejo.
+      note: "Quedó redundante tras la unificación de URLs. Sigue conectado al repo, así que cada push intenta un build nuevo acá también (y falla). PENDIENTE DE DECISIÓN DEL USUARIO: borrarlo, desconectarlo de git, o dejarlo como está — no se tocó porque borrar un proyecto es destructivo. Mientras siga vivo, existe una URL pública que muestra una versión desactualizada del prototipo, que es justamente el problema de 'URLs sueltas' que motivó la unificación. Existe además un tercer proyecto 'consultas-correo' (sin -v1) auto-creado por Vercel apuntando a la raíz del repo (404) — se dejó sin usar, no se tocó."
+  status: complete # un solo sitio deployado y verificado en vivo
+  last_verified: "2026-09-03"
