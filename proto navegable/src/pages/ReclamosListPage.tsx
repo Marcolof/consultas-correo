@@ -140,7 +140,7 @@ export function ReclamosListPage() {
         id="buscar-gestiones"
         value={search}
         onChange={setSearch}
-        placeholder={`Buscar ${ITEM_LABEL_PLURAL}…`}
+        placeholder="¿Con qué servicio podés ayudarte?"
         className={styles.search}
       />
 
