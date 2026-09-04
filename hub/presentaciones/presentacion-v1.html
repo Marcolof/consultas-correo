@@ -261,6 +261,34 @@
       </div>
     </section>
 
+    <!-- PASO: MENÚ SUPERIOR (COMPONENTE GLOBAL, NO ES UNA PANTALLA) -->
+    <section class="slide screen-slide-wrap">
+      <div class="screen-topbar">
+        <div class="screen-topbar__stripe"></div>
+        <div class="screen-topbar__band">
+          <img class="screen-topbar__logo" src="../assets/CorreoArgentino-MiCorreo.png" alt="Correo Argentino · MiCorreo" />
+          <span class="screen-topbar__label">Mi cuenta</span>
+        </div>
+      </div>
+      <div class="screen-slide-body">
+      <div class="screen-slide reverse">
+        <div class="screen-frame-wrap">
+          <div class="screen-frame"><iframe src="../prototipo/?profile=individuo&amp;userMenuOpen=1" title="Menú 'Mi cuenta' — ítem Mis gestiones"></iframe></div>
+        </div>
+        <div class="screen-text">
+          <span class="slide-eyebrow">También cambia el menú superior</span>
+          <h2>El acceso desde "Mi cuenta" ya dice "Mis gestiones"</h2>
+          <p>No es una pantalla nueva — es un componente global (el menú del header) que aparece en toda la app, no en una ruta puntual.</p>
+          <ul>
+            <li>El ítem del dropdown "Mi cuenta" pasa de "Ingresar Reclamos" a <strong>"Mis gestiones"</strong>.</li>
+            <li>Es sólo texto: el ítem sigue sin llevar a ningún lado por sí mismo, igual que antes.</li>
+            <li>El nombre de este ítem ahora sigue automáticamente al nombre vigente de la sección — si vuelve a cambiar, se actualiza solo acá también.</li>
+          </ul>
+        </div>
+      </div>
+      </div>
+    </section>
+
     <!-- 4. DIVIDER PANTALLAS -->
     <section class="slide cover-slide">
       <div class="cover-slide__bar"></div>

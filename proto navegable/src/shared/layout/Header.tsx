@@ -4,6 +4,7 @@ import togglerIcon from '@/assets/icons/navbar-toggler.svg'
 import logo from '@/assets/img/CorreoArgentino-MiCorreo.png'
 import { CURRENT_USER, userInitial } from '@/core/user'
 import { HEADER_USER_MENU } from '@/core/navigation/navigation.config'
+import { readQueryParam } from '@/core/session/deepLink'
 import { cn } from '@/shared/lib/cn'
 import styles from './Header.module.css'
 
@@ -20,7 +21,10 @@ export interface HeaderProps {
  */
 export function Header({ onToggleSidebar }: HeaderProps) {
   const user = CURRENT_USER
-  const [isUserMenuOpen, setIsUserMenuOpen] = useState(false)
+  // ?userMenuOpen=1 arranca con el dropdown "Mi cuenta" ya desplegado —
+  // pensado para embeber este estado en un slide de la presentación sin
+  // depender de una captura estática (ver core/session/deepLink.ts).
+  const [isUserMenuOpen, setIsUserMenuOpen] = useState(() => readQueryParam('userMenuOpen') === '1')
   const userMenuRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
