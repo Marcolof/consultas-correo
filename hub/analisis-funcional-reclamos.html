@@ -44,6 +44,26 @@
     <h2>2. Alcance cubierto hasta hoy</h2>
     <p>Sólo el <strong>listado de "Mis gestiones"</strong> está construido y navegable. No existen todavía: alta de una gestión nueva, pantalla de detalle, ni otros tipos de consulta.</p>
 
+    <h3>2.1 Pantallas y componentes afectados</h3>
+    <p><em>Distinción pedida por el usuario: no todo lo que cambió es una pantalla — parte es chrome global.</em></p>
+    <table>
+      <thead><tr><th>Tipo</th><th>Nombre</th><th>Cómo se accede</th><th>Detalle</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><strong>Pantalla</strong></td>
+          <td>"Mis gestiones" (nombre <strong>provisorio</strong>, antes "Reclamos")</td>
+          <td>Dropdown "Mi cuenta" del header</td>
+          <td>Pantalla completa rediseñada: categorías, buscador con tags, listado. Único artefacto construido de punta a punta.</td>
+        </tr>
+        <tr>
+          <td><strong>Componente global</strong> (no es pantalla)</td>
+          <td>Ítem del dropdown "Mi cuenta", antes "Ingresar Reclamos"</td>
+          <td>Header de toda la app, no una ruta puntual</td>
+          <td>Chrome replicado del sitio real, no navega a ningún lado. Su texto ahora sigue automáticamente el nombre vigente de la sección en vez de estar hardcodeado.</td>
+        </tr>
+      </tbody>
+    </table>
+
     <h2>3. Histórico — motivo×perfil (SUPERSEDED 2026-09-02)</h2>
     <p>Hasta el 2026-09-01, el negocio distinguía 3 perfiles (Individuo, Franquicias, Fulfillment) que veían subconjuntos de motivos individuales. Esa matriz queda superada. Detalle completo, por trazabilidad, en <a href="motivos-reclamo-por-perfil.html">motivos por perfil</a>. (El tipo de usuario SÍ sigue importando — ver sección 4.2, es un mecanismo nuevo.)</p>
 

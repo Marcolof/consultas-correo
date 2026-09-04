@@ -34,14 +34,32 @@ necesidad de cubrir todavía todo el alcance futuro del proyecto.
 ## 2. Alcance funcional cubierto hasta hoy
 
 Lo único construido y navegable hoy es el **listado de "Mis gestiones"**
-(pantalla `ReclamosListPage`, ruta `/` del prototipo — el nombre de
-archivo no se tocó, ver [`mis-gestiones-categorias.md`](mis-gestiones-categorias.md#1-cambio-de-nombre-reclamos--mis-gestiones)).
+(pantalla `ReclamosListPage`, ruta `/prototipo/` dentro del sitio único
+del proyecto — el nombre de archivo no se tocó, ver
+[`mis-gestiones-categorias.md`](mis-gestiones-categorias.md#1-cambio-de-nombre-reclamos--mis-gestiones)).
 No están construidas: alta de una gestión nueva, pantalla de detalle de
 una gestión, ni ningún otro tipo de consulta.
 
 Fuera de alcance / no definido todavía (ver sección 8): qué otros tipos de
 consulta existen en el producto real más allá de la gestión, y qué
 significa "administrar consultas".
+
+### 2.1 Pantallas y componentes afectados
+
+> Distinción pedida explícitamente por el usuario: no todo lo que cambió
+> es una pantalla — una parte es chrome global que aparece en cualquier
+> vista, no un lugar al que se navega.
+
+| Tipo | Nombre | Cómo se accede | Detalle |
+|---|---|---|---|
+| **Pantalla** | "Mis gestiones" (nombre **provisorio**, antes "Reclamos" — ver sección 1 de [`mis-gestiones-categorias.md`](mis-gestiones-categorias.md#1-cambio-de-nombre-reclamos--mis-gestiones)) | Dropdown "Mi cuenta" del header (ítem homónimo, ver fila siguiente) | Pantalla completa rediseñada: categorías (chips), buscador con tags de sinónimo, contador, listado. Único artefacto construido de punta a punta — `pages/ReclamosListPage.tsx`. |
+| **Componente global** (no es una pantalla) | Barra de navegación superior (header) — ítem del dropdown "Mi cuenta", antes "Ingresar Reclamos" | Visible en el header de **toda** la app, no en una ruta puntual | Es chrome replicado del sitio real (`core/navigation/navigation.config.ts`), no navega a ningún lado hoy (ni antes ni después de este cambio). Lo único que cambió (2026-09-03) es que el **texto** del ítem sigue automáticamente al nombre vigente de la sección (`SECTION_LABEL`) en vez de tener el string "Ingresar Reclamos" hardcodeado — si el nombre de la pantalla vuelve a cambiar, este ítem se actualiza solo. Detalle técnico en [`mis-gestiones-categorias.md`](mis-gestiones-categorias.md#1-cambio-de-nombre-reclamos--mis-gestiones). |
+
+Ambas filas son consecuencia del mismo cambio de nombre ("Reclamos" →
+"Mis gestiones"), pero son dos superficies distintas del código
+(`pages/ReclamosListPage.tsx` vs. `core/navigation/navigation.config.ts`)
+con impacto distinto: la pantalla es el producto en sí; el ítem del menú
+es sólo un punto de entrada textual hacia ella, sin lógica propia.
 
 ## 3. Histórico — motivo×perfil (SUPERSEDED 2026-09-02)
 
