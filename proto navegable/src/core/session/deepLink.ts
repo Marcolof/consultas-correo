@@ -18,6 +18,7 @@
  *   ?paqueteriaInternacional=1 (muestra la categoría, oculta por defecto)
  *   ?comunicacionesDigitales=1 (ídem, para Mis Comunicaciones Digitales)
  *   ?userMenuOpen=1 (abre el dropdown "Mi cuenta" del header ya desplegado)
+ *   ?hideTooling=1 (oculta el botón flotante "Herramientas del prototipo")
  */
 export function readQueryParam(name: string): string | null {
   if (typeof window === 'undefined') return null

@@ -53,6 +53,10 @@ function GridIcon() {
  *        `core/session/categoryToggles.ts` +
  *        `core/gestiones/categories.ts` (`HIDDEN_BY_DEFAULT_CATEGORY_IDS`).
  *
+ * `?hideTooling=1` (2026-09-03) saca este botón por completo — sólo usado
+ * por los iframes de la presentación, donde no corresponde mostrar acceso
+ * al Hub ni a "Casos de uso" del prototipo.
+ *
  * (2026-09-02, restaurado el mismo día que se había sacado): la sección
  * "Usuarios" había quedado superada por las 7 categorías fijas, pero el
  * usuario aclaró que el tipo de usuario SÍ sigue impactando qué categorías
@@ -92,6 +96,13 @@ export function HubAccessButton() {
       document.removeEventListener('keydown', onKeyDown)
     }
   }, [isMenuOpen])
+
+  // ?hideTooling=1 saca este botón del DOM — pensado únicamente para los
+  // iframes de la presentación (hub/presentaciones/presentacion-v1.html):
+  // ahí no tiene sentido mostrar un acceso a "Volver al hub"/"Casos de
+  // uso" del prototipo. No afecta el uso normal del prototipo (sin el
+  // param, se comporta exactamente igual que siempre).
+  if (readQueryParam('hideTooling') === '1') return null
 
   return (
     <div className={styles.wrapper} ref={menuRef}>
