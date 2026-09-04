@@ -39,7 +39,7 @@ archivo no se tocó, ver [`mis-gestiones-categorias.md`](mis-gestiones-categoria
 No están construidas: alta de una gestión nueva, pantalla de detalle de
 una gestión, ni ningún otro tipo de consulta.
 
-Fuera de alcance / no definido todavía (ver sección 6): qué otros tipos de
+Fuera de alcance / no definido todavía (ver sección 8): qué otros tipos de
 consulta existen en el producto real más allá de la gestión, y qué
 significa "administrar consultas".
 
@@ -127,7 +127,7 @@ patrón que la regla anterior con perfiles).
 ## 5. Flujo funcional de la pantalla (listado de "Mis gestiones")
 
 1. El usuario ingresa a la pantalla con un tipo de usuario ya determinado
-   (mecanismo de determinación: **no definido**, ver sección 6) y ve
+   (mecanismo de determinación: **no definido**, ver sección 8) y ve
    "Todos" + las categorías visibles para ese tipo (5 a 7 según la tabla
    de la sección 4.2).
 2. La pantalla muestra: buscador de texto libre, chips de categoría
@@ -156,7 +156,189 @@ patrón que la regla anterior con perfiles).
    producción): un panel de control permite simular los 4 tipos para
    validar qué categorías aparecen, en la misma sesión.
 
-## 6. Pendiente de definición (preguntas para el AFU / negocio)
+## 6. Historias de usuario
+
+> Formato *Como / Quiero / Para*, con criterios de aceptación derivados de
+> lo que ya está construido y verificado en el prototipo — no de negocio
+> no confirmado. Donde el criterio depende de una regla no validada
+> (sección 4.1), se marca explícitamente. Numeración `HU-XX` propia de
+> este documento, no del backlog del proyecto (todavía no existe uno).
+
+**HU-01 — Ver mis gestiones agrupadas por categoría**
+Como usuario de MiCorreo (cualquier tipo), quiero ver mis gestiones
+agrupadas por categoría de producto/servicio en vez de un listado plano de
+motivos, para encontrar más rápido la que me corresponde sin leer 27
+opciones sueltas.
+- Criterios de aceptación:
+  - Al entrar a la pantalla, el chip "Todos" viene seleccionado y el
+    listado muestra la unión de gestiones de las categorías visibles para
+    mi tipo de usuario (ver HU-06).
+  - Cada categoría visible aparece como chip, en el orden fijo de
+    `GESTION_CATEGORIES` (sección 4.1), no en orden alfabético ni de uso.
+  - El contador arriba del listado siempre refleja la cantidad de
+    resultados actualmente visibles (post-filtro y post-búsqueda).
+
+**HU-02 — Encontrar una gestión sin saber el nombre exacto**
+Como usuario, quiero escribir en el buscador con mis propias palabras
+(no necesariamente el título exacto de la gestión), para no tener que
+adivinar cómo está redactada en el sistema.
+- Criterios de aceptación:
+  - El buscador matchea contra el label de la gestión **y** contra sus
+    tags de sinónimo (hasta 50 por gestión — ver
+    [`mis-gestiones-categorias.md`](mis-gestiones-categorias.md) sección 9).
+  - No distingue mayúsculas ni acentos.
+  - Si escribo una frase de varias palabras, alcanza con que **una** sea
+    relevante (3+ letras) para obtener resultados — palabras de relleno
+    ("no", "me", "la") no bloquean la búsqueda.
+  - Los resultados con más palabras coincidentes aparecen primero.
+  - La búsqueda responde al instante, tecla por tecla (no hay que apretar
+    "Buscar" ni esperar un debounce) — es filtrado en memoria, sin
+    llamado a backend en el prototipo.
+
+**HU-03 — Acotar el listado por categoría**
+Como usuario, quiero tocar una categoría puntual para ver sólo sus
+gestiones, para no scrollear entre las de otras categorías que no me
+interesan ahora.
+- Criterios de aceptación:
+  - Al tocar un chip, el listado se acota a las gestiones de esa
+    categoría exclusivamente.
+  - Buscador y categoría se combinan con AND: si además hay texto en el
+    buscador, el resultado es la intersección de ambos filtros.
+  - Aparece un link "Limpiar filtro" en la misma línea que el contador,
+    alineado a la derecha, sólo cuando el chip activo no es "Todos".
+
+**HU-04 — Volver a ver todo con un solo toque**
+Como usuario que filtró por una categoría y quiere volver atrás, quiero
+un atajo para sacar el filtro sin tener que volver a tocar "Todos" a
+mano.
+- Criterios de aceptación:
+  - Tocar "Limpiar filtro" vuelve el chip activo a "Todos" sin alterar el
+    texto de búsqueda que hubiera escrito.
+
+**HU-05 — Entender cuándo no hay resultados**
+Como usuario que buscó o filtró y no encontró nada, quiero un mensaje
+claro en vez de una pantalla vacía sin explicación, para saber que tengo
+que ajustar el buscador o el filtro, no que el sistema está roto.
+- Criterios de aceptación:
+  - Si la combinación de búsqueda + categoría no devuelve ítems, se
+    muestra un estado vacío con mensaje y sugerencia de cambiar la
+    búsqueda o la categoría (`EmptyState`, no una lista en blanco).
+
+**HU-06 — No ver categorías que no me corresponden**
+Como usuario Individuo o Pyme, quiero que la pantalla no me muestre
+categorías de otro tipo de cuenta (Franquicias, Fulfillment) que no uso,
+para no confundirme con opciones que no aplican a mi cuenta.
+- Criterios de aceptación:
+  - Individuo y Pyme no ven el chip "Franquicias" ni "Fulfillment", ni
+    sus gestiones dentro de "Todos".
+  - Franquicias no ve "Fulfillment" (ni viceversa) — nunca conviven para
+    un mismo tipo de usuario.
+  - Si tenía seleccionada una categoría que deja de estar disponible al
+    cambiar de tipo de usuario, el filtro vuelve solo a "Todos" (no
+    queda un chip fantasma seleccionado ni la pantalla se rompe).
+  - *(Depende de cómo se determina el tipo de usuario de una cuenta real
+    en producción — pregunta abierta 11 de la sección 8. Hoy en el
+    prototipo se simula desde un panel de control, no hay autenticación.)*
+
+**HU-07 — Usar la pantalla desde el celular**
+Como usuario que entra desde un smartphone, quiero que la pantalla se vea
+y use bien en una pantalla angosta, para gestionar mis reclamos sin
+depender de una computadora.
+- Criterios de aceptación:
+  - En ancho mobile, el menú lateral se colapsa a un ícono de hamburguesa.
+  - Buscador, chips y listado se recalculan al ancho disponible, sin
+    scroll horizontal.
+  - *(Hoy verificado sólo con el modo "Responsive" forzado del panel de
+    prototipo, que replica el mismo breakpoint real de 768px — no
+    probado todavía en un dispositivo físico ni en distintos navegadores
+    mobile.)*
+
+**HU-08 (diferida, no implementada) — Ver el detalle de una gestión**
+Como usuario que tocó una gestión de la lista, quiero ver su detalle
+(estado, historial, próximos pasos, acciones disponibles), para entender
+qué está pasando con mi reclamo sin tener que iniciar sesión en otro
+lado.
+- Estado: **no implementada**. Hoy tocar una fila sólo muestra un aviso
+  temporal ("pantalla de detalle todavía no implementada"). Bloqueada por
+  la pregunta abierta 8 de la sección 8 (qué datos y acciones debería
+  tener) — no se puede escribir un criterio de aceptación real sin esa
+  definición.
+
+**HU-09 (fuera de este MVP) — Ver gestiones de Paquetería Internacional y
+Mis Comunicaciones Digitales**
+Como usuario, quiero ver gestiones reales de envíos internacionales y de
+comunicaciones digitales, para no tener que buscar esa ayuda por otro
+canal.
+- Estado: **fuera del alcance de este MVP** (decisión del usuario,
+  2026-09-03 — ver sección 4.1). Las 4 gestiones de relleno de cada
+  categoría son contenido inventado, no una historia real: existen sólo
+  para poder previsualizar el layout desde el panel de control del
+  prototipo, no para que un usuario real las use hoy.
+
+## 7. Análisis funcional detallado
+
+### 7.1 Reglas de negocio (numeradas para referencia cruzada)
+
+| Regla | Enunciado | Fuente |
+|---|---|---|
+| RN-01 | "Todos" es la unión de las gestiones de las categorías visibles para el tipo de usuario activo — nunca el universo completo de 27 gestiones. | Confirmado (corrección de bug 2026-09-02) |
+| RN-02 | Franquicias y Fulfillment son mutuamente excluyentes: ningún tipo de usuario ve ambas categorías a la vez. | Confirmado, textual del usuario |
+| RN-03 | Individuo y Pyme no ven Franquicias ni Fulfillment. | Confirmado, textual del usuario |
+| RN-04 | Las 5 categorías restantes (Mi Cuenta, Paquetería Nacional, Paquetería Internacional, Mis Comunicaciones Digitales, Oficios Judiciales) no tienen exclusión de perfil documentada. | **Supuesto** — no confirmado por exclusión textual, ver pregunta 3 de la sección 8 |
+| RN-05 | Búsqueda y filtro de categoría se combinan con AND (intersección), no OR. | Confirmado por implementación, verificado en navegador |
+| RN-06 | Dentro de la búsqueda, coincidir una palabra de la frase alcanza (OR entre palabras); el resultado se ordena por cantidad de palabras coincidentes. | Confirmado por implementación (2026-09-03), verificado en navegador |
+| RN-07 | Si la categoría activa deja de estar disponible al cambiar de tipo de usuario, el filtro cae a "Todos" automáticamente. | Confirmado por implementación, verificado en navegador |
+| RN-08 | Paquetería Internacional y Mis Comunicaciones Digitales quedan fuera del MVP: sin chip, sin aporte a "Todos", para ningún tipo de usuario, independientemente de RN-04. | Confirmado, decisión de alcance del usuario (2026-09-03) |
+
+### 7.2 Casos borde verificados
+
+- **Cambio de tipo de usuario con texto de búsqueda activo**: el texto del
+  buscador **no se borra** al cambiar de tipo de usuario — sólo se
+  recalculan las categorías visibles y, si corresponde, el chip activo
+  (RN-07). Si el texto de búsqueda dejaba de tener sentido para el nuevo
+  tipo (ej. buscaba "franquicia" y ahora soy Individuo), el resultado
+  pasa a 0 ítems con el estado vacío de HU-05, no un error.
+- **Búsqueda vacía tras borrar todo el texto**: vuelve a mostrar el
+  listado completo del filtro de categoría activo, sin re-render roto ni
+  parpadeo del contador.
+- **Mínimo de gestiones visibles**: ningún tipo de usuario puede quedar
+  con 0 gestiones en "Todos" — el piso son las 9 de Mi Cuenta (2) +
+  Paquetería Nacional (6) + Oficios Judiciales (1), visibles para los 4
+  tipos por igual (sujeto a RN-04).
+- **Búsqueda por nombre de categoría**: cada gestión lleva el nombre de
+  su propia categoría como tag adicional, así que buscar "Mi Cuenta" (con
+  "Todos" seleccionado, sin tocar ningún chip) trae el mismo resultado
+  que tocar el chip "Mi Cuenta" — no hay lógica de código separada para
+  esto, es sólo un tag más.
+- **Sin persistencia**: recargar la página resetea todo (tipo de usuario,
+  categoría, texto de búsqueda) al estado por defecto — no hay
+  `localStorage` ni backend detrás; es esperable en un prototipo, pero es
+  una diferencia real contra producción a tener en cuenta si el AFU
+  necesita especificar persistencia de sesión.
+
+### 7.3 No funcional (implicancias a validar de cara a producción)
+
+- **Sin backend real**: todo el filtrado (búsqueda + categoría) ocurre en
+  memoria sobre un JSON estático de 27 gestiones. No hay paginación,
+  loading state, ni manejo de error de red — ninguno de estos aplica hoy
+  porque no hay ninguna llamada asincrónica en el flujo. Si el dato real
+  viene de una API, hay que definir esos 3 puntos antes de producción.
+- **Búsqueda sin debounce**: cada tecla dispara un re-render y un
+  re-filtrado inmediato del array completo (27 ítems hoy). Es
+  imperceptible a esta escala; si el catálogo real de gestiones crece
+  varios órdenes de magnitud, conviene revisar si sigue siendo necesario
+  un debounce o filtrado del lado del servidor.
+- **Accesibilidad no auditada**: los componentes (`SearchInput`,
+  `ChipGroup`, `NavListItem`) tienen atributos ARIA básicos (`aria-label`,
+  roles nativos de `button`/`input`), pero no se hizo una auditoría de
+  accesibilidad (contraste, navegación por teclado end-to-end, lector de
+  pantalla) — no confirmar cumplimiento sin probarlo.
+- **Internacionalización**: todo el texto está hardcodeado en español
+  dentro de los componentes (salvo `SECTION_LABEL`/tags, que son datos).
+  No hay mecanismo de i18n — no aplica hoy, pero es relevante si el
+  producto lo necesita a futuro.
+
+## 8. Pendiente de definición (preguntas para el AFU / negocio)
 
 Ninguna de estas preguntas fue respondida todavía — no se resolvieron por
 inferencia ni se asumió una respuesta por defecto en el prototipo:
@@ -198,7 +380,7 @@ rediseñan** en esta entrega — se mantiene el formulario actual; y la
 detección de motivo por IA (texto libre) es visión a futuro,
 **explícitamente fuera** del MVP.
 
-## 7. Trazabilidad de fuentes
+## 9. Trazabilidad de fuentes
 
 | Afirmación | Fuente | Confianza |
 |---|---|---|
@@ -211,9 +393,10 @@ detección de motivo por IA (texto libre) es visión a futuro,
 | 3 perfiles y matriz motivo×perfil (sección 3, histórico) | JSON provisto por el usuario, 2026-09-01 | Alta en su momento — superado el 2026-09-02 para esta pantalla |
 | Flujo de alta de reclamo en producción (2 pasos) | `html reference/reclaclamos.html` | Alta — observación directa de producción |
 | MVP no incluye rediseño de formularios ni IA | Acta de reunión funcional N°1, 31/08/2026 | Alta — acta formal con acuerdos firmados |
-| Preguntas de la sección 6 | Brief original + preguntas abiertas acumuladas | N/A — son preguntas, no afirmaciones |
+| Preguntas de la sección 8 | Brief original + preguntas abiertas acumuladas | N/A — son preguntas, no afirmaciones |
+| Historias de usuario (sección 6) y análisis detallado (sección 7) | Derivadas por Claude de comportamiento ya implementado y verificado en navegador, más las secciones 1-5 de este documento | Alta para lo verificado en navegador; baja/inferencial donde se marca explícitamente (ej. HU-06, HU-07) |
 
-## 8. Documentos relacionados
+## 10. Documentos relacionados
 
 - [`brief-consultas-reclamos.md`](brief-consultas-reclamos.md) — definición
   general de alto nivel y fricciones detectadas en el flujo de alta actual.

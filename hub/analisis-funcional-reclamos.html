@@ -79,7 +79,7 @@
 
     <h2>5. Flujo funcional de la pantalla</h2>
     <ol>
-      <li>El usuario ingresa con un tipo de usuario ya determinado (mecanismo de determinación: no definido, ver sección 6) y ve "Todos" + las categorías visibles para ese tipo.</li>
+      <li>El usuario ingresa con un tipo de usuario ya determinado (mecanismo de determinación: no definido, ver sección 8) y ve "Todos" + las categorías visibles para ese tipo.</li>
       <li>La pantalla muestra buscador, chips de categoría ("Todos" preseleccionado), contador y listado.</li>
       <li><strong>Buscar</strong>: texto libre, filtra por coincidencia en el label <strong>y</strong> los tags de la gestión (hasta 50, sin distinguir mayúsculas/acentos), en memoria. Con varias palabras alcanza con que una matchee (relleno como "no"/"me" no bloquea) y los resultados más relevantes aparecen primero.</li>
       <li><strong>Filtrar por categoría</strong>: acota el listado a esa categoría; se combina con la búsqueda (AND). Aparece "Limpiar filtro" si el chip activo no es "Todos".</li>
@@ -88,7 +88,51 @@
       <li><strong>Cambio de tipo de usuario</strong>: panel de control de prototipo para simular los 4 tipos en la misma sesión.</li>
     </ol>
 
-    <h2>6. Pendiente de definición (preguntas para el AFU / negocio)</h2>
+    <h2>6. Historias de usuario</h2>
+    <p><em>Formato Como / Quiero / Para, con criterios derivados de lo ya construido y verificado — no de negocio no confirmado. Detalle completo con criterios de aceptación en el .md descargable.</em></p>
+    <ul>
+      <li><strong>HU-01</strong> — Ver mis gestiones agrupadas por categoría, para encontrar más rápido la que corresponde.</li>
+      <li><strong>HU-02</strong> — Encontrar una gestión sin saber el nombre exacto (buscador matchea label + hasta 50 tags de sinónimo, una palabra alcanza, resultados por relevancia).</li>
+      <li><strong>HU-03</strong> — Acotar el listado por categoría (se combina con la búsqueda por AND).</li>
+      <li><strong>HU-04</strong> — Volver a ver todo con "Limpiar filtro" sin perder el texto buscado.</li>
+      <li><strong>HU-05</strong> — Entender cuándo no hay resultados (estado vacío con mensaje, no una lista en blanco).</li>
+      <li><strong>HU-06</strong> — No ver categorías que no corresponden al tipo de usuario (Franquicias/Fulfillment mutuamente excluyentes).</li>
+      <li><strong>HU-07</strong> — Usar la pantalla desde el celular (verificado sólo con el modo Responsive forzado del prototipo, no en dispositivo físico).</li>
+      <li><strong>HU-08</strong> (diferida, no implementada) — Ver el detalle de una gestión. Bloqueada por la pregunta 8 de la sección 8.</li>
+      <li><strong>HU-09</strong> (fuera de este MVP) — Ver gestiones reales de Paquetería Internacional / Comunicaciones Digitales. Contenido de relleno hoy, no una historia real todavía.</li>
+    </ul>
+
+    <h2>7. Análisis funcional detallado</h2>
+    <h3>7.1 Reglas de negocio</h3>
+    <table>
+      <thead><tr><th>Regla</th><th>Enunciado</th><th>Fuente</th></tr></thead>
+      <tbody>
+        <tr><td>RN-01</td><td>"Todos" es la unión de las categorías visibles para el tipo de usuario activo, nunca el universo completo.</td><td>Confirmado</td></tr>
+        <tr><td>RN-02</td><td>Franquicias y Fulfillment son mutuamente excluyentes.</td><td>Confirmado, textual</td></tr>
+        <tr><td>RN-03</td><td>Individuo y Pyme no ven Franquicias ni Fulfillment.</td><td>Confirmado, textual</td></tr>
+        <tr><td>RN-04</td><td>Las otras 5 categorías no tienen exclusión de perfil documentada.</td><td><strong>Supuesto</strong>, ver pregunta 3</td></tr>
+        <tr><td>RN-05</td><td>Búsqueda y categoría se combinan con AND, no OR.</td><td>Verificado en navegador</td></tr>
+        <tr><td>RN-06</td><td>Dentro de la búsqueda, una palabra de la frase alcanza (OR entre palabras); ranking por relevancia.</td><td>Verificado en navegador</td></tr>
+        <tr><td>RN-07</td><td>Categoría inválida al cambiar de tipo de usuario → cae a "Todos" solo.</td><td>Verificado en navegador</td></tr>
+        <tr><td>RN-08</td><td>Paquetería Internacional / Com. Digitales fuera del MVP, para todos los tipos, independiente de RN-04.</td><td>Confirmado, decisión de alcance 2026-09-03</td></tr>
+      </tbody>
+    </table>
+    <h3>7.2 Casos borde verificados</h3>
+    <ul>
+      <li>Cambiar de tipo de usuario no borra el texto de búsqueda — sólo recalcula categorías y, si corresponde, el chip activo.</li>
+      <li>Piso mínimo de "Todos": 9 gestiones (Mi Cuenta + Paquetería Nacional + Oficios Judiciales), igual para los 4 tipos.</li>
+      <li>Buscar el nombre de una categoría (ej. "Mi Cuenta") da el mismo resultado que tocar su chip — es sólo un tag más, sin lógica de código aparte.</li>
+      <li>Sin persistencia: recargar la página resetea todo al estado por defecto (no hay backend ni localStorage).</li>
+    </ul>
+    <h3>7.3 No funcional (a validar de cara a producción)</h3>
+    <ul>
+      <li>Sin backend real — filtrado en memoria sobre JSON estático; no hay paginación ni loading/error state que definir todavía.</li>
+      <li>Búsqueda sin debounce — cada tecla refiltra el array completo; imperceptible a esta escala.</li>
+      <li>Accesibilidad no auditada (ARIA básico presente, sin auditoría de contraste/teclado/lector de pantalla).</li>
+      <li>Sin mecanismo de i18n — todo el texto de UI está hardcodeado en español.</li>
+    </ul>
+
+    <h2>8. Pendiente de definición (preguntas para el AFU / negocio)</h2>
     <p>Ninguna resuelta por inferencia:</p>
     <ol>
       <li>¿Las asignaciones "por intuición" (Mi Cuenta, Paquetería Nacional, Oficios Judiciales) son correctas?</li>
@@ -105,7 +149,7 @@
     </ol>
     <p><strong>Confirmado por el acta del 31/08/2026</strong> (no son preguntas, ya es alcance cerrado): los formularios particulares de cada gestión no se rediseñan en esta entrega, y la detección de motivo por IA es visión a futuro, explícitamente fuera del MVP.</p>
 
-    <h2>7. Documentos relacionados</h2>
+    <h2>10. Documentos relacionados</h2>
     <ul>
       <li><a href="brief.html">Brief básico — Consultas / Reclamos</a></li>
       <li><a href="mis-gestiones-categorias.html">"Mis gestiones" — Categorías</a></li>
