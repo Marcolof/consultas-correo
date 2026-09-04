@@ -4,6 +4,13 @@
  * Ningún ítem navega: son datos para pintar el sidebar y el menú de usuario.
  * La única ruta real de la app es `/` (Nuevo envío | Paquetería).
  *
+ * Única excepción de fidelidad a propósito: el ítem que en el sitio real
+ * dice "Ingresar Reclamos" usa acá `SECTION_LABEL` (2026-09-03) en vez del
+ * string literal — el usuario avisó que el nombre de la sección es una
+ * definición "muy pobre" todavía y probable de volver a cambiar; que este
+ * ítem del menú lo siga automáticamente evita que un futuro rename se
+ * actualice en `sectionLabel.ts` y se olvide acá.
+ *
  * Los íconos son los PNG originales del sitio real, recortados a mano
  * (`documentation/` no lo detalla porque fue un ajuste puntual de assets, no
  * de código): cada uno traía un margen transparente distinto dentro del
@@ -13,6 +20,7 @@
  * de su lienzo — el archivo sigue siendo el mismo PNG de producción.
  */
 
+import { SECTION_LABEL } from '@/core/gestiones/sectionLabel'
 import addIcon from '@/assets/icons/add.png'
 import cajaIcon from '@/assets/icons/caja.png'
 import enchufeIcon from '@/assets/icons/enchufe.png'
@@ -95,7 +103,7 @@ export const SIDEBAR_DRAWER: readonly SidebarDrawerItem[] = [
       'Agregar Usuarios',
       'Mis Promociones',
       'Estadísticas',
-      'Ingresar Reclamos',
+      SECTION_LABEL,
       'Cerrar sesión',
     ],
   },
@@ -108,6 +116,6 @@ export const HEADER_USER_MENU: readonly string[] = [
   'Agregar Usuarios',
   'Mis Promociones',
   'Estadísticas',
-  'Ingresar Reclamos',
+  SECTION_LABEL,
   'Cerrar sesión',
 ]

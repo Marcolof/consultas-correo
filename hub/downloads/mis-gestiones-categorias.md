@@ -52,11 +52,17 @@ placeholder del buscador, contador, mensajes de estado vacío) ahora lee de
 estas constantes. Si el negocio vuelve a cambiar el nombre, se edita un
 solo archivo.
 
-**No se renombró** el chrome de navegación replicado del sitio real
-(`core/navigation/navigation.config.ts`, ítem "Ingresar Reclamos" del menú
-de usuario) — es una réplica fiel de un menú que existe hoy en producción,
-no la pantalla que estamos rediseñando; cambiarlo rompería la fidelidad
-con el sitio real. Tampoco se renombraron nombres internos de archivos/
+**El texto del chrome de navegación replicado del sitio real SÍ se
+actualizó (2026-09-03)** — el ítem del menú "Mi cuenta" que en el sitio
+real dice "Ingresar Reclamos" pasó a usar `SECTION_LABEL` en
+[`core/navigation/navigation.config.ts`](../proto%20navegable/src/core/navigation/navigation.config.ts)
+en vez del string literal `'Ingresar Reclamos'`. El usuario lo marcó
+explícitamente como pendiente: era "una definición muy pobre" dejarlo
+hardcodeado, porque un futuro rename de la sección (que el propio usuario
+avisó que es probable) se aplicaría en `sectionLabel.ts` pero se olvidaría
+acá, dejando el menú desincronizado. El ítem sigue sin navegar a ningún
+lado (fidelidad de chrome, no la pantalla rediseñada) — sólo cambió de
+dónde sale el texto. Tampoco se renombraron nombres internos de archivos/
 carpetas (`ReclamosListPage.tsx`, `core/reclamos/`) — es un identificador
 técnico, no texto visible; renombrarlo no aporta valor de UX y sí agrega
 riesgo de romper algo por un cambio de alcance no pedido.
