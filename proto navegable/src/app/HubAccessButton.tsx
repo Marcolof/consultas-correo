@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
+import { Link } from 'react-router-dom'
 import { useActiveUseCase } from '@/core/session/activeUseCase'
 import { useForcedViewport } from '@/core/session/forcedViewport'
 import { useCategoryToggles } from '@/core/session/categoryToggles'
@@ -36,9 +37,11 @@ function GridIcon() {
  * de MiCorreo — es tooling de este proyecto, separado a propósito del
  * `ChatBubble`, que sí replica el sitio real).
  *
- * Al tocarlo despliega 2 opciones:
+ * Al tocarlo despliega 3 opciones:
  *   1. "Volver al Hub" — navega al Hub del proyecto.
- *   2. "Casos de uso" — abre un panel con 2 secciones:
+ *   2. "Cambiar de versión" — vuelve a la landing del módulo, donde se
+ *      elige entre V1 y V2 (ver `app/router.tsx`).
+ *   3. "Casos de uso" — abre un panel con 2 secciones:
  *      - "Usuarios": simula el tipo de usuario activo (Individuo / Pyme /
  *        Franquicias / Fulfillment), que determina qué categorías (chips)
  *        se ven en el listado de "Mis gestiones" — ver
@@ -127,6 +130,14 @@ export function HubAccessButton() {
           >
             Volver al Hub
           </a>
+          <Link
+            to="/"
+            className={cn(styles.menuItem)}
+            role="menuitem"
+            onClick={() => setIsMenuOpen(false)}
+          >
+            Cambiar de versión
+          </Link>
           <button
             type="button"
             role="menuitem"

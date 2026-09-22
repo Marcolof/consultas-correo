@@ -1,0 +1,147 @@
+/*
+ * Portada del módulo del prototipo (selector de versiones).
+ *
+ * Deliberadamente sobria y sin el chrome de MiCorreo: no es una pantalla
+ * del producto, es la entrada al módulo. Usa los mismos tokens para no
+ * introducir una segunda paleta.
+ */
+
+.page {
+  min-height: 100vh;
+  background: var(--surface-page);
+  padding: var(--space-12) var(--space-4);
+}
+
+.content {
+  max-width: 980px;
+  margin: 0 auto;
+}
+
+.head {
+  margin-bottom: var(--space-10);
+}
+
+.kicker {
+  margin: 0 0 var(--space-2);
+  color: var(--text-subtle);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.title {
+  margin: 0 0 var(--space-3);
+  color: var(--text-primary);
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-bold);
+}
+
+.lede {
+  max-width: 62ch;
+  margin: 0;
+  color: var(--text-muted);
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-normal);
+}
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-6);
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  border: var(--border-width-thin) solid var(--border-subtle);
+  border-top: var(--border-width-thick) solid var(--color-brand);
+  border-radius: var(--radius-md);
+  background: var(--surface-raised);
+  padding: var(--space-6);
+  color: inherit;
+  text-decoration: none;
+  transition: border-color var(--transition-fast);
+}
+
+.card:hover {
+  border-color: var(--border-strong);
+}
+
+.cardHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  margin-bottom: var(--space-4);
+}
+
+.version {
+  color: var(--color-accent);
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-bold);
+}
+
+.estado {
+  color: var(--text-subtle);
+  font-size: var(--font-size-xs);
+}
+
+.cardTitle {
+  margin: 0 0 var(--space-3);
+  color: var(--text-primary);
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--line-height-snug);
+}
+
+.cardResumen {
+  margin: 0 0 var(--space-4);
+  color: var(--text-muted);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-normal);
+}
+
+.puntos {
+  flex: 1;
+  margin: 0 0 var(--space-6);
+  padding-left: var(--space-5);
+  color: var(--text-secondary);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-normal);
+}
+
+.puntos li + li {
+  margin-top: var(--space-1);
+}
+
+.cta {
+  color: var(--text-link);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+}
+
+.foot {
+  margin-top: var(--space-10);
+}
+
+.hubLink {
+  color: var(--text-link);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  text-decoration: none;
+}
+
+.hubLink:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 767.98px) {
+  .page {
+    padding: var(--space-8) var(--space-4);
+  }
+
+  .cards {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
