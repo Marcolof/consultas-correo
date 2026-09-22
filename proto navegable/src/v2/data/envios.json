@@ -1,0 +1,97 @@
+{
+  "schema_version": 1,
+  "_advertencia": "CONTENIDO 100% INVENTADO. Ninguno de estos envios, estados ni eventos es un dato real de MiCorreo: existen solo para que la propuesta V2 (reclamo contextual) se pueda recorrer. Los nombres, direcciones y numeros de seguimiento son ficticios. Ver documentation/propuesta-v2-reclamo-contextual.md.",
+  "estados": [
+    {
+      "id": "en_transito",
+      "label": "En camino",
+      "tono": "info",
+      "esProblema": false
+    },
+    {
+      "id": "demorado",
+      "label": "Demorado",
+      "tono": "warning",
+      "esProblema": true
+    },
+    {
+      "id": "entrega_fallida",
+      "label": "No se pudo entregar",
+      "tono": "danger",
+      "esProblema": true
+    },
+    {
+      "id": "entregado",
+      "label": "Entregado",
+      "tono": "success",
+      "esProblema": false
+    }
+  ],
+  "envios": [
+    {
+      "id": "CD482910073AR",
+      "numero": "CD 482 910 073 AR",
+      "descripcion": "Caja chica — 1,2 kg",
+      "destinatario": "María Gómez",
+      "direccion": "Av. Rivadavia 4520, piso 3 B",
+      "localidad": "CABA",
+      "fechaDespacho": "12/09/2026",
+      "entregaEstimada": "17/09/2026",
+      "estado": "demorado",
+      "eventos": [
+        { "fecha": "16/09/2026", "detalle": "En tránsito — Centro de Distribución Monte Grande" },
+        { "fecha": "13/09/2026", "detalle": "Despachado desde Sucursal Once" },
+        { "fecha": "12/09/2026", "detalle": "Envío registrado" }
+      ]
+    },
+    {
+      "id": "CD771204588AR",
+      "numero": "CD 771 204 588 AR",
+      "descripcion": "Sobre documentación",
+      "destinatario": "Estudio Peralta y Asociados",
+      "direccion": "Corrientes 1834, oficina 12",
+      "localidad": "CABA",
+      "fechaDespacho": "15/09/2026",
+      "entregaEstimada": "18/09/2026",
+      "estado": "entrega_fallida",
+      "eventos": [
+        { "fecha": "18/09/2026", "detalle": "Visita sin éxito — domicilio cerrado" },
+        { "fecha": "17/09/2026", "detalle": "En reparto" },
+        { "fecha": "15/09/2026", "detalle": "Envío registrado" }
+      ]
+    },
+    {
+      "id": "CD338907612AR",
+      "numero": "CD 338 907 612 AR",
+      "descripcion": "Caja mediana — 4,5 kg",
+      "destinatario": "Lucas Fernández",
+      "direccion": "San Martín 275",
+      "localidad": "Rosario, Santa Fe",
+      "fechaDespacho": "08/09/2026",
+      "entregaEstimada": "12/09/2026",
+      "fechaEntrega": "12/09/2026",
+      "receptor": "L. Fernández (DNI 3•••••21)",
+      "estado": "entregado",
+      "eventos": [
+        { "fecha": "12/09/2026", "detalle": "Entregado a L. Fernández" },
+        { "fecha": "11/09/2026", "detalle": "En reparto" },
+        { "fecha": "08/09/2026", "detalle": "Envío registrado" }
+      ]
+    },
+    {
+      "id": "CD905517240AR",
+      "numero": "CD 905 517 240 AR",
+      "descripcion": "Paquete — 800 g",
+      "destinatario": "Sofía Ruiz",
+      "direccion": "Belgrano 640",
+      "localidad": "Córdoba",
+      "fechaDespacho": "20/09/2026",
+      "entregaEstimada": "24/09/2026",
+      "estado": "en_transito",
+      "eventos": [
+        { "fecha": "21/09/2026", "detalle": "En tránsito — Centro de Distribución Córdoba" },
+        { "fecha": "20/09/2026", "detalle": "Envío registrado" }
+      ]
+    }
+  ]
+}

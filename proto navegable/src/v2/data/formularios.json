@@ -1,0 +1,296 @@
+{
+  "schema_version": 2,
+  "_advertencia": "FORMULARIO DE REFERENCIA. Los formularios reales ya existen en produccion, viven en otras URLs y varian segun la consulta. Estos NO los reemplazan ni los proponen: sirven para mostrar con que datos llegaria el caso si el asistente lo entregara. La pantalla lo rotula explicitamente.",
+  "_campo_contexto": "Un campo con 'contexto' se resuelve contra el contexto acumulado del asistente (respuestas dadas + datos del envio si se entro desde uno). Si el contexto tiene ese dato, el campo se muestra como PRECARGADO y de solo lectura. Si no lo tiene, el mismo campo se le pide al usuario. Un unico formulario sirve entonces para los dos caminos, sin duplicar definiciones.",
+  "formularios": {
+    "demora": {
+      "titulo": "Reclamo por demora",
+      "campos": [
+        {
+          "id": "numero",
+          "tipo": "text",
+          "label": "Número de envío",
+          "requerido": true,
+          "contexto": "numero"
+        },
+        {
+          "id": "destinatario",
+          "tipo": "text",
+          "label": "Destinatario",
+          "requerido": true,
+          "contexto": "destinatario"
+        },
+        {
+          "id": "entregaEstimada",
+          "tipo": "text",
+          "label": "Entrega estimada",
+          "requerido": false,
+          "contexto": "entregaEstimada"
+        },
+        {
+          "id": "ultimoEvento",
+          "tipo": "text",
+          "label": "Último movimiento",
+          "requerido": false,
+          "contexto": "ultimoEvento"
+        },
+        {
+          "id": "contactoPreferido",
+          "tipo": "select",
+          "label": "¿Cómo preferís que te contactemos?",
+          "requerido": true,
+          "opciones": [
+            {
+              "value": "telefono",
+              "label": "Teléfono"
+            },
+            {
+              "value": "email",
+              "label": "Email"
+            },
+            {
+              "value": "whatsapp",
+              "label": "WhatsApp"
+            }
+          ]
+        },
+        {
+          "id": "telefono",
+          "tipo": "text",
+          "label": "Teléfono de contacto",
+          "requerido": true
+        },
+        {
+          "id": "detalle",
+          "tipo": "textarea",
+          "label": "¿Querés agregar algo más?",
+          "requerido": false
+        }
+      ]
+    },
+    "entrega": {
+      "titulo": "Reclamo por entrega no concretada",
+      "campos": [
+        {
+          "id": "numero",
+          "tipo": "text",
+          "label": "Número de envío",
+          "requerido": true,
+          "contexto": "numero"
+        },
+        {
+          "id": "direccion",
+          "tipo": "text",
+          "label": "Domicilio de entrega",
+          "requerido": true,
+          "contexto": "direccion"
+        },
+        {
+          "id": "ultimoEvento",
+          "tipo": "text",
+          "label": "Último movimiento",
+          "requerido": false,
+          "contexto": "ultimoEvento"
+        },
+        {
+          "id": "direccionCorrecta",
+          "tipo": "radio",
+          "label": "¿El domicilio de entrega es correcto?",
+          "requerido": true,
+          "opciones": [
+            {
+              "value": "si",
+              "label": "Sí, el domicilio es correcto"
+            },
+            {
+              "value": "no",
+              "label": "No, necesito corregirlo"
+            }
+          ]
+        },
+        {
+          "id": "direccionNueva",
+          "tipo": "text",
+          "label": "Domicilio corregido",
+          "requerido": false,
+          "hint": "Completalo sólo si el domicilio de arriba está mal."
+        },
+        {
+          "id": "franjaHoraria",
+          "tipo": "select",
+          "label": "¿En qué franja horaria podemos volver a intentarlo?",
+          "requerido": true,
+          "opciones": [
+            {
+              "value": "manana",
+              "label": "Mañana (8 a 13)"
+            },
+            {
+              "value": "tarde",
+              "label": "Tarde (13 a 18)"
+            },
+            {
+              "value": "cualquiera",
+              "label": "Cualquier horario"
+            }
+          ]
+        }
+      ]
+    },
+    "contenido": {
+      "titulo": "Reclamo por el contenido del envío",
+      "campos": [
+        {
+          "id": "numero",
+          "tipo": "text",
+          "label": "Número de envío",
+          "requerido": true,
+          "contexto": "numero"
+        },
+        {
+          "id": "destinatario",
+          "tipo": "text",
+          "label": "Destinatario",
+          "requerido": true,
+          "contexto": "destinatario"
+        },
+        {
+          "id": "fechaEntrega",
+          "tipo": "text",
+          "label": "Fecha de entrega",
+          "requerido": false,
+          "contexto": "fechaEntrega"
+        },
+        {
+          "id": "receptor",
+          "tipo": "text",
+          "label": "Recibido por",
+          "requerido": false,
+          "contexto": "receptor"
+        },
+        {
+          "id": "quePaso",
+          "tipo": "textarea",
+          "label": "¿Qué falta o qué daño tiene?",
+          "requerido": true,
+          "hint": "Contanos qué esperabas recibir y en qué estado llegó."
+        },
+        {
+          "id": "valorDeclarado",
+          "tipo": "text",
+          "label": "Valor aproximado de lo reclamado",
+          "requerido": false
+        },
+        {
+          "id": "tieneFotos",
+          "tipo": "radio",
+          "label": "¿Tenés fotos del paquete o del contenido?",
+          "requerido": true,
+          "opciones": [
+            {
+              "value": "si",
+              "label": "Sí, puedo adjuntarlas"
+            },
+            {
+              "value": "no",
+              "label": "No tengo fotos"
+            }
+          ]
+        }
+      ]
+    },
+    "facturacion": {
+      "titulo": "Reclamo de facturación",
+      "campos": [
+        {
+          "id": "numeroFactura",
+          "tipo": "text",
+          "label": "Número de factura o comprobante",
+          "requerido": true
+        },
+        {
+          "id": "detalle",
+          "tipo": "textarea",
+          "label": "¿Qué error encontraste?",
+          "requerido": true
+        },
+        {
+          "id": "telefono",
+          "tipo": "text",
+          "label": "Teléfono de contacto",
+          "requerido": true
+        }
+      ]
+    },
+    "cuenta": {
+      "titulo": "Reclamo sobre mi cuenta",
+      "campos": [
+        {
+          "id": "emailCuenta",
+          "tipo": "text",
+          "label": "Email de la cuenta",
+          "requerido": true
+        },
+        {
+          "id": "detalle",
+          "tipo": "textarea",
+          "label": "Contanos qué pasó",
+          "requerido": true
+        },
+        {
+          "id": "telefono",
+          "tipo": "text",
+          "label": "Teléfono de contacto",
+          "requerido": true
+        }
+      ]
+    },
+    "sellos": {
+      "titulo": "Reclamo sobre sellos digitales u oficios",
+      "campos": [
+        {
+          "id": "numeroOperacion",
+          "tipo": "text",
+          "label": "Número de operación",
+          "requerido": false
+        },
+        {
+          "id": "detalle",
+          "tipo": "textarea",
+          "label": "Contanos qué pasó",
+          "requerido": true
+        },
+        {
+          "id": "telefono",
+          "tipo": "text",
+          "label": "Teléfono de contacto",
+          "requerido": true
+        }
+      ]
+    },
+    "otro": {
+      "titulo": "Otro problema",
+      "campos": [
+        {
+          "id": "numero",
+          "tipo": "text",
+          "label": "Número de envío",
+          "requerido": false,
+          "contexto": "numero"
+        },
+        {
+          "id": "detalle",
+          "tipo": "textarea",
+          "label": "Contanos qué pasó",
+          "requerido": true
+        },
+        {
+          "id": "telefono",
+          "tipo": "text",
+          "label": "Teléfono de contacto",
+          "requerido": true
+        }
+      ]
+    }
+  }
+}

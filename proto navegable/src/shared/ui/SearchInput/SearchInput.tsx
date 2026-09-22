@@ -14,6 +14,11 @@ export interface SearchInputProps extends NativeInputProps {
   readonly placeholder?: string
   readonly ariaLabel?: string
   readonly className?: string
+  /**
+   * Si se pasa, aparece una cruz a la derecha cuando hay texto. Opcional
+   * para no cambiar el comportamiento de los buscadores que ya existen.
+   */
+  readonly onClear?: () => void
 }
 
 function SearchIcon() {
@@ -39,6 +44,7 @@ export function SearchInput({
   placeholder = 'Buscar…',
   ariaLabel,
   className,
+  onClear,
   ...rest
 }: SearchInputProps) {
   return (
@@ -54,6 +60,12 @@ export function SearchInput({
         className={styles.input}
         {...rest}
       />
+
+      {onClear !== undefined && value !== '' && (
+        <button type="button" className={styles.clear} onClick={onClear} aria-label="Borrar la búsqueda">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      )}
     </div>
   )
 }

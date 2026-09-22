@@ -1,0 +1,560 @@
+{
+  "schema_version": 2,
+  "_regla": "NO INVENTAR OPCIONES. Cada hoja de este arbol es, palabra por palabra, una gestion documentada en core/gestiones/data/categorias-gestiones.json (las 19 reales; las 8 marcadas '(Gestion inventada)' de Paqueteria Internacional y Mis Comunicaciones Digitales quedan fuera). Las agrupaciones de segundo nivel son las categorias de ese mismo archivo. Si hace falta una opcion nueva, primero tiene que existir en la documentacion.",
+  "_inferencias": "Lo unico que NO sale del dato: (1) que gestion abre que formulario de referencia; (2) el filtro por estado del envio (\"visibleSi\"); (3) cuales son los accesos rapidos de mayor uso.",
+  "_como_editar": "Diccionario PLANO de nodos: cada opcion apunta a otro nodo por 'next'. No anidar. Un mismo nodo puede ser destino de varias ramas. 'guarda' agrega datos al contexto; una pregunta cuya respuesta ya esta en el contexto se saltea sola. 'visibleSi' oculta una opcion si el contexto tiene ese campo con otro valor. 'tags' alimenta el buscador.",
+  "_regla_de_profundidad": "Maximo 3 preguntas antes de llegar a una hoja; hoy son 2 (tema -> gestion). No se muestra contador en pantalla, a pedido del usuario.",
+  "inicio": "tema",
+  "_accesos_rapidos": "Atajos del inicio. Saltan a un nodo del MISMO arbol (por \"camino\") o a otra pantalla (por \"ruta\"). Los que apuntan a una gestion se ocultan solos si el tipo de usuario activo no ve esa categoria. CUALES son los de mayor uso es una SUPOSICION: no hay dato de frecuencia real. EL ORDEN IMPORTA: se renderizan en este orden y \"Ingresar un reclamo\" va ULTIMO a proposito (pedido del usuario, 22/09) para que el camino guiado sea la opcion mas directa y entrar al formulario en blanco quede como salida de ultimo recurso. Todos los atajos por \"camino\" apuntan a una gestion documentada de las 19 reales.",
+  "accesos_rapidos": [
+    {
+      "id": "ar_demora",
+      "label": "Demora en el servicio",
+      "icono": "reloj",
+      "camino": [
+        "paqueteria_nacional",
+        "demora_servicio"
+      ]
+    },
+    {
+      "id": "ar_entrega",
+      "label": "Inconvenientes con la entrega",
+      "icono": "mapa",
+      "camino": [
+        "paqueteria_nacional",
+        "inconvenientes_entrega"
+      ]
+    },
+    {
+      "id": "ar_paquete_danado",
+      "label": "Paquete dañado",
+      "icono": "paquete-danado",
+      "camino": [
+        "paqueteria_nacional",
+        "paquete_danado"
+      ]
+    },
+    {
+      "id": "ar_factura",
+      "label": "Errores en mi factura",
+      "icono": "factura",
+      "camino": [
+        "franquicias",
+        "errores_factura"
+      ]
+    },
+    {
+      "id": "ar_stock",
+      "label": "No veo el stock",
+      "icono": "fulfillment",
+      "camino": [
+        "fulfillment",
+        "no_veo_stock"
+      ]
+    },
+    {
+      "id": "ar_nuevo_reclamo",
+      "label": "Ingresar un reclamo",
+      "icono": "reclamo-nuevo",
+      "ruta": "/v2/reclamo"
+    }
+  ],
+  "nodos": {
+    "tema": {
+      "tipo": "pregunta",
+      "texto": "Elegí un tema",
+      "guardaEn": "tema",
+      "opciones": [
+        {
+          "id": "mi_cuenta",
+          "label": "Mi Cuenta",
+          "icono": "cuenta",
+          "next": "problema_mi_cuenta",
+          "guarda": {
+            "tema": "mi_cuenta"
+          },
+          "tags": [
+            "cuenta",
+            "usuario",
+            "cobro",
+            "acceso",
+            "mi cuenta"
+          ],
+          "categoria": "mi_cuenta"
+        },
+        {
+          "id": "paqueteria_nacional",
+          "label": "Paquetería Nacional",
+          "icono": "paquete",
+          "next": "problema_paqueteria",
+          "guarda": {
+            "tema": "paqueteria_nacional"
+          },
+          "tags": [
+            "envio",
+            "paquete",
+            "caja",
+            "encomienda",
+            "entrega",
+            "paqueteria nacional"
+          ],
+          "categoria": "paqueteria_nacional"
+        },
+        {
+          "id": "franquicias",
+          "label": "Franquicias",
+          "icono": "franquicia",
+          "next": "problema_franquicias",
+          "guarda": {
+            "tema": "franquicias"
+          },
+          "tags": [
+            "franquicia",
+            "franquicias",
+            "sello",
+            "factura",
+            "saldo"
+          ],
+          "categoria": "franquicias"
+        },
+        {
+          "id": "fulfillment",
+          "label": "Fulfillment",
+          "icono": "fulfillment",
+          "next": "problema_fulfillment",
+          "guarda": {
+            "tema": "fulfillment"
+          },
+          "tags": [
+            "fulfillment",
+            "stock",
+            "armado",
+            "pedidos",
+            "carga"
+          ],
+          "categoria": "fulfillment"
+        },
+        {
+          "id": "oficios_judiciales",
+          "label": "Oficios Judiciales",
+          "icono": "oficio",
+          "next": "problema_oficios",
+          "guarda": {
+            "tema": "oficios_judiciales"
+          },
+          "tags": [
+            "oficio",
+            "oficios judiciales",
+            "judicial",
+            "justicia",
+            "citacion",
+            "pago"
+          ],
+          "categoria": "oficios_judiciales"
+        }
+      ]
+    },
+    "problema_mi_cuenta": {
+      "tipo": "pregunta",
+      "texto": "¿Qué necesitás resolver?",
+      "guardaEn": "problema",
+      "opciones": [
+        {
+          "id": "cobro_erroneo",
+          "label": "Recibí un cobro erróneo",
+          "next": "form_facturacion",
+          "guarda": {
+            "problema": "cobro_erroneo"
+          },
+          "tags": [
+            "cobro",
+            "erroneo",
+            "error",
+            "falla",
+            "debito",
+            "monto",
+            "cargo"
+          ]
+        },
+        {
+          "id": "usuario_adicional",
+          "label": "Inconvenientes para dar de alta un usuario adicional",
+          "next": "form_cuenta",
+          "guarda": {
+            "problema": "usuario_adicional"
+          },
+          "tags": [
+            "usuario",
+            "adicional",
+            "alta",
+            "permiso",
+            "equipo",
+            "problema",
+            "inconveniente"
+          ]
+        }
+      ]
+    },
+    "problema_paqueteria": {
+      "tipo": "pregunta",
+      "texto": "¿Qué necesitás resolver?",
+      "guardaEn": "problema",
+      "opciones": [
+        {
+          "id": "demora_servicio",
+          "label": "Demora en el servicio",
+          "next": "form_demora",
+          "guarda": {
+            "problema": "demora_servicio"
+          },
+          "visibleSi": {
+            "estado": [
+              "en_transito",
+              "demorado"
+            ]
+          },
+          "tags": [
+            "demora",
+            "tarda",
+            "atraso",
+            "no llego",
+            "lento",
+            "problema",
+            "perdido"
+          ]
+        },
+        {
+          "id": "falta_seguimiento",
+          "label": "Falta o error en la información de seguimiento",
+          "next": "form_demora",
+          "guarda": {
+            "problema": "falta_seguimiento"
+          },
+          "tags": [
+            "seguimiento",
+            "tracking",
+            "estado",
+            "error",
+            "falla",
+            "sin movimiento",
+            "informacion"
+          ]
+        },
+        {
+          "id": "inconvenientes_entrega",
+          "label": "Inconvenientes con la entrega",
+          "next": "form_entrega",
+          "guarda": {
+            "problema": "inconvenientes_entrega"
+          },
+          "visibleSi": {
+            "estado": [
+              "demorado",
+              "entrega_fallida"
+            ]
+          },
+          "tags": [
+            "entrega",
+            "domicilio",
+            "direccion",
+            "visita",
+            "sucursal",
+            "retiro",
+            "ausente",
+            "problema"
+          ]
+        },
+        {
+          "id": "no_puedo_pagar",
+          "label": "No puedo pagar mis envíos",
+          "next": "form_facturacion",
+          "guarda": {
+            "problema": "no_puedo_pagar"
+          },
+          "tags": [
+            "pago",
+            "pagar",
+            "tarjeta",
+            "cobro",
+            "no acepta",
+            "error",
+            "falla"
+          ]
+        },
+        {
+          "id": "paquete_danado",
+          "label": "Paquete dañado",
+          "next": "form_contenido",
+          "guarda": {
+            "problema": "paquete_danado"
+          },
+          "visibleSi": {
+            "estado": [
+              "entregado"
+            ]
+          },
+          "tags": [
+            "dañado",
+            "roto",
+            "golpeado",
+            "daño",
+            "falla",
+            "paquete",
+            "caja"
+          ]
+        },
+        {
+          "id": "paquete_faltante",
+          "label": "Paquete con faltante de contenido",
+          "next": "form_contenido",
+          "guarda": {
+            "problema": "paquete_faltante"
+          },
+          "visibleSi": {
+            "estado": [
+              "entregado"
+            ]
+          },
+          "tags": [
+            "faltante",
+            "falta",
+            "incompleto",
+            "robo",
+            "vacio",
+            "contenido",
+            "paquete"
+          ]
+        }
+      ]
+    },
+    "problema_franquicias": {
+      "tipo": "pregunta",
+      "texto": "¿Qué necesitás resolver?",
+      "guardaEn": "problema",
+      "opciones": [
+        {
+          "id": "generar_sello",
+          "label": "Problemas para generar el sello digital",
+          "next": "form_sellos",
+          "guarda": {
+            "problema": "generar_sello"
+          },
+          "tags": [
+            "sello",
+            "digital",
+            "generar",
+            "emitir",
+            "error",
+            "falla",
+            "problema"
+          ]
+        },
+        {
+          "id": "pago_sello",
+          "label": "Problema con el pago de sellos digitales",
+          "next": "form_sellos",
+          "guarda": {
+            "problema": "pago_sello"
+          },
+          "tags": [
+            "sello",
+            "pago",
+            "pagar",
+            "cobro",
+            "tarjeta",
+            "error",
+            "problema"
+          ]
+        },
+        {
+          "id": "errores_factura",
+          "label": "Errores en mi factura",
+          "next": "form_facturacion",
+          "guarda": {
+            "problema": "errores_factura"
+          },
+          "tags": [
+            "factura",
+            "facturacion",
+            "error",
+            "falla",
+            "monto",
+            "comprobante",
+            "cobro"
+          ]
+        },
+        {
+          "id": "errores_saldo",
+          "label": "Errores con el saldo de mi cuenta",
+          "next": "form_facturacion",
+          "guarda": {
+            "problema": "errores_saldo"
+          },
+          "tags": [
+            "saldo",
+            "credito",
+            "dinero",
+            "plata",
+            "recarga",
+            "error",
+            "falla"
+          ]
+        }
+      ]
+    },
+    "problema_oficios": {
+      "tipo": "pregunta",
+      "texto": "¿Qué necesitás resolver?",
+      "guardaEn": "problema",
+      "opciones": [
+        {
+          "id": "pago_oficios",
+          "label": "Inconvenientes con el pago de oficios judiciales",
+          "next": "form_sellos",
+          "guarda": {
+            "problema": "pago_oficios"
+          },
+          "tags": [
+            "oficio",
+            "judicial",
+            "justicia",
+            "citacion",
+            "pago",
+            "cobro",
+            "error",
+            "falla"
+          ]
+        }
+      ]
+    },
+    "problema_fulfillment": {
+      "tipo": "pregunta",
+      "texto": "¿Qué necesitás resolver?",
+      "guardaEn": "problema",
+      "opciones": [
+        {
+          "id": "demora_armado",
+          "label": "Demora en el armado de los envíos",
+          "next": "form_otro",
+          "guarda": {
+            "problema": "demora_armado"
+          },
+          "tags": [
+            "demora",
+            "armado",
+            "tarda",
+            "atraso",
+            "fulfillment",
+            "problema"
+          ]
+        },
+        {
+          "id": "diferencia_armado",
+          "label": "Diferencia en el armado del envío",
+          "next": "form_otro",
+          "guarda": {
+            "problema": "diferencia_armado"
+          },
+          "tags": [
+            "diferencia",
+            "armado",
+            "error",
+            "falla",
+            "fulfillment"
+          ]
+        },
+        {
+          "id": "diferencia_stock",
+          "label": "Diferencia de stock",
+          "next": "form_otro",
+          "guarda": {
+            "problema": "diferencia_stock"
+          },
+          "tags": [
+            "stock",
+            "diferencia",
+            "inventario",
+            "faltante",
+            "fulfillment"
+          ]
+        },
+        {
+          "id": "carga_envios",
+          "label": "Inconvenientes con la carga de envíos",
+          "next": "form_otro",
+          "guarda": {
+            "problema": "carga_envios"
+          },
+          "tags": [
+            "carga",
+            "subir",
+            "envios",
+            "problema",
+            "inconveniente",
+            "fulfillment"
+          ]
+        },
+        {
+          "id": "carga_pedidos",
+          "label": "Inconveniente en la carga de los pedidos",
+          "next": "form_otro",
+          "guarda": {
+            "problema": "carga_pedidos"
+          },
+          "tags": [
+            "carga",
+            "pedidos",
+            "problema",
+            "inconveniente",
+            "fulfillment"
+          ]
+        },
+        {
+          "id": "no_veo_stock",
+          "label": "No veo el stock",
+          "next": "form_otro",
+          "guarda": {
+            "problema": "no_veo_stock"
+          },
+          "tags": [
+            "stock",
+            "no veo",
+            "inventario",
+            "visualizar",
+            "fulfillment"
+          ]
+        }
+      ]
+    },
+    "form_demora": {
+      "tipo": "formulario",
+      "formulario": "demora"
+    },
+    "form_entrega": {
+      "tipo": "formulario",
+      "formulario": "entrega"
+    },
+    "form_contenido": {
+      "tipo": "formulario",
+      "formulario": "contenido"
+    },
+    "form_facturacion": {
+      "tipo": "formulario",
+      "formulario": "facturacion"
+    },
+    "form_cuenta": {
+      "tipo": "formulario",
+      "formulario": "cuenta"
+    },
+    "form_sellos": {
+      "tipo": "formulario",
+      "formulario": "sellos"
+    },
+    "form_otro": {
+      "tipo": "formulario",
+      "formulario": "otro"
+    }
+  },
+  "_visibilidad_por_perfil": "Las opciones de \"tema\" declaran su \"categoria\". El asistente filtra con la regla profile_category_visibility de core/gestiones/data/categorias-gestiones.json (fuente canonica, NO se copia aca): individuo y pyme no ven Franquicias ni Fulfillment; franquicias no ve Fulfillment; fulfillment no ve Franquicias; Mi Cuenta la ven los cuatro. El tipo de usuario activo se simula desde el panel Casos de uso.",
+  "_primer_nivel": "El primer nivel SON las categorias documentadas, no un agrupamiento inventado por encima. La documentacion no define ningun nivel superior a las categorias. Cuantas tarjetas ve el usuario depende de profile_category_visibility: Individuo/Pyme ven 3 (Mi Cuenta, Paqueteria Nacional, Oficios Judiciales); Franquicias y Fulfillment ven 4. Se elimino la pregunta inicial \"tengo cuenta / no tengo cuenta\" el 2026-09-22: a esta seccion no llega un usuario sin cuenta."
+}

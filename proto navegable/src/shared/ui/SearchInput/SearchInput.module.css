@@ -45,6 +45,29 @@
   outline: none;
 }
 
+/* Cruz para vaciar la búsqueda. Sólo se renderiza si se pasa `onClear`. */
+.clear {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  margin-left: var(--space-2);
+  border: none;
+  border-radius: var(--radius-full);
+  background: none;
+  color: var(--icon-enabled);
+  font-size: var(--font-size-lg);
+  line-height: 1;
+  cursor: pointer;
+}
+
+.clear:hover {
+  background: var(--surface-sunken);
+  color: var(--text-primary);
+}
+
 /* Oculta la "x" nativa de type=search en Chrome/Edge — el diseño no la pide. */
 .input::-webkit-search-cancel-button {
   display: none;

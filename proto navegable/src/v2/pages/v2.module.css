@@ -1,0 +1,527 @@
+/*
+ * Estilos de las pantallas de la propuesta V2.
+ *
+ * Un solo módulo porque las pantallas comparten casi todo (tarjeta, fila,
+ * panel de datos). Todo sale de los tokens de MiCorreo: V2 no introduce una
+ * paleta propia, sólo una distribución distinta.
+ *
+ * La distribución en tarjetas sigue la imagen de referencia aportada por el
+ * usuario (una página de "Contactanos" con grilla de opciones + una fila de
+ * accesos rápidos abajo). El contenido de cada tarjeta va centrado como en
+ * esa referencia, pero la página NO se centra: mantiene la alineación a la
+ * izquierda del chrome real de MiCorreo (decisión del 2026-09-02).
+ */
+
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+  max-width: 1000px;
+}
+
+.search {
+  max-width: 1000px;
+  margin-bottom: var(--space-6);
+}
+
+.backLink {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  border: none;
+  background: none;
+  padding: 0;
+  margin-bottom: var(--space-4);
+  color: var(--text-link);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  cursor: pointer;
+}
+
+.backLink:hover {
+  text-decoration: underline;
+}
+
+/* --- Camino recorrido ----------------------------------------------------- */
+
+/* Barra de salida: "Volver" arriba y a la izquierda, se haya llegado por el
+ * buscador o eligiendo tarjetas. En el recorrido guiado le siguen las migas,
+ * que son las que permiten saltar a un punto intermedio. */
+.barraVolver {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-4);
+  max-width: 1000px;
+}
+
+.camino {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.crumb,
+.crumbAuto {
+  border: var(--border-width-thin) solid var(--border-subtle);
+  border-radius: var(--radius-pill);
+  background: var(--surface-raised);
+  padding: var(--space-1) var(--space-3);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+}
+
+.crumb {
+  color: var(--text-link);
+  cursor: pointer;
+}
+
+.crumb:hover {
+  border-color: var(--border-strong);
+}
+
+/* Respuesta que resolvió el contexto: se muestra, pero no se puede editar. */
+.crumbAuto {
+  border-style: dashed;
+  background: none;
+  color: var(--text-subtle);
+  font-weight: var(--font-weight-medium);
+}
+
+
+/* --- Pregunta ------------------------------------------------------------- */
+
+/* Una línea corta, no un título: el encabezado de la pantalla ya pregunta. */
+.preguntaLinea {
+  margin: 0 0 var(--space-4);
+  color: var(--text-muted);
+  font-size: var(--font-size-base);
+}
+
+/* --- Grilla de tarjetas --------------------------------------------------- */
+
+/* `auto-fit` en vez de 3 columnas fijas: una pregunta con 2 opciones las
+ * reparte a mitades en vez de dejar un hueco a la derecha. */
+.grilla {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: var(--space-4);
+  max-width: 1000px;
+}
+
+.tarjeta {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
+  border: var(--border-width-thin) solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  background: var(--surface-raised);
+  box-shadow: var(--shadow-row);
+  padding: var(--space-6) var(--space-4);
+  text-align: center;
+  cursor: pointer;
+  transition:
+    border-color var(--transition-fast),
+    box-shadow var(--transition-fast);
+}
+
+.tarjeta:hover {
+  border-color: var(--border-strong);
+  box-shadow: var(--shadow-card-hover);
+}
+
+.tarjetaIcono {
+  color: var(--color-accent);
+}
+
+.tarjetaLabel {
+  color: var(--text-primary);
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--line-height-snug);
+}
+
+.tarjetaDesc {
+  color: var(--text-muted);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-snug);
+}
+
+/* --- Lista de filas ------------------------------------------------------- */
+
+.lista {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  max-width: 1000px;
+}
+
+.fila {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  width: 100%;
+  border: var(--border-width-thin) solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  background: var(--surface-raised);
+  padding: var(--space-4);
+  text-align: left;
+  cursor: pointer;
+  transition: border-color var(--transition-fast);
+}
+
+.fila:hover {
+  border-color: var(--border-strong);
+}
+
+.filaLabel {
+  display: block;
+  color: var(--text-primary);
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-semibold);
+}
+
+.filaRuta {
+  display: block;
+  margin-top: var(--space-1);
+  color: var(--text-muted);
+  font-size: var(--font-size-sm);
+}
+
+.filaFlecha {
+  flex-shrink: 0;
+  color: var(--icon-enabled);
+}
+
+/* --- Búsqueda ------------------------------------------------------------- */
+
+.cargando {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin: 0;
+  color: var(--text-muted);
+  font-size: var(--font-size-sm);
+}
+
+.spinner {
+  width: 14px;
+  height: 14px;
+  border: 2px solid var(--border-subtle);
+  border-top-color: var(--color-accent);
+  border-radius: var(--radius-full);
+  animation: girar 0.6s linear infinite;
+}
+
+@keyframes girar {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .spinner {
+    animation-duration: 2s;
+  }
+}
+
+.volverGuiada {
+  border: none;
+  background: none;
+  padding: 0;
+  color: var(--text-link);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  cursor: pointer;
+}
+
+.volverGuiada:hover {
+  text-decoration: underline;
+}
+
+/* --- Accesos rápidos ------------------------------------------------------ */
+
+.accesos {
+  border-top: var(--border-width-thin) solid var(--border-subtle);
+  padding-top: var(--space-6);
+  max-width: 1000px;
+}
+
+.accesosTitulo {
+  margin: 0 0 var(--space-4);
+  color: var(--text-primary);
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-semibold);
+}
+
+/* `auto-fit`: la cantidad de atajos cambia según el tipo de usuario, así que
+ * la grilla se acomoda sola en vez de dejar huecos o desbordar. */
+.accesosGrilla {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: var(--space-3);
+}
+
+.accesoTarjeta {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
+  border: var(--border-width-thin) solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  background: var(--surface-raised);
+  box-shadow: var(--shadow-row);
+  padding: var(--space-4) var(--space-3);
+  text-align: center;
+  cursor: pointer;
+  transition:
+    border-color var(--transition-fast),
+    box-shadow var(--transition-fast);
+}
+
+.accesoTarjeta:hover {
+  border-color: var(--border-strong);
+  box-shadow: var(--shadow-card-hover);
+}
+
+.accesoLabel {
+  color: var(--text-primary);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  line-height: var(--line-height-snug);
+}
+
+.accesoDesc {
+  color: var(--text-subtle);
+  font-size: var(--font-size-xs);
+}
+
+/* --- Tarjeta de envío ----------------------------------------------------- */
+
+.cards {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  max-width: 1000px;
+}
+
+.card {
+  display: block;
+  width: 100%;
+  border: var(--border-width-thin) solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  background: var(--surface-raised);
+  padding: var(--space-4);
+  text-align: left;
+  cursor: pointer;
+  transition: border-color var(--transition-fast);
+}
+
+.card:hover {
+  border-color: var(--border-strong);
+}
+
+.cardTop {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-4);
+}
+
+.cardNumero {
+  margin: 0;
+  color: var(--text-primary);
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-semibold);
+}
+
+.cardDesc {
+  margin: var(--space-1) 0 0;
+  color: var(--text-muted);
+  font-size: var(--font-size-sm);
+}
+
+.cardEvento {
+  margin: var(--space-3) 0 0;
+  color: var(--text-subtle);
+  font-size: var(--font-size-xs);
+}
+
+.cardProblema {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-top: var(--space-3);
+  border-top: var(--border-width-thin) solid var(--border-subtle);
+  padding-top: var(--space-3);
+  color: var(--text-link);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+}
+
+/* --- Panel de datos ------------------------------------------------------- */
+
+.panel {
+  border: var(--border-width-thin) solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  background: var(--surface-raised);
+  padding: var(--space-5);
+}
+
+.panelTitle {
+  margin: 0 0 var(--space-4);
+  color: var(--text-primary);
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-semibold);
+}
+
+.panelNote {
+  margin: 0 0 var(--space-4);
+  max-width: 70ch;
+  color: var(--text-muted);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-normal);
+}
+
+.sectionNote {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: var(--font-size-sm);
+}
+
+.dataGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-4);
+}
+
+.dataItem {
+  min-width: 0;
+}
+
+.dataLabel {
+  margin: 0;
+  color: var(--text-subtle);
+  font-size: var(--font-size-xs);
+}
+
+.dataValue {
+  margin: var(--space-1) 0 0;
+  color: var(--text-primary);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  overflow-wrap: anywhere;
+}
+
+/* --- Seguimiento ---------------------------------------------------------- */
+
+.timeline {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.event {
+  display: flex;
+  gap: var(--space-4);
+  font-size: var(--font-size-sm);
+}
+
+.eventFecha {
+  flex-shrink: 0;
+  width: 92px;
+  color: var(--text-subtle);
+}
+
+.eventDetalle {
+  color: var(--text-primary);
+}
+
+/* --- Formulario ----------------------------------------------------------- */
+
+/* Rótulo honesto: los formularios reales viven en otras URLs. */
+.formularioTitulo {
+  margin: 0 0 var(--space-2);
+  color: var(--text-primary);
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+}
+
+.formularioNota {
+  margin: 0;
+  max-width: 70ch;
+  color: var(--text-muted);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-normal);
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+.formActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+}
+
+/* --- Responsive ----------------------------------------------------------- */
+
+@media (max-width: 767.98px) {
+  .grilla,
+  .accesosGrilla {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .dataGrid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .cardTop {
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  .event {
+    flex-direction: column;
+    gap: var(--space-1);
+  }
+
+  .eventFecha {
+    width: auto;
+  }
+}
+
+
+/*
+ * El switch "Responsive" del panel de herramientas fuerza el layout mobile
+ * sin angostar la ventana real, así que estas reglas se repiten bajo
+ * `.force-mobile` — mismo patrón que Header/Sidebar/AppShell.
+ */
+:global(.force-mobile) .grilla,
+:global(.force-mobile) .accesosGrilla,
+:global(.force-mobile) .dataGrid {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+:global(.force-mobile) .cardTop {
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+:global(.force-mobile) .event {
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+:global(.force-mobile) .eventFecha {
+  width: auto;
+}
