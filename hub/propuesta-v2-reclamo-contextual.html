@@ -1,0 +1,194 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Propuesta V2 — Asistente guiado</title>
+<link rel="stylesheet" href="hub.css" />
+</head>
+<body>
+  <header class="top">
+    <div class="brand">Correo Argentino · MiCorreo</div>
+    <p>Documentación — Propuesta V2</p>
+  </header>
+
+  <main>
+    <div class="top-row">
+      <a class="back-link" href="documentacion.html">&larr; Volver a Documentación</a>
+      <a class="download-btn" href="downloads/propuesta-v2-reclamo-contextual.md" download title="Descargar propuesta-v2-reclamo-contextual.md">
+        <svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M8 1v9m0 0L4.5 6.5M8 10l3.5-3.5M2 12v1.5A1.5 1.5 0 0 0 3.5 15h9a1.5 1.5 0 0 0 1.5-1.5V12" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Descargar
+      </a>
+    </div>
+
+    <div class="status-bar">
+      <span class="pill draft">Alternativa en exploración</span>
+      <span class="pill">Fuera del MVP con fecha 07/10/2026</span>
+    </div>
+
+    <h1>Propuesta V2 — Asistente guiado</h1>
+
+    <blockquote>
+      <strong>Esta propuesta NO reemplaza a V1.</strong> Las dos conviven y se
+      eligen al entrar al prototipo. V1 es la propuesta ya presentada; V2 es
+      una segunda lectura del mismo problema, abierta a partir de la
+      inconformidad del cliente con el enfoque de sección única.
+    </blockquote>
+
+    <h2>1. La idea</h2>
+    <p>
+      En V1 el usuario entra a una sección y tiene que <strong>encontrar su
+      caso dentro del catálogo completo</strong>. En V2 no hay catálogo a la
+      vista: el sistema hace unas pocas preguntas y <strong>va podando</strong>
+      hasta dejarlo en el lugar correcto.
+    </p>
+
+    <h3>Dos caminos, un solo árbol</h3>
+    <p>
+      El buscador <strong>no es una pantalla aparte</strong>: busca sobre las
+      hojas del mismo árbol y, al elegir un resultado, deja el asistente
+      exactamente donde habría quedado contestando pregunta por pregunta. Por
+      eso el resultado muestra también su ruta.
+    </p>
+
+    <h2>2. Las reglas de diseño</h2>
+    <ol>
+      <li><strong>Máximo 3 preguntas</strong> antes de llegar a destino (hoy
+      son 2). <strong>No se muestra un contador</strong> a propósito:
+      condiciona al usuario.</li>
+      <li><strong>El buscador queda</strong>, como atajo para quien ya sabe
+      qué quiere.</li>
+      <li><strong>Se puede volver atrás</strong> a cualquier respuesta ya
+      dada. La salida está siempre en el mismo lugar —arriba a la
+      izquierda, un botón <strong>"← Volver"</strong>— se haya llegado por
+      el buscador o eligiendo tarjetas.</li>
+      <li><strong>Poco texto</strong>: sin subtítulos explicativos ni
+      descripciones bajo las opciones.</li>
+      <li><strong>Nada inventado en el listado de opciones.</strong></li>
+    </ol>
+    <p>
+      Los íconos son de Lucide. Las tarjetas llevan una sombra suave para
+      despegarse del fondo. El contenido de cada tarjeta va centrado como en
+      la imagen de referencia, pero la página no se centra: conserva la
+      alineación izquierda del chrome real de MiCorreo.
+    </p>
+
+    <h2>3. Regla de contenido: nada inventado</h2>
+    <p>
+      <strong>Cada hoja del árbol es, palabra por palabra, una gestión
+      documentada.</strong> Las 19 gestiones reales de
+      <code>categorias-gestiones.json</code> están todas, y no hay ninguna de
+      más: las 8 marcadas "(Gestión inventada)" quedan fuera. Las agrupaciones
+      son las categorías de ese mismo archivo.
+    </p>
+    <p>
+      Verificado por script: 19 documentadas, 19 hojas, ninguna sin usar,
+      ninguna de más, profundidad máxima 2 preguntas.
+    </p>
+    <p>Lo único que <strong>no</strong> sale del dato, y hay que validar:</p>
+    <ol>
+      <li>qué gestión abre qué formulario de referencia;</li>
+      <li>el filtro por estado del envío;</li>
+      <li>cuáles son los accesos rápidos de mayor uso.</li>
+    </ol>
+
+    <h2>4. El árbol de hoy</h2>
+    <pre><code>Elegí un tema
+├─ Mi Cuenta → 2 gestiones
+├─ Paquetería Nacional → 6 gestiones
+├─ Franquicias → 4 gestiones          (sólo usuario Franquicias)
+├─ Fulfillment → 6 gestiones          (sólo usuario Fulfillment)
+└─ Oficios Judiciales → 1 gestión</code></pre>
+
+    <h3>Por qué el primer nivel son las categorías</h3>
+    <p>
+      Se quitó la pregunta inicial "¿Tenés cuenta en MiCorreo?": a esta sección
+      <strong>no llega un usuario sin cuenta</strong>. Al buscar con qué
+      reemplazarla, la respuesta estaba en la documentación:
+      <strong>no existe ningún nivel de agrupación por encima de las
+      categorías</strong>. Inventar tres "temas principales" habría sido
+      agregar una capa que nadie definió.
+    </p>
+    <p>
+      Que a un usuario común le queden exactamente 3 tarjetas no es una
+      decisión de diseño: es lo que resulta de aplicar la regla de visibilidad
+      documentada.
+    </p>
+
+    <h2>5. Qué ve cada tipo de usuario</h2>
+    <p>
+      Es la misma <code>profile_category_visibility</code> que ya usa V1, y V2
+      la <strong>consulta</strong> desde su fuente canónica en vez de copiarla.
+      El tipo de usuario se simula desde el panel "Casos de uso".
+    </p>
+    <table>
+      <thead><tr><th>Tipo de usuario</th><th>Ve</th><th>Atajos</th></tr></thead>
+      <tbody>
+        <tr><td>Individuo / Pyme</td><td>Mi Cuenta · Paquetería Nacional · Oficios Judiciales</td><td>4</td></tr>
+        <tr><td>Franquicias</td><td>+ Franquicias (no ve Fulfillment)</td><td>5</td></tr>
+        <tr><td>Fulfillment</td><td>+ Fulfillment (no ve Franquicias)</td><td>5</td></tr>
+      </tbody>
+    </table>
+    <p>
+      El filtro alcanza también al <strong>buscador</strong> y a los accesos
+      rápidos: buscar "stock" siendo Individuo da cero resultados.
+    </p>
+
+    <h2>6. Los formularios son de referencia</h2>
+    <p>
+      Los formularios reales <strong>ya existen en producción</strong>, viven
+      en otras URLs y varían según la consulta. Los del prototipo no los
+      reemplazan: están rotulados en pantalla como
+      <strong>"Formulario de referencia"</strong>. Sirven para mostrar una sola
+      cosa: con qué datos llegaría el caso si el asistente lo entregara.
+    </p>
+
+    <h2>7. Lo que NO tiene</h2>
+    <p>
+      <strong>No hay pantalla de "Mis gestiones" ni seguimiento de
+      reclamos.</strong> Se había construido una y se quitó: nunca se pidió, y
+      el HTML de producción tampoco la tiene. El alcance de V2 termina en el
+      número de caso.
+    </p>
+
+    <h2>8. Conflicto de alcance con el acta del 31/08/2026</h2>
+    <p>
+      El acta acordó que en este MVP (producción 07/10/2026) <strong>no se
+      rediseñan los formularios</strong>. V2 rediseña el recorrido completo.
+      Por eso se presenta como <strong>alternativa fuera del MVP vigente</strong>.
+      Si V2 pasara a ser el camino elegido, esa fecha deja de ser sostenible.
+    </p>
+
+    <h2>9. Preguntas abiertas</h2>
+    <ol>
+      <li>¿Las categorías son el mejor primer nivel? La asignación de gestiones
+      a Mi Cuenta, Paquetería Nacional y Oficios Judiciales sigue marcada como
+      "inferida por intuición".</li>
+      <li>Oficios Judiciales tiene una sola gestión, así que su segunda
+      pregunta ofrece una única opción. ¿Hay más gestiones para esa categoría?</li>
+      <li>¿Los accesos rápidos que son gestiones son los correctos? No hay
+      dato de frecuencia real de uso. (El 22/09 "Mis envíos" se reemplazó por
+      "Paquete dañado" y "Ingresar un reclamo" pasó al extremo derecho.)</li>
+      <li>¿Se borran las pantallas de envíos? <code>/v2/envios</code> quedó
+      sin entrada desde la interfaz al sacar ese atajo: es la única
+      demostración del reclamo contextual, pero usa datos inventados.</li>
+      <li>¿A qué URL real debería llevar cada formulario?</li>
+      <li>¿Qué otras entidades además del envío deberían tener entrada
+      contextual?</li>
+      <li>¿Qué datos puede precargar realmente el sistema en cada formulario?</li>
+      <li>¿Debería haber respuestas de autoayuda que resuelvan sin abrir
+      reclamo? El motor las soporta; se quitaron porque ninguna está
+      documentada.</li>
+      <li>¿Cómo se relaciona esto con el microservicio "MS Claims"?</li>
+      <li>¿Alcanza con "← Volver" como única salida? El 22/09 se unificó el
+      rótulo en los dos caminos y se quitó "Empezar de nuevo", porque la
+      primera miga ya vuelve al principio.</li>
+    </ol>
+
+    <p class="foot-note">
+      El detalle completo (mecanismos del motor, contexto acumulado, deep
+      links) está en el <code>.md</code> descargable desde el botón de arriba.
+    </p>
+  </main>
+</body>
+</html>
