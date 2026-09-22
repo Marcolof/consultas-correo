@@ -4,8 +4,14 @@
     {
       "name": "proto-navegable",
       "runtimeExecutable": "npm",
-      "runtimeArgs": ["--prefix", "proto navegable", "run", "dev"],
+      "runtimeArgs": ["run", "dev"],
       "port": 4300
+    },
+    {
+      "name": "proto-navegable-4301",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "dev", "--", "--port", "4301", "--strictPort"],
+      "port": 4301
     }
   ]
 }

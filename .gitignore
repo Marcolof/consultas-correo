@@ -28,3 +28,8 @@ dist-ssr/
 # Editor / OS
 .DS_Store
 Thumbs.db
+
+# Punto de retome entre sesiones de trabajo (estado, decisiones pendientes y
+# lectura del contexto de cliente). El repo es público: este archivo se queda
+# en local a propósito — decisión del usuario, 2026-09-22.
+/HANDOFF.md
