@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Presentación V3 · Ayuda y soporte — MiCorreo</title>
+<style>
+  :root {
+    --color-brand-dark: #152663;
+    --color-brand-dark-hover: #263b7f;
+    --color-brand: #ffce00;
+    --color-brand-subtle: #fff6d1;
+    --global-bg: #fafafa;
+    --border-card: #dfe3ea;
+    --gray-100: #f2f2f2;
+    --gray-200: #eeeeee;
+    --gray-900: #191919;
+    --text-primary: #191919;
+    --text-muted: #49454f;
+    --text-subtle: #79747e;
+    --color-success: #10b981;
+    --radius-md: 10px;
+    --radius-lg: 15px;
+    --radius-pill: 32px;
+  }
+
+  * { box-sizing: border-box; }
+  html, body { height: 100%; margin: 0; }
+
+  body {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    background: var(--global-bg);
+    color: var(--text-primary);
+    font-family: "Gilroy", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    font-synthesis: none;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+
+  .deck-stage {
+    flex: 1 1 auto;
+    min-height: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 14px 20px;
+  }
+  .deck { max-width: 1360px; width: 100%; height: 100%; position: relative; margin: 0 auto; }
+
+  .slide {
+    display: none;
+    position: relative;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 40px 44px;
+    border: 1px solid var(--border-card);
+    border-radius: var(--radius-lg);
+    background: #fff;
+    box-shadow: 0 2px 8px rgba(21,38,99,.04);
+    overflow-y: auto;
+  }
+  .slide.is-active { display: flex; flex-direction: column; justify-content: flex-start; }
+
+  .deck-nav {
+    flex: 0 0 auto;
+    display: grid; grid-template-columns: 1fr auto 1fr; align-items: center;
+    padding: 14px 20px;
+    border-top: 1px solid var(--border-card);
+    background: #fff;
+  }
+  .deck-nav__hub { grid-column: 1; justify-self: start; }
+  .deck-nav__controls { grid-column: 2; justify-self: center; display: flex; align-items: center; gap: 22px; }
+  .deck-nav__btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    min-height: 42px; padding: .6rem 1.2rem;
+    border: 1px solid var(--border-card); border-radius: var(--radius-pill);
+    background: #fff; color: var(--color-brand-dark);
+    font-size: .875rem; font-weight: 700; font-family: inherit;
+    text-decoration: none;
+    cursor: pointer; transition: background-color .2s ease-in-out, border-color .2s ease-in-out, opacity .2s ease-in-out;
+  }
+  .deck-nav__btn:hover:not(:disabled) { background: var(--gray-100); border-color: var(--color-brand-dark); }
+  .deck-nav__btn:disabled { opacity: .35; cursor: not-allowed; }
+  .deck-nav__btn svg { width: 18px; height: 18px; }
+  .deck-nav__btn--next { background: var(--color-brand-dark); border-color: var(--color-brand-dark); color: #fff; }
+  .deck-nav__btn--next:hover:not(:disabled) { background: var(--color-brand-dark-hover); border-color: var(--color-brand-dark-hover); }
+  .deck-nav__counter { min-width: 64px; text-align: center; font-size: .8125rem; font-weight: 700; color: var(--text-subtle); font-variant-numeric: tabular-nums; }
+
+  .deck-progress { flex: 0 0 auto; height: 3px; background: var(--gray-200); }
+  .deck-progress__bar { height: 100%; background: var(--color-brand); transition: width .25s ease; }
+
+  .slide-eyebrow { display: inline-flex; align-items:center; gap:8px; align-self: flex-start; margin-bottom: 12px; padding: 5px 14px; border-radius: var(--radius-pill); background: var(--gray-100); color: var(--color-brand-dark); font-size: .8125rem; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; }
+
+  .slide h2 { font-size: 1.85rem; font-weight: 700; margin: 0 0 10px; line-height: 1.2; }
+  .slide p { color: var(--text-muted); max-width: 720px; font-size: 1rem; margin: 0 0 10px; }
+
+  .crumb { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; font-size: 1.0625rem; font-weight: 700; }
+  .crumb span:not(.crumb-sep) { padding: 6px 14px; border-radius: var(--radius-pill); background: rgba(255,255,255,.12); color: #fff; }
+  .crumb-sep { color: var(--color-brand); opacity: .8; }
+
+  /* Portadas */
+  .cover-slide { padding: 0; background: var(--color-brand-dark); border-color: var(--color-brand-dark); overflow: hidden; }
+  .cover-slide.is-active { flex-direction: row; align-items: stretch; justify-content: flex-start; }
+  .cover-slide__bar { flex: 0 0 16px; background: var(--color-brand); }
+  .cover-slide__content { flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; justify-content: center; padding: 56px 64px; }
+  .cover-eyebrow { display: block; margin-bottom: 18px; color: var(--color-brand); font-size: .9375rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; }
+  .cover-title { margin: 0 0 16px; max-width: 900px; font-size: 3rem; font-weight: 700; color: #fff; line-height: 1.15; }
+  .cover-slide p.cover-subtitle { margin: 0; max-width: 680px; font-size: 1.25rem; font-weight: 600; color: #c7d0ea; }
+  .cover-slide .crumb { margin-top: 30px; }
+  @media (max-width: 900px) {
+    .cover-slide__content { padding: 40px 28px; }
+    .cover-title { font-size: 2rem; }
+  }
+
+  /* Slides con captura */
+  .screen-slide-wrap { padding: 0; }
+  .screen-slide-wrap.is-active { flex-direction: column; justify-content: flex-start; }
+
+  .screen-topbar { flex: 0 0 auto; }
+  .screen-topbar__stripe { height: 6px; background: var(--color-brand-dark); }
+  .screen-topbar__band { display: flex; align-items: center; gap: 16px; height: 56px; padding: 0 40px; background: var(--color-brand); }
+  .screen-topbar__logo { height: 24px; width: auto; }
+  .screen-topbar__label { font-size: 1.1875rem; font-weight: 700; color: var(--color-brand-dark); }
+
+  .screen-slide-body { flex: 1 1 auto; min-height: 0; display: flex; align-items: flex-start; padding: 32px 40px; overflow-y: auto; }
+  .plain-body { flex: 1 1 auto; min-height: 0; display: flex; flex-direction: column; justify-content: flex-start; padding: 32px 40px; overflow-y: auto; }
+  .screen-slide-body .screen-slide { width: 100%; }
+
+  .screen-slide { display: grid; grid-template-columns: minmax(250px, 320px) 1fr; gap: 34px; align-items: start; }
+  .screen-slide.reverse { grid-template-columns: 1fr minmax(250px, 320px); }
+  .screen-slide.reverse .screen-text { order: 2; }
+  .screen-slide.reverse .screen-frame-wrap { order: 1; }
+  .screen-slide > * { min-width: 0; }
+  .screen-text h2 { font-size: 1.5rem; }
+  .screen-text p { font-size: .9375rem; }
+  .screen-text ul { margin: 14px 0 0; padding-left: 18px; color: var(--text-muted); font-size: .9375rem; line-height: 1.7; }
+  .screen-text ul li + li { margin-top: 6px; }
+  .screen-text ul li strong { color: var(--text-primary); }
+
+  /* Captura sin marco de mockup: contorno fino y sombra suave. */
+  .screen-frame-wrap { display: flex; justify-content: center; min-width: 0; width: 100%; }
+  .screen-frame {
+    width: 100%; max-width: 980px; max-height: 613px; aspect-ratio: 1440 / 900;
+    border: 1px solid var(--border-card);
+    border-radius: var(--radius-md);
+    background: #fff;
+    overflow: hidden;
+    box-shadow: 0 18px 40px rgba(21,38,99,.14);
+  }
+  .screen-frame iframe { width: 1440px; height: 900px; transform: scale(var(--frame-scale, .5556)); transform-origin: top left; border: 0; pointer-events: none; }
+
+  /* Beneficio destacado debajo de los bullets */
+  .win { display: flex; gap: 10px; align-items: flex-start; margin-top: 18px; padding: 12px 14px; border-radius: var(--radius-md); background: var(--color-brand-subtle); color: var(--color-brand-dark); font-size: .9375rem; font-weight: 700; line-height: 1.4; }
+  .win svg { flex: 0 0 auto; width: 20px; height: 20px; margin-top: 1px; }
+
+  /* Escalabilidad */
+  .future-search { display: flex; align-items: center; gap: 14px; max-width: 760px; margin: 18px 0 6px; padding: 14px 18px; border: 1px solid var(--border-card); border-radius: var(--radius-md); background: #fff; box-shadow: 0 10px 28px rgba(21,38,99,.10); }
+  .future-search svg { flex: 0 0 auto; width: 22px; height: 22px; color: var(--text-subtle); }
+  .future-search__text { flex: 1 1 auto; min-width: 0; color: var(--text-primary); font-size: 1.0625rem; font-weight: 600; }
+  .future-search__caret { display: inline-block; width: 2px; height: 1.1em; margin-left: 2px; vertical-align: -3px; background: var(--color-brand-dark); animation: blink 1s steps(1) infinite; }
+  @keyframes blink { 50% { opacity: 0; } }
+  .future-chip { display: inline-flex; align-items: center; gap: 6px; flex: 0 0 auto; padding: 6px 12px; border-radius: var(--radius-pill); background: var(--color-brand-dark); color: #fff; font-size: .8125rem; font-weight: 700; }
+  .future-chip svg { width: 16px; height: 16px; color: var(--color-brand); }
+  .future-hint { margin: 0 0 4px; font-size: .875rem; color: var(--text-subtle); }
+
+  .steps-row { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; margin-top: 22px; }
+  .steps-row--4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  @media (max-width: 1100px) { .steps-row--4 { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  .step-card { padding: 22px; border-radius: var(--radius-md); background: var(--gray-100); }
+  .step-card__icon { display: inline-grid; place-items: center; width: 44px; height: 44px; margin-bottom: 14px; border-radius: 50%; background: var(--color-brand); color: var(--color-brand-dark); }
+  .step-card__icon svg { width: 22px; height: 22px; }
+  .step-card strong { display: block; margin-bottom: 6px; font-size: 1.0625rem; color: var(--text-primary); }
+  .step-card p { margin: 0; font-size: .9375rem; color: var(--text-muted); }
+  .step-card__tag { display: inline-block; margin-top: 12px; padding: 3px 10px; border-radius: var(--radius-pill); background: #fff; color: var(--color-brand-dark); font-size: .75rem; font-weight: 700; letter-spacing: .03em; text-transform: uppercase; }
+
+  @media (max-width: 900px) {
+    .deck-stage { padding: 14px 16px; }
+    .slide { border-radius: var(--radius-md); }
+    .deck-nav { gap: 12px; padding: 12px 14px; }
+    .deck-nav__btn span.btn-label { display: none; }
+    .screen-slide, .screen-slide.reverse, .steps-row { grid-template-columns: 1fr; }
+    .screen-slide.reverse .screen-text, .screen-slide.reverse .screen-frame-wrap { order: initial; }
+    .screen-topbar__band { padding: 0 20px; height: 48px; }
+    .screen-slide-body, .plain-body { padding: 18px 20px; }
+    .screen-frame { max-height: none; max-width: calc(44vh * 1.6); }
+    .future-chip span { display: none; }
+  }
+  @media (prefers-reduced-motion: reduce) { .future-search__caret { animation: none; } }
+</style>
+</head>
+<body>
+
+  <main class="deck-stage">
+   <div class="deck" id="deck">
+
+    <!-- 1. PORTADA -->
+    <section class="slide cover-slide">
+      <div class="cover-slide__bar"></div>
+      <div class="cover-slide__content">
+        <span class="cover-eyebrow">MiCorreo · Propuesta V3</span>
+        <h1 class="cover-title">Ayuda y soporte</h1>
+        <p class="cover-subtitle">Mejoras de experiencia de usuario sobre una base escalable</p>
+        <div class="crumb">
+          <span>Temas claros</span><span class="crumb-sep">›</span>
+          <span>Búsqueda</span><span class="crumb-sep">›</span>
+          <span>Escalable</span><span class="crumb-sep">›</span>
+          <span>Formulario simple</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. BENEFICIOS -->
+    <section class="slide screen-slide-wrap">
+      <div class="screen-topbar">
+        <div class="screen-topbar__stripe"></div>
+        <div class="screen-topbar__band">
+          <img class="screen-topbar__logo" src="../assets/CorreoArgentino-MiCorreo.png" alt="Correo Argentino · MiCorreo" />
+          <span class="screen-topbar__label">Beneficios</span>
+        </div>
+      </div>
+      <div class="plain-body">
+        <span class="slide-eyebrow">La propuesta en resumen</span>
+        <h2>Cuatro mejoras para pedir ayuda más fácil</h2>
+        <p>Menos pasos y menos dudas para el usuario, y una base preparada para seguir creciendo.</p>
+
+        <div class="steps-row steps-row--4">
+          <div class="step-card">
+            <span class="step-card__icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="7" height="7" x="3" y="3" rx="1"/><rect width="7" height="7" x="14" y="3" rx="1"/><rect width="7" height="7" x="14" y="14" rx="1"/><rect width="7" height="7" x="3" y="14" rx="1"/></svg></span>
+            <strong>Agrupación amigable</strong>
+            <p>Las gestiones agrupadas en 4 cards con nombres que el usuario reconoce.</p>
+          </div>
+          <div class="step-card">
+            <span class="step-card__icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg></span>
+            <strong>Nueva barra de búsqueda</strong>
+            <p>Un campo para escribir lo que necesita y ver los resultados al instante.</p>
+          </div>
+          <div class="step-card">
+            <span class="step-card__icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m22 7-8.5 8.5-5-5L2 17"/><path d="M16 7h6v6"/></svg></span>
+            <strong>Diseño escalable</strong>
+            <p>Nuevos accesos y futuras funciones se suman sin rediseñar la pantalla.</p>
+          </div>
+          <div class="step-card">
+            <span class="step-card__icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M8 13h8"/><path d="M8 17h5"/></svg></span>
+            <strong>Formulario más claro</strong>
+            <p>Sin inputs deshabilitados: el usuario sólo describe su consulta.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. AGRUPACIÓN EN CARDS -->
+    <section class="slide screen-slide-wrap">
+      <div class="screen-topbar">
+        <div class="screen-topbar__stripe"></div>
+        <div class="screen-topbar__band">
+          <img class="screen-topbar__logo" src="../assets/CorreoArgentino-MiCorreo.png" alt="Correo Argentino · MiCorreo" />
+          <span class="screen-topbar__label">Temas</span>
+        </div>
+      </div>
+      <div class="screen-slide-body">
+      <div class="screen-slide">
+        <div class="screen-text">
+          <span class="slide-eyebrow">01 · Temas que se entienden</span>
+          <h2>Temas claros, fáciles de reconocer</h2>
+          <ul>
+            <li>Las gestiones se agrupan en <strong>4 temas</strong> con nombres cotidianos: envíos, pagos, cuenta y otras consultas.</li>
+            <li>Cada tema es una <strong>card entera tocable</strong>, con ícono y una línea que explica qué incluye.</li>
+            <li>Los subtemas aparecen <strong>recién al entrar</strong>: la pantalla inicial no abruma con opciones.</li>
+            <li>Cada tipo de usuario ve <strong>sólo los temas que le corresponden</strong>.</li>
+          </ul>
+          <div class="win">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+            Menos lectura y menos dudas en el primer paso.
+          </div>
+        </div>
+        <div class="screen-frame-wrap">
+          <div class="screen-frame"><iframe src="../prototipo/v3?profile=individuo&amp;hideTooling=1" title="Ayuda y soporte — temas en cards"></iframe></div>
+        </div>
+      </div>
+      </div>
+    </section>
+
+    <!-- 3. BÚSQUEDA -->
+    <section class="slide screen-slide-wrap">
+      <div class="screen-topbar">
+        <div class="screen-topbar__stripe"></div>
+        <div class="screen-topbar__band">
+          <img class="screen-topbar__logo" src="../assets/CorreoArgentino-MiCorreo.png" alt="Correo Argentino · MiCorreo" />
+          <span class="screen-topbar__label">Búsqueda</span>
+        </div>
+      </div>
+      <div class="screen-slide-body">
+      <div class="screen-slide reverse">
+        <div class="screen-frame-wrap">
+          <div class="screen-frame"><iframe src="../prototipo/v3?profile=individuo&amp;q=paquete&amp;hideTooling=1" title="Ayuda y soporte — resultados de búsqueda"></iframe></div>
+        </div>
+        <div class="screen-text">
+          <span class="slide-eyebrow">02 · Búsqueda directa</span>
+          <h2>Escribí y encontrá</h2>
+          <p>Si el usuario ya sabe lo que necesita, no tiene que recorrer los temas.</p>
+          <ul>
+            <li>Nuevo <strong>campo de búsqueda</strong>, arriba de todo.</li>
+            <li><strong>Listado de resultados</strong> al instante, con la cantidad encontrada.</li>
+            <li>Entiende <strong>sinónimos</strong>: "tracking" encuentra seguimiento.</li>
+            <li>Muestra <strong>sólo las gestiones</strong> que corresponden a cada usuario.</li>
+          </ul>
+        </div>
+      </div>
+      </div>
+    </section>
+
+    <!-- 4. ESCALABILIDAD -->
+    <section class="slide screen-slide-wrap">
+      <div class="screen-topbar">
+        <div class="screen-topbar__stripe"></div>
+        <div class="screen-topbar__band">
+          <img class="screen-topbar__logo" src="../assets/CorreoArgentino-MiCorreo.png" alt="Correo Argentino · MiCorreo" />
+          <span class="screen-topbar__label">Escalabilidad</span>
+        </div>
+      </div>
+      <div class="plain-body">
+        <span class="slide-eyebrow">03 · Lista para crecer</span>
+        <h2>Diseño escalable</h2>
+        <p>El buscador y las cards son piezas modulares: en próximos sprints se podrían sumar mejoras sin rediseñar la pantalla.</p>
+
+        <div class="steps-row">
+          <div class="step-card">
+            <span class="step-card__icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg></span>
+            <strong>Un buscador que puede evolucionar</strong>
+            <p>A futuro, el mismo campo podría integrar otras funciones, como inteligencia artificial.</p>
+            <span class="step-card__tag">Posible evolución</span>
+          </div>
+          <div class="step-card">
+            <span class="step-card__icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="7" height="7" x="3" y="3" rx="1"/><rect width="7" height="7" x="14" y="3" rx="1"/><rect width="7" height="7" x="3" y="14" rx="1"/><path d="M17.5 14v7"/><path d="M14 17.5h7"/></svg></span>
+            <strong>Diseño basado en cards</strong>
+            <p>Un tema o un acceso directo nuevo se suma a la grilla, sin tocar el resto de la pantalla.</p>
+            <span class="step-card__tag">Posible evolución</span>
+          </div>
+          <div class="step-card">
+            <span class="step-card__icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m2 7 4.41-4.41A2 2 0 0 1 7.83 2h8.34a2 2 0 0 1 1.42.59L22 7"/><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><path d="M15 22v-4a2 2 0 0 0-2-2h-2a2 2 0 0 0-2 2v4"/><path d="M2 7h20"/><path d="M22 7v3a2 2 0 0 1-2 2a2.7 2.7 0 0 1-1.59-.63.7.7 0 0 0-.82 0A2.7 2.7 0 0 1 16 12a2.7 2.7 0 0 1-1.59-.63.7.7 0 0 0-.82 0A2.7 2.7 0 0 1 12 12a2.7 2.7 0 0 1-1.59-.63.7.7 0 0 0-.82 0A2.7 2.7 0 0 1 8 12a2.7 2.7 0 0 1-1.59-.63.7.7 0 0 0-.82 0A2.7 2.7 0 0 1 4 12a2 2 0 0 1-2-2V7"/></svg></span>
+            <strong>Accesos por tipo de usuario</strong>
+            <p>Ya funciona con segmentación de tipo de usuario: Franquicias y Fulfillment tienen su propio acceso directo, que los demás no ven.</p>
+            <span class="step-card__tag">Incluido en V3</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. FORMULARIO -->
+    <section class="slide screen-slide-wrap">
+      <div class="screen-topbar">
+        <div class="screen-topbar__stripe"></div>
+        <div class="screen-topbar__band">
+          <img class="screen-topbar__logo" src="../assets/CorreoArgentino-MiCorreo.png" alt="Correo Argentino · MiCorreo" />
+          <span class="screen-topbar__label">Formulario</span>
+        </div>
+      </div>
+      <div class="screen-slide-body">
+      <div class="screen-slide">
+        <div class="screen-text">
+          <span class="slide-eyebrow">04 · Formulario sin fricción</span>
+          <h2>Un formulario más simple</h2>
+          <ul>
+            <li>Los datos de la cuenta se muestran <strong>como información</strong>, sin campos para completar.</li>
+            <li><strong>Sin inputs deshabilitados</strong>, que hacen pensar que hay algo para activar.</li>
+            <li>Un <strong>espacio amplio</strong> para describir la consulta.</li>
+          </ul>
+          <div class="win">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+            El usuario sólo escribe lo que le pasó.
+          </div>
+        </div>
+        <div class="screen-frame-wrap">
+          <div class="screen-frame"><iframe src="../prototipo/v3/formulario?profile=individuo&amp;g=cobros_erroneos&amp;hideTooling=1" title="Formulario de consulta"></iframe></div>
+        </div>
+      </div>
+      </div>
+    </section>
+
+    <!-- 6. CIERRE -->
+    <section class="slide cover-slide">
+      <div class="cover-slide__bar"></div>
+      <div class="cover-slide__content">
+        <span class="cover-eyebrow">Propuesta V3 · Ayuda y soporte</span>
+        <h1 class="cover-title">Más simple para el usuario, más fácil de hacer crecer</h1>
+        <div class="crumb">
+          <span>Temas claros</span><span class="crumb-sep">›</span>
+          <span>Búsqueda</span><span class="crumb-sep">›</span>
+          <span>Escalable</span><span class="crumb-sep">›</span>
+          <span>Formulario simple</span>
+        </div>
+        <p class="cover-subtitle" style="margin-top:22px;">MiCorreo · Correo Argentino</p>
+      </div>
+    </section>
+
+   </div>
+  </main>
+
+  <div class="deck-progress"><div class="deck-progress__bar" id="progressBar"></div></div>
+  <nav class="deck-nav">
+    <a class="deck-nav__btn deck-nav__hub" href="../index.html" aria-label="Volver al hub">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/></svg>
+      <span class="btn-label">Volver al hub</span>
+    </a>
+    <div class="deck-nav__controls">
+      <button type="button" class="deck-nav__btn" id="prevBtn" aria-label="Slide anterior">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+        <span class="btn-label">Anterior</span>
+      </button>
+      <div class="deck-nav__counter"><span id="slideCurrent">1</span> / <span id="slideTotal">1</span></div>
+      <button type="button" class="deck-nav__btn deck-nav__btn--next" id="nextBtn" aria-label="Siguiente slide">
+        <span class="btn-label">Siguiente</span>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+      </button>
+    </div>
+  </nav>
+
+  <script>
+    (function () {
+      const slides = Array.from(document.querySelectorAll('#deck .slide'));
+      const total = slides.length;
+      const currentEl = document.getElementById('slideCurrent');
+      const totalEl = document.getElementById('slideTotal');
+      const prevBtn = document.getElementById('prevBtn');
+      const nextBtn = document.getElementById('nextBtn');
+      const progressBar = document.getElementById('progressBar');
+      totalEl.textContent = total;
+
+      let index = Math.min(Math.max(parseInt((location.hash || '').replace('#', ''), 10) - 1 || 0, 0), total - 1);
+
+      function syncFrameScale() {
+        slides[index].querySelectorAll('.screen-frame').forEach(frame => {
+          const iframe = frame.querySelector('iframe');
+          if (!iframe || !frame.clientWidth) return;
+          iframe.style.transform = 'scale(' + (frame.clientWidth / 1440) + ')';
+        });
+      }
+      function scheduleFrameSync() {
+        requestAnimationFrame(() => requestAnimationFrame(syncFrameScale));
+        setTimeout(syncFrameScale, 60);
+      }
+
+      function render() {
+        slides.forEach((s, i) => s.classList.toggle('is-active', i === index));
+        currentEl.textContent = index + 1;
+        prevBtn.disabled = index === 0;
+        nextBtn.disabled = index === total - 1;
+        progressBar.style.width = ((index + 1) / total * 100) + '%';
+        history.replaceState(null, '', '#' + (index + 1));
+        slides[index].scrollTop = 0;
+        scheduleFrameSync();
+      }
+
+      window.addEventListener('resize', () => scheduleFrameSync());
+
+      function go(delta) {
+        const next = index + delta;
+        if (next < 0 || next >= total) return;
+        index = next;
+        render();
+      }
+
+      prevBtn.addEventListener('click', () => go(-1));
+      nextBtn.addEventListener('click', () => go(1));
+
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') { e.preventDefault(); go(1); }
+        else if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); go(-1); }
+      });
+
+      let touchX = null;
+      const stage = document.querySelector('.deck-stage');
+      stage.addEventListener('touchstart', e => { touchX = e.changedTouches[0].clientX; }, { passive: true });
+      stage.addEventListener('touchend', e => {
+        if (touchX === null) return;
+        const dx = e.changedTouches[0].clientX - touchX;
+        if (Math.abs(dx) > 50) go(dx < 0 ? 1 : -1);
+        touchX = null;
+      }, { passive: true });
+
+      render();
+    })();
+  </script>
+
+</body>
+</html>
