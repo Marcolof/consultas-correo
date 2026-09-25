@@ -24,6 +24,7 @@
   --correo-grey-700: #49454f;
   --correo-off-white: #fafafa;
   --correo-near-black: #191919;
+  --correo-yellow-050: #fff6d1; /* fondo del círculo de ícono de las tarjetas (Figma Mi Correo 2.0) */
 
   /* --- Escala de grises harvesteada del CSS de referencia ---------------- */
   --grey-050: #fafafa; /* bg-correo-very-light-grey */
@@ -106,6 +107,7 @@
   --radius-md: 10px; /* filas de tabla */
   --radius-md-lg: 12px; /* searchbar de Reclamos, según propuesta Figma */
   --radius-lg: 15px; /* mapa de sucursal */
+  --radius-card: 16px; /* tarjetas de Mi Correo 2.0 (Figma 13658:332679) */
   --radius-xl: 25px; /* modales, botones pill */
   --radius-2xl: 30px; /* box-acceso */
   --radius-pill: 32px;
@@ -119,8 +121,6 @@
 
   /* --- Sombras ---------------------------------------------------------- */
   --shadow-row: 0 2px 2px 1px rgba(195, 195, 195, 0.25);
-  /* Tarjetas que se despegan del fondo (grilla de opciones de V2). */
-  --shadow-card-hover: 0 4px 10px 0 rgba(25, 25, 25, 0.1);
   --shadow-dropdown: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
   --shadow-modal: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
   --shadow-inset-active: inset 0 3px 5px rgba(0, 0, 0, 0.125);
@@ -155,6 +155,7 @@
   --surface-sunken: var(--grey-100); /* bg-correo-light-grey */
   --surface-rail: var(--grey-200); /* riel del sidebar */
   --surface-brand: var(--correo-yellow); /* bg-correo-1 — header */
+  --surface-brand-subtle: var(--correo-yellow-050);
   --surface-disabled: var(--grey-300);
 
   /* --- Texto ------------------------------------------------------------ */
@@ -179,6 +180,9 @@
   /* --- Bordes ----------------------------------------------------------- */
   --border-default: var(--grey-400);
   --border-subtle: var(--grey-200);
+  /* Contorno de tarjetas y filas de listado (Figma Mi Correo 2.0:
+   * Stroke/color-stroke-default). Reemplaza a las sombras en V1, V2 y V3. */
+  --border-card: var(--grey-300);
   --border-strong: var(--correo-yellow);
   --border-focus: var(--blue-focus);
 

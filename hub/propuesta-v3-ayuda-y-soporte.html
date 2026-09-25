@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Propuesta V3 — Ayuda y soporte</title>
+<link rel="stylesheet" href="hub.css" />
+</head>
+<body>
+  <header class="top">
+    <div class="brand">Correo Argentino · MiCorreo</div>
+    <p>Documentación — Propuesta V3</p>
+  </header>
+
+  <main>
+    <div class="top-row">
+      <a class="back-link" href="documentacion.html">&larr; Volver a Documentación</a>
+      <a class="download-btn" href="downloads/propuesta-v3-ayuda-y-soporte.md" download title="Descargar propuesta-v3-ayuda-y-soporte.md">
+        <svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M8 1v9m0 0L4.5 6.5M8 10l3.5-3.5M2 12v1.5A1.5 1.5 0 0 0 3.5 15h9a1.5 1.5 0 0 0 1.5-1.5V12" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Descargar
+      </a>
+    </div>
+
+    <div class="status-bar">
+      <span class="pill draft">Alternativa en exploración</span>
+      <span class="pill">Agrupación mock</span>
+    </div>
+
+    <h1>Propuesta V3 — Ayuda y soporte</h1>
+
+    <blockquote>
+      V3 <strong>no reemplaza</strong> a V1 ni a V2: las tres conviven y se
+      eligen al entrar al prototipo.
+    </blockquote>
+
+    <h2>1. La idea</h2>
+    <p>
+      Sin preguntas intermedias: todas las gestiones están a la vista desde el
+      inicio, agrupadas por <strong>tipo de problema</strong>. El formulario
+      muestra los datos de la cuenta de sólo lectura y lo único que se
+      escribe es la consulta.
+    </p>
+
+    <h2>2. La agrupación es mock</h2>
+    <p>
+      La documentación agrupa por categoría de producto; la referencia aportada
+      por el usuario agrupa por tipo de problema. El usuario autorizó
+      hardcodear esta agrupación. Los títulos se acortaron; los ítems son los
+      de la referencia.
+    </p>
+    <table>
+      <thead><tr><th>Grupo</th><th>Título en la referencia</th></tr></thead>
+      <tbody>
+        <tr><td>Envíos y paquetes</td><td>Problemas físicos con el paquete</td></tr>
+        <tr><td>Pagos y facturación</td><td>Pagos, Cobros y Facturación</td></tr>
+        <tr><td>Cuenta y plataforma</td><td>Gestión y Plataforma</td></tr>
+        <tr><td>Otras consultas</td><td>General</td></tr>
+      </tbody>
+    </table>
+    <p>
+      V3 cubre <strong>las 19 gestiones documentadas</strong>. Se agregaron
+      las 4 que la referencia no tenía y "Cuenta y plataforma" concentra lo
+      propio de cada tipo de usuario: Franquicias ve ahí sus consultas de
+      sellos digitales, y Fulfillment las de carga y stock. Siguen sin gestión
+      documentada: "Inconveniente al generar envío", "Problemas de
+      seguimiento" y "Reclamos de Franquicias".
+    </p>
+
+    <h2>3. Se conserva la regla de tipo de usuario</h2>
+    <p>
+      Cada ítem sabe de qué categoría documentada viene y se filtra con la
+      misma regla que V1 y V2. Alcanza al buscador, a los accesos rápidos y al
+      formulario.
+    </p>
+
+    <h2>4. El formulario</h2>
+    <p>
+      El usuario llega siempre registrado: sus datos se muestran de sólo
+      lectura en "Información registrada". Los datos son ficticios y el
+      captcha es una maqueta visual.
+    </p>
+
+    <p class="foot-note">
+      El detalle completo, con el mapeo ítem por ítem y las preguntas
+      abiertas, está en el <code>.md</code> descargable desde el botón de arriba.
+    </p>
+  </main>
+</body>
+</html>

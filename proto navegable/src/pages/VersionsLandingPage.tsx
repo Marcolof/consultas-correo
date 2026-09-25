@@ -63,6 +63,19 @@ const VERSIONES: readonly VersionCard[] = [
       'Se puede volver atrás y cambiar cualquier respuesta',
     ],
   },
+  {
+    to: '/v3',
+    version: 'V3',
+    titulo: 'Todas las gestiones a la vista',
+    estado: 'Alternativa en exploración',
+    resumen:
+      'Sin preguntas intermedias: las gestiones se agrupan por tipo de problema y cada una está a un clic. El formulario muestra los datos de la cuenta y sólo pide la consulta.',
+    puntos: [
+      'Cuatro grupos por tipo de problema',
+      'Formulario sin datos que ya tiene la cuenta',
+      'Mismo buscador y accesos rápidos que V2',
+    ],
+  },
 ]
 
 export function VersionsLandingPage() {
@@ -81,7 +94,7 @@ export function VersionsLandingPage() {
           <p className={styles.kicker}>Correo Argentino · MiCorreo</p>
           <h1 className={styles.title}>Consultas y Reclamos</h1>
           <p className={styles.lede}>
-            Dos propuestas distintas para resolver el mismo problema. Cada una se
+            Tres propuestas distintas para resolver el mismo problema. Cada una se
             recorre completa; conviven para poder compararlas.
           </p>
         </header>

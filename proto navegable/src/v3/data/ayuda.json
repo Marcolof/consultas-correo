@@ -1,0 +1,100 @@
+{
+  "schema_version": 1,
+  "_advertencia": "AGRUPACIONES MOCK. Los 4 grupos y sus items salen de una imagen de referencia aportada por el usuario el 2026-09-24, NO de la documentacion: la documentacion agrupa por categoria de producto/servicio (categorias-gestiones.json) y esta referencia agrupa por tipo de problema. El usuario autorizo explicitamente hardcodear esta agrupacion para V3.",
+  "_trazabilidad": "Cada item declara 'gestion' (el label documentado al que corresponde, o null si no existe) y 'categoria' (la categoria documentada de esa gestion). 'categoria' es lo que conecta V3 con la regla real de visibilidad por tipo de usuario: un individuo no ve items de Franquicias ni Fulfillment aunque esten mezclados en estos grupos. Sin categoria, el item se ve para todos.",
+  "_titulos": "Los titulos de grupo se acortaron a pedido del usuario ('no son muy user friendly'). El titulo original de la referencia queda en 'tituloReferencia'. Los labels de los items son los de la referencia, sin cambios.",
+  "_descripcion": "Cada tarjeta de grupo muestra solo 'descripcion', no sus items: el usuario pidio que la tarjeta entera sea tocable y agrupe, y que los items aparezcan recien al entrar. La descripcion evita nombrar temas que dependen del tipo de usuario (stock, franquicias) para no prometer algo que ese usuario no va a ver adentro.",
+  "_diferencias_con_la_documentacion": {
+    "items_de_la_referencia_sin_gestion_documentada": [
+      "Inconveniente al generar envío",
+      "Problemas de seguimiento",
+      "Reclamos de Franquicias"
+    ],
+    "gestiones_documentadas_que_la_referencia_no_incluia": "Ninguna desde el 2026-09-24. Las 4 que faltaban (Problemas para generar el sello digital, Problema con el pago de sellos digitales, Inconveniente en la carga de los pedidos, Diferencia en el armado del envio) se agregaron cuando el usuario pidio que 'Cuenta y plataforma' muestre las consultas propias de Franquicias y Fulfillment: las de sellos y carga de pedidos van ahi; la de armado va en 'Envios y paquetes', junto a 'Demora en el armado'.",
+    "movidos_respecto_de_la_referencia": "'Diferencia de stock' y 'Reclamos de Franquicias' estaban en 'General' en la referencia; se movieron a 'Cuenta y plataforma' por el mismo pedido."
+  },
+
+  "grupos": [
+    {
+      "id": "paquete",
+      "titulo": "Envíos y paquetes",
+      "tituloReferencia": "Problemas físicos con el paquete",
+      "descripcion": "Demoras, entregas y paquetes dañados o incompletos",
+      "icono": "paquete",
+      "items": [
+        { "id": "demora_servicio", "label": "Demora en el servicio", "gestion": "Demora en el servicio", "categoria": "paqueteria_nacional" },
+        { "id": "demora_armado", "label": "Demora en el armado", "gestion": "Demora en el armado de los envíos", "categoria": "fulfillment" },
+        { "id": "diferencia_armado", "label": "Diferencia en el armado", "gestion": "Diferencia en el armado del envío", "categoria": "fulfillment" },
+        { "id": "fallas_entrega", "label": "Fallas en la entrega", "gestion": "Inconvenientes con la entrega", "categoria": "paqueteria_nacional" },
+        { "id": "paquetes_danados", "label": "Paquetes dañados", "gestion": "Paquete dañado", "categoria": "paqueteria_nacional" },
+        { "id": "faltantes_contenido", "label": "Faltantes de contenido", "gestion": "Paquete con faltante de contenido", "categoria": "paqueteria_nacional" }
+      ]
+    },
+    {
+      "id": "pagos",
+      "titulo": "Pagos y facturación",
+      "tituloReferencia": "Pagos, Cobros y Facturación",
+      "descripcion": "Cobros, facturas y medios de pago",
+      "icono": "pago",
+      "items": [
+        { "id": "cobros_erroneos", "label": "Cobros erróneos", "gestion": "Recibí un cobro erróneo", "categoria": "mi_cuenta" },
+        { "id": "errores_saldo", "label": "Errores con el saldo de mi cuenta", "gestion": "Errores con el saldo de mi cuenta", "categoria": "franquicias" },
+        { "id": "errores_factura", "label": "Errores en mi factura", "gestion": "Errores en mi factura", "categoria": "franquicias" },
+        { "id": "no_puedo_pagar", "label": "No puedo pagar mis envíos", "gestion": "No puedo pagar mis envíos", "categoria": "paqueteria_nacional" },
+        { "id": "pago_oficios", "label": "Pago de oficios judiciales", "gestion": "Inconvenientes con el pago de oficios judiciales", "categoria": "oficios_judiciales" }
+      ]
+    },
+    {
+      "id": "plataforma",
+      "titulo": "Cuenta y plataforma",
+      "tituloReferencia": "Gestión y Plataforma",
+      "descripcion": "Usuarios y uso de la plataforma",
+      "icono": "plataforma",
+      "items": [
+        { "id": "alta_usuario", "label": "Inconvenientes para alta de usuario", "gestion": "Inconvenientes para dar de alta un usuario adicional", "categoria": "mi_cuenta" },
+        { "id": "generar_envio", "label": "Inconveniente al generar envío", "gestion": null, "categoria": null, "tags": ["generar", "crear", "nuevo envio", "alta", "etiqueta", "error", "falla"] },
+        { "id": "generar_sello", "label": "Problemas con el sello digital", "gestion": "Problemas para generar el sello digital", "categoria": "franquicias" },
+        { "id": "pago_sellos", "label": "Pago de sellos digitales", "gestion": "Problema con el pago de sellos digitales", "categoria": "franquicias" },
+        { "id": "reclamos_franquicias", "label": "Reclamos de Franquicias", "gestion": null, "categoria": "franquicias", "tags": ["franquicia", "franquicias", "sello", "sello digital", "reclamo"] },
+        { "id": "carga_envios", "label": "Inconveniente con la carga de envíos", "gestion": "Inconvenientes con la carga de envíos", "categoria": "fulfillment" },
+        { "id": "carga_pedidos", "label": "Inconveniente con la carga de pedidos", "gestion": "Inconveniente en la carga de los pedidos", "categoria": "fulfillment" },
+        { "id": "no_visualizo_stock", "label": "No visualizo stock", "gestion": "No veo el stock", "categoria": "fulfillment" },
+        { "id": "diferencia_stock", "label": "Diferencia de stock", "gestion": "Diferencia de stock", "categoria": "fulfillment" }
+      ]
+    },
+    {
+      "id": "otras",
+      "titulo": "Otras consultas",
+      "tituloReferencia": "General",
+      "descripcion": "Seguimiento de envíos y otros temas",
+      "icono": "otras",
+      "items": [
+        { "id": "problemas_seguimiento", "label": "Problemas de seguimiento", "gestion": null, "categoria": null, "tags": ["seguimiento", "tracking", "estado", "rastreo", "donde esta", "problema"] },
+        { "id": "falta_info_seguimiento", "label": "Falta o error en información de seguimiento", "gestion": "Falta o error en la información de seguimiento", "categoria": "paqueteria_nacional" }
+      ]
+    }
+  ],
+
+  "_accesos_rapidos": "Los mismos atajos que V2, apuntando a items de esta agrupacion. El label se toma del item, no se repite aca. 'Ingresar un reclamo' va ultimo porque es el unico que saltea la eleccion de gestion. Se ocultan solos si el tipo de usuario no ve el item.",
+  "accesos_rapidos": [
+    { "id": "ar_demora", "item": "demora_servicio", "icono": "reloj" },
+    { "id": "ar_entrega", "item": "fallas_entrega", "icono": "mapa" },
+    { "id": "ar_danado", "item": "paquetes_danados", "icono": "paquete-danado" },
+    { "id": "ar_factura", "item": "errores_factura", "icono": "factura" },
+    { "id": "ar_stock", "item": "no_visualizo_stock", "icono": "stock" },
+    { "id": "ar_franquicias", "label": "Franquicias", "icono": "franquicia", "categoria": "franquicias" },
+    { "id": "ar_fulfillment", "label": "Fulfillment", "icono": "fulfillment", "categoria": "fulfillment" },
+    { "id": "ar_nuevo_reclamo", "label": "Ingresar un reclamo", "icono": "reclamo-nuevo" }
+  ],
+
+  "_cuenta": "DATOS DE CUENTA FICTICIOS. En produccion vienen de la sesion del usuario registrado: por eso el formulario los muestra de solo lectura en vez de pedirlos. El nombre se toma de core/user.ts para que coincida con el saludo del header. En la referencia, 'Tipo de documento' mostraba 'Consumidor final', que es una condicion frente al IVA y no un tipo de documento: se uso DNI.",
+  "cuenta": {
+    "email": "rodrigo.correo@ejemplo.com",
+    "direccion": "Belgrano 1250",
+    "localidad": "Pehuajó",
+    "codigoPostal": "6450",
+    "provincia": "Buenos Aires",
+    "tipoDocumento": "DNI",
+    "numeroDocumento": "30.123.456"
+  }
+}

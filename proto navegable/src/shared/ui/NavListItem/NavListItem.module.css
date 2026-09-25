@@ -8,7 +8,7 @@
   width: 100%;
   min-height: var(--nav-list-item-height);
   padding: var(--space-3) var(--space-4);
-  border: var(--border-width-thin) solid var(--border-subtle);
+  border: var(--border-width-thin) solid var(--border-card);
   border-radius: var(--nav-list-item-radius);
   background-color: var(--surface-raised);
   text-align: left;

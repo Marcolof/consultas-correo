@@ -1,0 +1,500 @@
+/*
+ * Estilos de la propuesta V3.
+ *
+ * Distribución tomada de dos imágenes de referencia (una grilla de 4 grupos
+ * con sus gestiones a la vista, y un formulario en dos columnas). De las
+ * referencias se tomó sólo la información y la disposición: tipografía,
+ * colores y radios son los tokens de MiCorreo, igual que V1 y V2.
+ *
+ * Las tarjetas se separan del fondo con un contorno de 1px (`--border-card`,
+ * Figma Stroke/color-stroke-default), sin sombra: pedido del usuario el
+ * 2026-09-25, aplicado igual en V1, V2 y V3.
+ */
+
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+  max-width: 1100px;
+}
+
+.search {
+  max-width: 1100px;
+  margin-bottom: var(--space-8);
+}
+
+/* --- Grupos ---------------------------------------------------------------- */
+
+.grupos {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: var(--space-5);
+  max-width: 1100px;
+}
+
+/*
+ * La tarjeta entera es el botón: agrupa, no lista gestiones.
+ * Estilo tomado de Figma "Mi Correo 2.0", nodo 13658:332679: radio 16,
+ * contorno de 1px (sin sombra desde el 2026-09-25), ícono dentro de un círculo amarillo claro y
+ * título + descripción en el color de texto principal.
+ */
+.grupo {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-3);
+  border: var(--border-width-thin) solid var(--border-card);
+  border-radius: var(--radius-card);
+  background: var(--surface-raised);
+  padding: var(--space-4);
+  font-family: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition:
+    border-color var(--transition-fast),
+    transform 0.2s ease-out;
+}
+
+.grupo:hover,
+.grupo:focus-visible {
+  border-color: var(--border-default);
+  transform: scale(1.02);
+}
+
+.grupoBadge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-full);
+  background: var(--surface-brand-subtle);
+  padding: var(--space-3);
+  color: var(--color-accent);
+}
+
+.grupoTexto {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.grupoIcono {
+  flex-shrink: 0;
+  color: var(--color-accent);
+}
+
+.grupoTitulo {
+  color: var(--text-primary);
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--line-height-snug);
+}
+
+.grupoDesc {
+  color: var(--text-primary);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-regular);
+  line-height: var(--line-height-snug);
+}
+
+/* Cabecera del tema abierto, sobre su lista de subtemas. */
+.temaHead {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.temaTitulo {
+  margin: 0;
+  color: var(--text-primary);
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+}
+
+/* --- Búsqueda (mismo comportamiento que V2) -------------------------------- */
+
+.volver {
+  align-self: flex-start;
+  border: none;
+  background: none;
+  padding: 0;
+  color: var(--text-link);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  cursor: pointer;
+}
+
+.volver:hover {
+  text-decoration: underline;
+}
+
+.cargando {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin: 0;
+  color: var(--text-muted);
+  font-size: var(--font-size-sm);
+}
+
+.spinner {
+  width: 14px;
+  height: 14px;
+  border: 2px solid var(--border-subtle);
+  border-top-color: var(--color-accent);
+  border-radius: var(--radius-full);
+  animation: girar 0.6s linear infinite;
+}
+
+@keyframes girar {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .spinner {
+    animation-duration: 2s;
+  }
+}
+
+.contador {
+  margin: 0 0 calc(-1 * var(--space-3));
+  color: var(--text-muted);
+  font-size: var(--font-size-sm);
+}
+
+.lista {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.fila {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  width: 100%;
+  border: var(--border-width-thin) solid var(--border-card);
+  border-radius: var(--radius-md);
+  background: var(--surface-raised);
+  padding: var(--space-4);
+  font-family: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: border-color var(--transition-fast);
+}
+
+.fila:hover {
+  border-color: var(--border-default);
+}
+
+.filaLabel {
+  display: block;
+  color: var(--text-primary);
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-semibold);
+}
+
+.filaRuta {
+  display: block;
+  margin-top: var(--space-1);
+  color: var(--text-muted);
+  font-size: var(--font-size-sm);
+}
+
+.filaFlecha {
+  flex-shrink: 0;
+  color: var(--icon-enabled);
+}
+
+/* --- Accesos rápidos: tarjetas más chicas que los grupos ------------------- */
+
+.accesos {
+  max-width: 1100px;
+  margin-top: var(--space-4);
+}
+
+.accesosTitulo {
+  margin: 0 0 var(--space-4);
+  color: var(--text-primary);
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-semibold);
+}
+
+.accesosGrilla {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: var(--space-3);
+}
+
+.acceso {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
+  border: var(--border-width-thin) solid var(--border-card);
+  border-radius: var(--radius-md);
+  background: var(--surface-raised);
+  padding: var(--space-4) var(--space-3);
+  font-family: inherit;
+  text-align: center;
+  cursor: pointer;
+  transition:
+    border-color var(--transition-fast),
+    transform 0.2s ease-out;
+}
+
+.acceso:hover,
+.acceso:focus-visible {
+  border-color: var(--border-default);
+  transform: scale(1.03);
+}
+
+.accesoIcono {
+  color: var(--color-accent);
+}
+
+.accesoLabel {
+  color: var(--text-primary);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  line-height: var(--line-height-snug);
+}
+
+/* --- Formulario ------------------------------------------------------------ */
+
+/* Encabezado con flecha de volver a la izquierda del título. Replica las
+ * medidas de PageHeader, que no admite un elemento delante del título. */
+.formHeader {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  margin-bottom: var(--space-6);
+}
+
+.formBack {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  margin-top: -2px;
+  border: none;
+  border-radius: var(--radius-full);
+  background: none;
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: background-color var(--transition-fast);
+}
+
+.formBack:hover,
+.formBack:focus-visible {
+  background: var(--surface-sunken);
+}
+
+.formTitulo {
+  margin: 0;
+  color: var(--text-primary);
+  font-size: 1.5rem;
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--line-height-snug);
+}
+
+.formDescripcion {
+  margin: var(--space-1) 0 0;
+  color: var(--text-muted);
+  font-size: var(--font-size-sm);
+}
+
+.formLayout {
+  display: grid;
+  /* "Información registrada" a 300px, como en Figma; el resto para la consulta. */
+  grid-template-columns: 300px minmax(0, 1fr);
+  gap: var(--space-6);
+  align-items: start;
+  max-width: 1100px;
+}
+
+.panel {
+  border: var(--border-width-thin) solid var(--border-card);
+  border-radius: var(--radius-md-lg);
+  background: var(--surface-raised);
+  padding: var(--space-6);
+}
+
+.panelTitulo {
+  margin: 0;
+  color: var(--text-primary);
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+}
+
+.panelDivisor {
+  height: var(--border-width-thin);
+  margin: var(--space-4) 0 var(--space-5);
+  border: none;
+  background: var(--border-subtle);
+}
+
+.datos {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  margin: 0;
+}
+
+.datoLabel {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: var(--font-size-xs);
+}
+
+.datoValor {
+  margin: var(--space-1) 0 0;
+  color: var(--text-primary);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  overflow-wrap: anywhere;
+}
+
+.detalle {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+/* La consulta es lo único que el usuario escribe: le damos lugar. */
+.consulta :global(textarea) {
+  min-height: 180px;
+  resize: vertical;
+}
+
+.subtitulo {
+  margin: 0 0 var(--space-2);
+  color: var(--text-primary);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+}
+
+/* Caja del captcha: es una maqueta, no un captcha real. */
+.captcha {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  max-width: 320px;
+  border: var(--border-width-thin) solid var(--border-default);
+  border-radius: var(--radius-sm);
+  padding: var(--space-3) var(--space-4);
+}
+
+.captchaMarca {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  color: var(--text-subtle);
+  font-size: var(--font-size-3xs);
+  line-height: var(--line-height-snug);
+}
+
+.captchaMarca strong {
+  color: var(--text-muted);
+}
+
+.captchaIcono {
+  margin-bottom: var(--space-1);
+  color: var(--color-brand);
+}
+
+.errorTexto {
+  margin: var(--space-2) 0 0;
+  color: var(--feedback-danger-strong);
+  font-size: var(--font-size-xs);
+}
+
+.acciones {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-4);
+  margin-top: var(--space-2);
+}
+
+/* --- Responsive ------------------------------------------------------------ */
+
+@media (max-width: 767.98px) {
+  .formLayout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .panel {
+    padding: var(--space-5);
+  }
+}
+
+/* Switch "Responsive" del panel de herramientas: mismo patrón que el resto. */
+:global(.force-mobile) .formLayout,
+:global(.force-mobile) .grupos {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+:global(.force-mobile) .panel {
+  padding: var(--space-5);
+}
+
+/* --- Transiciones entre vistas -------------------------------------------- */
+
+/*
+ * Sutiles a propósito: poco recorrido y poca duración. La dirección la fija
+ * core/transicion.ts antes de navegar: entrar a algo trae el contenido desde
+ * la derecha (todo se corre a la izquierda); volver, desde la izquierda.
+ */
+.entrada {
+  animation: subir 0.35s ease-out both;
+}
+
+.adelante {
+  animation: desdeDerecha 0.28s ease-out both;
+}
+
+.atras {
+  animation: desdeIzquierda 0.28s ease-out both;
+}
+
+@keyframes subir {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+}
+
+@keyframes desdeDerecha {
+  from {
+    opacity: 0;
+    transform: translateX(24px);
+  }
+}
+
+@keyframes desdeIzquierda {
+  from {
+    opacity: 0;
+    transform: translateX(-24px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .entrada,
+  .adelante,
+  .atras {
+    animation: none;
+  }
+
+  .grupo:hover,
+  .grupo:focus-visible,
+  .acceso:hover,
+  .acceso:focus-visible {
+    transform: none;
+  }
+}

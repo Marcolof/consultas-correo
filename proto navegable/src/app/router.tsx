@@ -6,6 +6,8 @@ import { EnviosListPage } from '@/v2/pages/EnviosListPage'
 import { EnvioDetallePage } from '@/v2/pages/EnvioDetallePage'
 import { ReclamoConfirmacionPage } from '@/v2/pages/ReclamoConfirmacionPage'
 import { ReclamoDirectoPage } from '@/v2/pages/ReclamoDirectoPage'
+import { AyudaPage } from '@/v3/pages/AyudaPage'
+import { FormularioPage } from '@/v3/pages/FormularioPage'
 import { AppShell } from './AppShell'
 
 /**
@@ -18,6 +20,8 @@ import { AppShell } from './AppShell'
  *   /v1            V1 — sección única de gestiones (propuesta presentada)
  *   /v2            V2 — asistente guiado (buscador + árbol de preguntas)
  *   /v2/envios     V2 — entrada contextual desde un envío
+ *   /v3            V3 — todas las gestiones a la vista, en 4 grupos
+ *   /v3/formulario V3 — formulario con los datos de la cuenta ya cargados
  *
  * V2 tiene pocas rutas a propósito: todo el recorrido del asistente vive en
  * `/v2` y su estado viaja en la query (`?p=`, `?q=`, `?envio=`), así
@@ -39,6 +43,9 @@ export function AppRouter() {
         <Route path="v2/envios" element={<EnviosListPage />} />
         <Route path="v2/envios/:envioId" element={<EnvioDetallePage />} />
         <Route path="v2/reclamos/:casoId" element={<ReclamoConfirmacionPage />} />
+
+        <Route path="v3" element={<AyudaPage />} />
+        <Route path="v3/formulario" element={<FormularioPage />} />
       </Route>
     </Routes>
   )

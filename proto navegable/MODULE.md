@@ -14,6 +14,7 @@ reclamos, que conviven y se comparan:
 |---|---|---|---|
 | **V1** | `/prototipo/v1` | Sección única "Mis gestiones": catálogo completo filtrable por categorías | Presentada al cliente |
 | **V2** | `/prototipo/v2` | Asistente guiado: pocas preguntas que podan hasta la gestión correcta | Alternativa en exploración |
+| **V3** | `/prototipo/v3` | Todas las gestiones a la vista en 4 grupos (mock) + formulario con los datos de la cuenta | Alternativa en exploración |
 
 `/prototipo/` es la **landing del módulo**: el selector entre las dos, sin
 el chrome de MiCorreo (no es una pantalla del producto).
@@ -65,6 +66,8 @@ Funciona sin el Hub: no importa nada de `hub/`, `documentation/` ni
 | `/v2/envios` | V2 — listado de envíos (entrada contextual) |
 | `/v2/envios/:envioId` | V2 — detalle de un envío |
 | `/v2/reclamos/:casoId` | V2 — confirmación con número de caso |
+| `/v3` | V3 — buscador + 4 grupos + accesos rápidos (`?q=`) |
+| `/v3/formulario` | V3 — formulario; `?g=<item>` trae el asunto elegido |
 
 **Query params** (`src/core/session/deepLink.ts` y la propia
 `AsistentePage`):

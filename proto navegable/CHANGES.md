@@ -60,6 +60,19 @@
 - **Se quitó "Empezar de nuevo".** La primera miga ya vuelve al principio.
   Sobrevive sólo dentro del cartel de error, donde no hay migas.
 
+### V3 — Ayuda y soporte (`/v3`) — alternativa, 2026-09-24
+
+- Todas las gestiones **a la vista en 4 grupos por tipo de problema**. La
+  agrupación es **mock**, tomada de una imagen de referencia: no es la de la
+  documentación. Vive en `src/v3/data/ayuda.json`.
+- Cada ítem guarda su gestión y categoría documentadas: la visibilidad por
+  tipo de usuario se conserva aunque los grupos mezclen categorías.
+- **Formulario sin datos que ya tiene la cuenta**: se muestran de sólo
+  lectura; sólo se escribe la consulta. Datos de cuenta ficticios; captcha
+  como maqueta visual.
+- Sombra difusa y centrada nueva (`--shadow-soft` en `tokens.css`).
+- V3 no importa nada de V2: se puede borrar una sin romper la otra.
+
 ## Decisiones tomadas y revertidas (para no repetirlas)
 
 | Qué se hizo | Por qué se deshizo |
