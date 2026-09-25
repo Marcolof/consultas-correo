@@ -196,12 +196,6 @@
   font-weight: var(--font-weight-semibold);
 }
 
-.filaRuta {
-  display: block;
-  margin-top: var(--space-1);
-  color: var(--text-muted);
-  font-size: var(--font-size-sm);
-}
 
 .filaFlecha {
   flex-shrink: 0;

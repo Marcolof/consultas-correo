@@ -88,17 +88,14 @@ export function AyudaPage() {
             <h2 className={styles.temaTitulo}>{accesoCategoria.label}</h2>
           </div>
           <div className={styles.lista}>
-            {itemsCategoria.map(({ item, grupo }) => (
+            {itemsCategoria.map(({ item }) => (
               <button
                 key={item.id}
                 type="button"
                 className={styles.fila}
                 onClick={() => abrirFormulario(item.id)}
               >
-                <span>
-                  <span className={styles.filaLabel}>{item.label}</span>
-                  <span className={styles.filaRuta}>{grupo.titulo}</span>
-                </span>
+                <span className={styles.filaLabel}>{item.label}</span>
                 <span className={styles.filaFlecha} aria-hidden="true">
                   →
                 </span>
@@ -147,17 +144,14 @@ export function AyudaPage() {
                     {`${String(resultados.length)} ${resultados.length === 1 ? 'resultado' : 'resultados'}`}
                   </p>
                   <div className={styles.lista}>
-                    {resultados.map(({ item, grupo }) => (
+                    {resultados.map(({ item }) => (
                       <button
                         key={item.id}
                         type="button"
                         className={styles.fila}
                         onClick={() => abrirFormulario(item.id)}
                       >
-                        <span>
-                          <span className={styles.filaLabel}>{item.label}</span>
-                          <span className={styles.filaRuta}>{grupo.titulo}</span>
-                        </span>
+                        <span className={styles.filaLabel}>{item.label}</span>
                         <span className={styles.filaFlecha} aria-hidden="true">
                           →
                         </span>
