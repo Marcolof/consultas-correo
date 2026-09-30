@@ -2,11 +2,14 @@ import type { ReactNode } from 'react'
 import { cn } from '@/shared/lib/cn'
 import styles from './PageContainer.module.css'
 
-export type PageWidth = 'narrow' | 'full'
+export type PageWidth = 'narrow' | 'wide' | 'full'
 
 export interface PageContainerProps {
   readonly children: ReactNode
-  /** `full` para pantallas que manejan su propia grilla (la réplica de alta). */
+  /**
+   * `wide` aprovecha el ancho disponible hasta un tope (pantallas con tablas).
+   * `full` para pantallas que manejan su propia grilla (la réplica de alta).
+   */
   readonly width?: PageWidth
   readonly className?: string
 }

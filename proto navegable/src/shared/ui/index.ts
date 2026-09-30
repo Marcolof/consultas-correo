@@ -5,6 +5,7 @@ export { Input, type InputProps } from './Input'
 export { Select, type SelectProps } from './Select'
 export { NumberInput, type NumberInputProps } from './NumberInput'
 export { SearchInput, type SearchInputProps } from './SearchInput'
+export { DatePicker, type DatePickerProps } from './DatePicker'
 
 // Controles
 export { Checkbox, RadioGroup, type CheckboxProps } from './Checkbox'

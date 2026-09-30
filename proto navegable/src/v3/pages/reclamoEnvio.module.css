@@ -1,0 +1,83 @@
+/*
+ * Reclamo de un envío (V3). Misma estructura que el formulario de V3
+ * (`v3.module.css`), con un panel lateral más ancho: tiene tres grupos de
+ * datos (remitente, destinatario y servicio) en vez de uno.
+ */
+
+.layout {
+  display: grid;
+  grid-template-columns: 360px minmax(0, 1fr);
+  gap: var(--space-6);
+  align-items: start;
+}
+
+.seccion + .seccion {
+  margin-top: var(--space-6);
+  border-top: var(--border-width-thin) solid var(--border-subtle);
+  padding-top: var(--space-5);
+}
+
+.seccionTitulo {
+  margin: 0 0 var(--space-4);
+  color: var(--text-primary);
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-semibold);
+}
+
+.datos {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-4) var(--space-3);
+  margin: 0;
+}
+
+.datoAncho {
+  grid-column: 1 / -1;
+}
+
+.asunto {
+  border-radius: var(--radius-md);
+  background: var(--surface-sunken);
+  padding: var(--space-3) var(--space-4);
+}
+
+.asunto p {
+  margin: 0;
+}
+
+.asuntoValor {
+  margin-top: var(--space-1) !important;
+  color: var(--text-primary);
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-semibold);
+}
+
+.asuntoTn {
+  margin-top: var(--space-1) !important;
+  color: var(--text-muted);
+  font-size: var(--font-size-xs);
+}
+
+/* Los dos únicos campos que escribe el usuario. El del contenido es más
+ * bajo (una descripción breve); el del reclamo, amplio. */
+.contenido :global(textarea) {
+  height: 96px;
+  min-height: 96px;
+  resize: vertical;
+}
+
+.reclamo :global(textarea) {
+  height: 200px;
+  min-height: 200px;
+  resize: vertical;
+}
+
+@media (max-width: 991.98px) {
+  .layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+:global(.force-mobile) .layout {
+  grid-template-columns: minmax(0, 1fr);
+}

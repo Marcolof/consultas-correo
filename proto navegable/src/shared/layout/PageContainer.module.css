@@ -16,6 +16,13 @@
   max-width: 1200px;
 }
 
+/* `wide`: pantallas con tablas, que necesitan ocupar el ancho disponible.
+ * Tope de 1600px para que las columnas no se separen de más en monitores
+ * muy anchos. */
+.wide {
+  max-width: 1600px;
+}
+
 /* `full` deja que la pantalla maneje su propia grilla a todo el ancho. Lo usa
  * la réplica del alta de envío, que tiene dos columnas propias. */
 .full {

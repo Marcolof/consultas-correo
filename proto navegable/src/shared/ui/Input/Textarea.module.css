@@ -1,0 +1,16 @@
+/* Contador de caracteres en la base del textarea (`showCounter`). */
+
+/* Deja lugar abajo para que el texto no pase por debajo del contador. */
+textarea.conContador {
+  padding-bottom: 28px;
+}
+
+.contador {
+  position: absolute;
+  right: var(--space-3);
+  bottom: var(--space-2);
+  color: var(--text-subtle);
+  font-size: var(--font-size-xs);
+  font-variant-numeric: tabular-nums;
+  pointer-events: none;
+}

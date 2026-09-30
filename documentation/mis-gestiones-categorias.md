@@ -191,6 +191,28 @@ Verificado en navegador: con ambos switches apagados, perfil Individuo con
 "Todos" da 9 gestiones (antes 17); al activar "Ver Paquetería
 Internacional" el chip reaparece y el contador sube a 13 (9 + 4).
 
+### 5.2 Uso en V3 de las gestiones internacionales (2026-09-30)
+
+La propuesta V3 muestra las **4 gestiones de Paquetería Internacional**
+dentro de "Envíos y paquetes → Envíos internacionales"
+([`propuesta-v3-ayuda-y-soporte.md`](propuesta-v3-ayuda-y-soporte.md),
+sección 9).
+
+> ⚠️ **Siguen siendo HIPOTÉTICAS.** No hay ninguna gestión internacional
+> real. Por decisión del usuario, en la interfaz de V3 se muestran **sin**
+> el sufijo "(Gestión inventada)" ni ninguna otra marca: su carácter
+> hipotético queda registrado **sólo en la documentación** (esta sección y
+> la de V3). V1 no cambia: la categoría sigue oculta por defecto (sección
+> 5.1).
+
+### 5.3 SIE — posible incorporación pendiente (2026-09-30)
+
+**SIE** es otra posible incorporación a los reclamos, mencionada por el
+usuario el 2026-09-30. **Estado: pendiente.** No forma parte de los casos de
+uso (ningún tipo de usuario la ve) ni tiene gestiones, en ninguna versión
+del prototipo. Podría sumarse más adelante; no hay en el proyecto una
+definición de su alcance y no se inventó ninguna.
+
 ## 6. Nivel 1 — qué categorías ve cada tipo de usuario (vigente)
 
 > **Confirmado por el usuario, 2026-09-02.** Este es el mecanismo que
@@ -393,7 +415,10 @@ ambas palabras); el resto matchea sólo "error", ordenado después.
 2. ¿Qué gestiones reales van a completar Paquetería Internacional y Mis
    Comunicaciones Digitales? Quedaron fuera del alcance de este MVP
    (2026-09-03, ver sección 5.1) para una próxima salida — sigue abierta
-   para esa entrega futura.
+   para esa entrega futura. V3 ya muestra las 4 internacionales hipotéticas
+   (sección 5.2): son las primeras a reemplazar.
+2b. ¿SIE se incorpora a los reclamos? ¿Con qué gestiones y para qué tipos de
+   usuario? (sección 5.3)
 3. ¿Las 5 categorías sin exclusión mencionada (Mi Cuenta, Paquetería
    Nacional, Paquetería Internacional, Mis Comunicaciones Digitales,
    Oficios Judiciales) son realmente visibles para los 4 tipos de usuario

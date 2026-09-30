@@ -1,6 +1,7 @@
 import type { TextareaHTMLAttributes } from 'react'
 import { cn } from '@/shared/lib/cn'
 import { Field, fieldControlClasses, fieldDescribedBy } from '@/shared/ui/Field'
+import styles from './Textarea.module.css'
 
 type NativeTextareaProps = Omit<
   TextareaHTMLAttributes<HTMLTextAreaElement>,
@@ -14,6 +15,11 @@ export interface TextareaProps extends NativeTextareaProps {
   readonly hint?: string
   readonly tooltip?: string
   readonly className?: string
+  /**
+   * Muestra `caracteres / maxLength` en la base del campo. Requiere
+   * `maxLength` y un `value` controlado.
+   */
+  readonly showCounter?: boolean
 }
 
 /**
@@ -28,10 +34,13 @@ export function Textarea({
   tooltip,
   className,
   placeholder,
+  showCounter = false,
   ...rest
 }: TextareaProps) {
   const hasError = error !== undefined && error !== null && error !== ''
   const hasHint = hint !== undefined && hint !== ''
+  const conContador = showCounter && rest.maxLength !== undefined
+  const largo = typeof rest.value === 'string' ? rest.value.length : 0
 
   return (
     <Field
@@ -41,6 +50,13 @@ export function Textarea({
       hint={hint}
       labelVariant="textarea"
       className={className}
+      adornment={
+        conContador ? (
+          <span className={styles.contador} aria-live="polite">
+            {largo}/{rest.maxLength}
+          </span>
+        ) : undefined
+      }
     >
       <textarea
         id={id}
@@ -52,6 +68,7 @@ export function Textarea({
           fieldControlClasses.control,
           fieldControlClasses.controlTextarea,
           hasError && fieldControlClasses.controlInvalid,
+          conContador && styles.conContador,
         )}
         {...rest}
       />

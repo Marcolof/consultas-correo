@@ -38,7 +38,24 @@ export interface ItemAyuda {
   readonly categoria: string | null
   /** Sólo para items sin gestión documentada (no tienen de dónde heredar tags). */
   readonly tags?: readonly string[]
+  /**
+   * La gestión es sobre un envío puntual: antes del formulario, el usuario
+   * busca y elige el envío (`/v3/envio`). Marcado a mano en ayuda.json según
+   * la captura del formulario de producción (motivos con punto rojo) y el
+   * criterio del usuario del 2026-09-30: todo lo referido a envíos va ahí.
+   */
+  readonly envio?: boolean
+  /** Subdivisión dentro del grupo (hoy sólo "Envíos y paquetes"). */
+  readonly subgrupo?: SubgrupoId
 }
+
+export type SubgrupoId = 'nacional' | 'internacional'
+
+/** Títulos y orden de los subgrupos: primero los envíos nacionales. */
+export const SUBGRUPOS: readonly { readonly id: SubgrupoId; readonly titulo: string }[] = [
+  { id: 'nacional', titulo: 'Envíos nacionales' },
+  { id: 'internacional', titulo: 'Envíos internacionales' },
+]
 
 export interface GrupoAyuda {
   readonly id: string
@@ -207,6 +224,24 @@ export function datosDeCuenta(): readonly DatoCuenta[] {
   ]
 }
 
+/**
+ * Datos del remitente del reclamo de un envío. Mismos datos de la cuenta,
+ * con los rótulos del formulario de producción ("Datos del remitente").
+ */
+export function datosRemitente(): readonly DatoCuenta[] {
+  const cuenta = data.cuenta
+  return [
+    { label: 'Razón social / nombre completo', valor: `${CURRENT_USER.firstName} ${CURRENT_USER.lastName}` },
+    { label: 'DNI / CUIT / CUIL', valor: cuenta.numeroDocumento },
+    { label: 'Domicilio', valor: cuenta.direccion },
+    { label: 'Localidad', valor: cuenta.localidad },
+    { label: 'Código postal', valor: cuenta.codigoPostal },
+    { label: 'Provincia', valor: cuenta.provincia },
+    { label: 'Correo electrónico', valor: cuenta.email },
+    { label: 'Teléfono', valor: cuenta.telefono },
+  ]
+}
+
 /** Asunto que viaja con el reclamo: el nombre documentado si existe, si no el de la referencia. */
 export function asuntoDe(item: ItemAyuda): string {
   return item.gestion ?? item.label
@@ -219,4 +254,14 @@ export function enviarConsulta(): string {
   const caso = `RC-2026-${String(proximoCaso)}`
   proximoCaso += 1
   return caso
+}
+
+/**
+ * A dónde lleva elegir una gestión: las de envío pasan primero por la
+ * búsqueda del envío; el resto va directo al formulario.
+ */
+export function rutaDeGestion(itemId: string | null, perfil: UserProfileId): string {
+  if (itemId === null) return '/v3/formulario'
+  const encontrado = findItemVisible(itemId, perfil)
+  return encontrado?.item.envio === true ? `/v3/envio?g=${itemId}` : `/v3/formulario?g=${itemId}`
 }

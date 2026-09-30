@@ -70,8 +70,30 @@
 - **Formulario sin datos que ya tiene la cuenta**: se muestran de sólo
   lectura; sólo se escribe la consulta. Datos de cuenta ficticios; captcha
   como maqueta visual.
-- Sombra difusa y centrada nueva (`--shadow-soft` en `tokens.css`).
+- Tarjetas con contorno de 1px (`--border-card`) en vez de sombra (25/09),
+  también en V1 y V2.
 - V3 no importa nada de V2: se puede borrar una sin romper la otra.
+
+#### V3 — Reclamos de envío (2026-09-30)
+
+- Las gestiones de envío (campo `envio` en `ayuda.json`) pasan por
+  **`/v3/envio`**: búsqueda del envío con los 8 filtros de producción,
+  plegables y animados, chips de filtros aplicados, tabla a todo el ancho y
+  paginado. Diseño de Figma (`13826:86552`, `13826:86982`, `13818:80453`).
+- **Iguales a producción** (pedido del usuario): calendario, menú ⋮ (Reclamo
+  · Detalle · Seguimientos) y modales de Detalle y Seguimientos.
+- **`/v3/reclamo-envio`**: formulario con toda la info del de producción
+  (remitente, destinatario, servicio) en panel lateral de sólo lectura y dos
+  campos con contador de caracteres. Máximos propuestos (250 / 1000).
+- "Envíos y paquetes" dividido en **nacionales** e **internacionales**. Las 4
+  internacionales son **hipotéticas** (sin marca en la UI; ver
+  `documentation/propuesta-v3-ayuda-y-soporte.md`, sección 9).
+- Envíos de ejemplo **inventados** (`src/v3/core/envios.ts`).
+- Compartidos nuevos o ampliados: `DatePicker`; `Field.adornment`;
+  `Textarea.showCounter`; `Input.floatLabel`; `PageContainer width="wide"`;
+  `Modal size="wide"` (`--modal-width-wide: 1200px`).
+- `npm run build:cliente`: paquete sólo-V3 para abrir con doble clic
+  (`vite.client.config.ts`, `src/clientMain.tsx`, `src/app/ClientApp.tsx`).
 
 ## Decisiones tomadas y revertidas (para no repetirlas)
 

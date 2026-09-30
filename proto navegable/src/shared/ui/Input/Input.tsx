@@ -22,6 +22,11 @@ export interface InputProps extends NativeInputProps {
   /** Texto del tooltip (`data-bs-title` en el original). */
   readonly tooltip?: string
   readonly className?: string
+  /**
+   * Deja el label siempre arriba. Para controles que siempre muestran algo
+   * aunque estén vacíos, como `type="date"` (dd/mm/aaaa).
+   */
+  readonly floatLabel?: boolean
 }
 
 /**
@@ -40,6 +45,7 @@ export function Input({
   tooltip,
   className,
   placeholder,
+  floatLabel = false,
   ...rest
 }: InputProps) {
   const hasError = error !== undefined && error !== null && error !== ''
@@ -47,7 +53,7 @@ export function Input({
   const hasHint = hint !== undefined && hint !== ''
 
   return (
-    <Field id={id} label={label} error={error} hint={hint} className={className}>
+    <Field id={id} label={label} error={error} hint={hint} className={className} floatLabel={floatLabel}>
       <input
         id={id}
         placeholder={placeholder ?? label}

@@ -18,6 +18,12 @@ export interface FieldProps {
   readonly className?: string
   /** El control. Va ANTES del label: el CSS usa el selector hermano. */
   readonly children: ReactNode
+  /**
+   * Contenido extra DENTRO del recuadro del control (p. ej. un contador de
+   * caracteres). Se renderiza después del label para no romper el selector
+   * hermano `control + label` del label flotante.
+   */
+  readonly adornment?: ReactNode
 }
 
 /**
@@ -38,6 +44,7 @@ export function Field({
   labelVariant = 'default',
   className,
   children,
+  adornment,
 }: FieldProps) {
   const errorId = `${id}-error`
   const hintId = `${id}-hint`
@@ -64,6 +71,8 @@ export function Field({
         >
           {label}
         </label>
+
+        {adornment}
       </div>
 
       {hint !== undefined && hint !== '' && (

@@ -1,7 +1,8 @@
 # Propuesta V3 — Ayuda y soporte
 
-**Estado:** alternativa en exploración · **Fecha:** 24/09/2026
-**Rutas en el prototipo:** `/prototipo/v3` y `/prototipo/v3/formulario`
+**Estado:** alternativa en exploración · **Fecha:** 24/09/2026 · **Actualizado:** 30/09/2026
+**Rutas en el prototipo:** `/prototipo/v3`, `/prototipo/v3/formulario`,
+`/prototipo/v3/envio` y `/prototipo/v3/reclamo-envio`
 
 > V3 **no reemplaza** a V1 ni a V2. Las tres conviven y se eligen desde la
 > landing del prototipo (`/prototipo/`).
@@ -66,11 +67,10 @@ agrupación de la referencia para esta propuesta. Vive en
 Los títulos de grupo **se acortaron** a pedido del usuario ("no son muy user
 friendly"). Los ítems conservan el texto de la referencia.
 
-| Grupo (V3) | Título en la referencia | Ítems |
-|---|---|---|
 | Grupo (V3) | Ítems | Sólo Franquicias | Sólo Fulfillment |
 |---|---|---|---|
-| Envíos y paquetes | Demora en el servicio · Fallas en la entrega · Paquetes dañados · Faltantes de contenido | — | Demora en el armado · Diferencia en el armado |
+| Envíos y paquetes — **nacionales** | Demora en el servicio · Fallas en la entrega · Paquetes dañados · Faltantes de contenido | — | Demora en el armado · Diferencia en el armado |
+| Envíos y paquetes — **internacionales** (⚠️ hipotéticos, ver sección 9) | Demora en la entrega internacional · Problemas con la aduana · Paquete extraviado en tránsito internacional · Costos de importación no informados | — | — |
 | Pagos y facturación | Cobros erróneos · No puedo pagar mis envíos · Pago de oficios judiciales | Errores con el saldo de mi cuenta · Errores en mi factura | — |
 | Cuenta y plataforma | Inconvenientes para alta de usuario · Inconveniente al generar envío | Problemas con el sello digital · Pago de sellos digitales · Reclamos de Franquicias | Inconveniente con la carga de envíos · Inconveniente con la carga de pedidos · No visualizo stock · Diferencia de stock |
 | Otras consultas | Problemas de seguimiento · Falta o error en información de seguimiento | — | — |
@@ -148,7 +148,136 @@ Detalles:
 - Al enviar se muestra el número de caso en el mismo panel. No hay pantalla
   de seguimiento.
 
-## 7. Preguntas abiertas
+Este formulario es el de las gestiones que **no** son de un envío puntual
+(cobros, facturas, cuenta, etc.). Las de envío pasan antes por la búsqueda
+del envío (sección 7) y terminan en su propio formulario (sección 8).
+
+## 7. Búsqueda del envío (`/v3/envio`) — agregada el 30/09/2026
+
+En producción (`/reclamosform`, relevado el 30/09/2026) los motivos de
+reclamo **se dividen en dos formularios distintos**:
+
+| Motivos de producción | Qué pide primero | Formulario |
+|---|---|---|
+| Demora en el servicio · Falta o error en la información de seguimiento · Inconvenientes con la entrega · Paquete dañado · Paquete con faltante de contenido | **Buscar y elegir el envío** | Reclamo de envío (sección 8) |
+| Recibí un cobro erróneo · Errores en mi factura · Errores con el saldo de mi cuenta · Inconvenientes con la carga de envíos · Inconvenientes con el pago de oficios judiciales · Inconvenientes para dar de alta un usuario adicional · No puedo pagar mis envíos | Nada | Formulario de la sección 6 |
+
+**Criterio del usuario (30/09/2026): todo lo referido a envíos va al
+formulario de envío**, aunque producción liste más motivos que los de la
+tabla. En V3 se marcaron así (campo `envio` en `ayuda.json`):
+
+- Los 5 de producción: Demora en el servicio, Fallas en la entrega, Paquetes
+  dañados, Faltantes de contenido y Falta o error en información de
+  seguimiento.
+- **Agregados por el criterio "todo lo de envíos"** (a confirmar): Problemas
+  de seguimiento, Demora en el armado y Diferencia en el armado (Fulfillment).
+- Los 4 internacionales hipotéticos (sección 9).
+
+### Pantalla
+
+Diseño: Figma "Mi Correo 2.0", "Estado default" (`13826:86552`), "Con
+búsqueda" (`13826:86982`) y componente "Filtros reclamos" (`13818:80453`).
+
+- **Título con flecha de volver**: la navegación hacia atrás vive en el título.
+- **Filtros** (los mismos 8 de producción): TN, Destinatario, Fecha desde,
+  Fecha hasta, Provincia de origen / Sucursal de origen, Provincia de destino
+  / Sucursal de destino. La sucursal se habilita recién al elegir su
+  provincia. Arrancan **visibles**, en 4 columnas × 2 filas, y se pliegan con
+  el botón "Filtros".
+- **Estado vacío inicial**: "Aún no hay resultados — Utilizá los filtros para
+  encontrar resultados".
+- **Al aplicar**: el panel se pliega (animado) y los filtros activos quedan
+  como **chips** que se quitan de a uno, con "Limpiar filtro". Debajo:
+  contador ("24 envíos"), tabla con filas alternadas (Fecha ordenable, TN,
+  Estado, Envío cargado por, Origen, Destino) y paginador con "Filas por
+  página".
+- **Sin coincidencias**: "No encontramos envíos con esos filtros".
+- **Ancho**: la pantalla usa todo el ancho disponible (hasta 1600px), para que
+  la tabla no quede angosta.
+- **Estado en la URL**: los filtros aplicados viajan en la URL; volver desde
+  el reclamo conserva la búsqueda.
+
+### Lo que se mantiene IGUAL que producción (pedido del usuario)
+
+- **Calendario**: estilo global de producción (bootstrap-datepicker):
+  « Mes Año », semana Do–Sa, días de meses vecinos en gris, ~205 × 230px.
+  Es el componente compartido `DatePicker`.
+- **Menú ⋮ de cada envío**: Reclamo · Detalle · Seguimientos.
+- **Modal "Detalles del envío"** y **modal "Movimientos del envío"**: se
+  replicaron tal cual, aunque no sigan el estilo de V3. Rediseñarlos queda
+  para más adelante.
+
+### Datos
+
+**Los envíos son inventados** (24 envíos de ejemplo en
+`proto navegable/src/v3/core/envios.ts`): producción no devolvió resultados
+en el ambiente de dev y después la sesión venció. Siguen el formato de la
+tabla de Figma y de los modales de producción. Las sucursales existen sólo
+para algunas provincias.
+
+## 8. Reclamo de un envío (`/v3/reclamo-envio`) — agregado el 30/09/2026
+
+Se llega con "Reclamo" desde el menú ⋮ de un envío. Toma **toda la
+información** del formulario de producción, con el estilo de V3:
+
+- **Panel lateral de sólo lectura** con tres grupos: Datos del remitente (de
+  la cuenta), Datos del destinatario y Datos del servicio (TN, importe
+  abonado, valor del contenido, tipo de producto), estos dos precargados del
+  envío.
+- **Asunto** como en producción: gestión + producto (p. ej. "Demora en el
+  servicio - Paq.ar Clásico"), más el TN.
+- **Dos campos amplios**, los únicos que escribe el usuario, con **contador de
+  caracteres**:
+  - "Descripción del contenido" (96px de alto, máx. 250 caracteres).
+  - "Descripción del reclamo" (200px, máx. 1000). En producción se llama
+    sólo "Descripción"; se agregó "del reclamo" para distinguirlo.
+  - **Los máximos son propuestos**: no se pudo relevar el de producción.
+- Sin captcha, igual que el formulario de reclamo de producción.
+- Al enviar: número de caso en el mismo panel.
+
+## 9. ⚠️ Envíos internacionales: gestiones HIPOTÉTICAS
+
+Desde el 30/09/2026, "Envíos y paquetes" se divide en **Envíos nacionales**
+(primero, con las gestiones de siempre) y **Envíos internacionales**.
+
+**Las 4 gestiones internacionales son hipotéticas: no existen en
+producción ni en la documentación del negocio.** Son las 4 que ya figuraban
+como inventadas en la categoría Paquetería Internacional de
+[`mis-gestiones-categorias.md`](mis-gestiones-categorias.md) (sección 5):
+
+- Demora en la entrega internacional
+- Problemas con la aduana
+- Paquete extraviado en tránsito internacional
+- Costos de importación no informados
+
+Decisión del usuario (30/09/2026): **en la interfaz se muestran como
+cualquier otra gestión**, sin el sufijo "(Gestión inventada)" ni ninguna
+marca de "hipotética". Su carácter hipotético se registra **sólo en la
+documentación** (este documento y `mis-gestiones-categorias.md`). Se buscan
+con los mismos tags de la categoría inventada y, como son de envío, pasan
+por la búsqueda del envío.
+
+Antes de presentarlas como reales hay que reemplazarlas por las gestiones
+internacionales que defina el negocio.
+
+## 10. Pendiente: SIE
+
+**SIE** es otra posible incorporación a los reclamos que mencionó el
+usuario el 30/09/2026. **Hoy queda pendiente**: no forma parte de los casos
+de uso ni de ninguna pantalla del prototipo, pero podría sumarse más
+adelante. No hay en el proyecto ninguna definición de qué gestiones o
+tipo de usuario abarcaría; se documenta sólo su estado.
+
+## 11. Paquete para el cliente
+
+`npm run build:cliente` (dentro de `proto navegable/`) genera una carpeta
+con **sólo V3** que se abre con doble clic, sin servidor ni links al Hub o a
+Vercel: `Paquete cliente V3/` (fuera del repositorio), con
+`Abrir propuesta V3.html`, `assets/` y un `LEEME.txt`. Incluye las fuentes
+Gilroy y arranca con el perfil Individuo. Ver `vite.client.config.ts` y
+`scripts/finalize-cliente.mjs`.
+
+## 12. Preguntas abiertas
 
 1. ¿La agrupación por tipo de problema se adopta, o se vuelve a la de
    categorías? Son ejes distintos y hoy conviven en V1/V2 vs V3.
@@ -162,8 +291,16 @@ Detalles:
    usuario? (Franquicias y Fulfillment probablemente tengan razón social.)
 5. ¿"Tipo de documento: Consumidor final" de la referencia era un error, o
    el campo real es la condición frente al IVA?
+6. ¿"Problemas de seguimiento", "Demora en el armado" y "Diferencia en el
+   armado" van al formulario de envío? Se marcaron así por el criterio "todo
+   lo de envíos", sin que producción lo confirme.
+7. ¿Qué gestiones internacionales reales reemplazan a las 4 hipotéticas?
+8. ¿Cuáles son los largos máximos reales de "Descripción del contenido" y
+   "Descripción"?
+9. ¿SIE se incorpora a los reclamos? ¿Con qué gestiones y para qué tipos de
+   usuario?
 
-## 8. Documentos relacionados
+## 13. Documentos relacionados
 
 - [`propuesta-v2-reclamo-contextual.md`](propuesta-v2-reclamo-contextual.md) — V2.
 - [`mis-gestiones-categorias.md`](mis-gestiones-categorias.md) — la regla de categorías y tipos de usuario.

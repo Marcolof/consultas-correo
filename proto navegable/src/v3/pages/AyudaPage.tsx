@@ -3,7 +3,15 @@ import { useNavigate, useSearchParams } from 'react-router-dom'
 import { useActiveUseCase } from '@/core/session/activeUseCase'
 import { PageContainer, PageHeader } from '@/shared/layout'
 import { EmptyState, SearchInput } from '@/shared/ui'
-import { accesosVisibles, buscar, findGrupoVisible, gruposVisibles, itemsDeCategoria } from '../core/ayuda'
+import {
+  SUBGRUPOS,
+  accesosVisibles,
+  buscar,
+  findGrupoVisible,
+  gruposVisibles,
+  itemsDeCategoria,
+  rutaDeGestion,
+} from '../core/ayuda'
 import { Icono } from '../components/Icono'
 import { direccionActual, irAdelante, irAtras } from '../core/transicion'
 import styles from './v3.module.css'
@@ -59,7 +67,7 @@ export function AyudaPage() {
 
   const abrirFormulario = (itemId: string | null) => {
     irAdelante()
-    void navigate(itemId === null ? '/v3/formulario' : `/v3/formulario?g=${itemId}`)
+    void navigate(rutaDeGestion(itemId, profileId))
   }
 
   const resultados = hayBusqueda ? buscar(consulta, profileId) : []
@@ -174,21 +182,34 @@ export function AyudaPage() {
             <h2 className={styles.temaTitulo}>{grupoAbierto.titulo}</h2>
           </div>
 
-          <div className={styles.lista}>
-            {grupoAbierto.items.map((item) => (
-              <button
-                key={item.id}
-                type="button"
-                className={styles.fila}
-                onClick={() => abrirFormulario(item.id)}
-              >
-                <span className={styles.filaLabel}>{item.label}</span>
-                <span className={styles.filaFlecha} aria-hidden="true">
-                  →
-                </span>
-              </button>
-            ))}
-          </div>
+          {/* Grupos con subdivisión (Envíos y paquetes): un bloque por subgrupo,
+              en el orden de SUBGRUPOS. El resto, una sola lista. */}
+          {(grupoAbierto.items.some((item) => item.subgrupo !== undefined)
+            ? SUBGRUPOS.map((subgrupo) => ({
+                ...subgrupo,
+                items: grupoAbierto.items.filter((item) => item.subgrupo === subgrupo.id),
+              })).filter((subgrupo) => subgrupo.items.length > 0)
+            : [{ id: 'todos', titulo: null, items: grupoAbierto.items }]
+          ).map((bloque) => (
+            <section key={bloque.id} className={styles.subgrupo} aria-label={bloque.titulo ?? undefined}>
+              {bloque.titulo !== null && <h3 className={styles.subgrupoTitulo}>{bloque.titulo}</h3>}
+              <div className={styles.lista}>
+                {bloque.items.map((item) => (
+                  <button
+                    key={item.id}
+                    type="button"
+                    className={styles.fila}
+                    onClick={() => abrirFormulario(item.id)}
+                  >
+                    <span className={styles.filaLabel}>{item.label}</span>
+                    <span className={styles.filaFlecha} aria-hidden="true">
+                      →
+                    </span>
+                  </button>
+                ))}
+              </div>
+            </section>
+          ))}
         </div>
       ) : (
         <div key={vista} className={`${styles.stack} ${animacion}`}>

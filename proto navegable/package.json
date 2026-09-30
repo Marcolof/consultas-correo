@@ -7,6 +7,7 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
+    "build:cliente": "tsc -b && vite build -c vite.client.config.ts && node scripts/finalize-cliente.mjs",
     "preview": "vite preview",
     "typecheck": "tsc -b --noEmit"
   },

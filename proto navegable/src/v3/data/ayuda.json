@@ -13,7 +13,6 @@
     "gestiones_documentadas_que_la_referencia_no_incluia": "Ninguna desde el 2026-09-24. Las 4 que faltaban (Problemas para generar el sello digital, Problema con el pago de sellos digitales, Inconveniente en la carga de los pedidos, Diferencia en el armado del envio) se agregaron cuando el usuario pidio que 'Cuenta y plataforma' muestre las consultas propias de Franquicias y Fulfillment: las de sellos y carga de pedidos van ahi; la de armado va en 'Envios y paquetes', junto a 'Demora en el armado'.",
     "movidos_respecto_de_la_referencia": "'Diferencia de stock' y 'Reclamos de Franquicias' estaban en 'General' en la referencia; se movieron a 'Cuenta y plataforma' por el mismo pedido."
   },
-
   "grupos": [
     {
       "id": "paquete",
@@ -22,12 +21,16 @@
       "descripcion": "Demoras, entregas y paquetes dañados o incompletos",
       "icono": "paquete",
       "items": [
-        { "id": "demora_servicio", "label": "Demora en el servicio", "gestion": "Demora en el servicio", "categoria": "paqueteria_nacional" },
-        { "id": "demora_armado", "label": "Demora en el armado", "gestion": "Demora en el armado de los envíos", "categoria": "fulfillment" },
-        { "id": "diferencia_armado", "label": "Diferencia en el armado", "gestion": "Diferencia en el armado del envío", "categoria": "fulfillment" },
-        { "id": "fallas_entrega", "label": "Fallas en la entrega", "gestion": "Inconvenientes con la entrega", "categoria": "paqueteria_nacional" },
-        { "id": "paquetes_danados", "label": "Paquetes dañados", "gestion": "Paquete dañado", "categoria": "paqueteria_nacional" },
-        { "id": "faltantes_contenido", "label": "Faltantes de contenido", "gestion": "Paquete con faltante de contenido", "categoria": "paqueteria_nacional" }
+        { "id": "demora_servicio", "envio": true, "label": "Demora en el servicio", "gestion": "Demora en el servicio", "categoria": "paqueteria_nacional", "subgrupo": "nacional" },
+        { "id": "demora_armado", "envio": true, "label": "Demora en el armado", "gestion": "Demora en el armado de los envíos", "categoria": "fulfillment", "subgrupo": "nacional" },
+        { "id": "diferencia_armado", "envio": true, "label": "Diferencia en el armado", "gestion": "Diferencia en el armado del envío", "categoria": "fulfillment", "subgrupo": "nacional" },
+        { "id": "fallas_entrega", "envio": true, "label": "Fallas en la entrega", "gestion": "Inconvenientes con la entrega", "categoria": "paqueteria_nacional", "subgrupo": "nacional" },
+        { "id": "paquetes_danados", "envio": true, "label": "Paquetes dañados", "gestion": "Paquete dañado", "categoria": "paqueteria_nacional", "subgrupo": "nacional" },
+        { "id": "faltantes_contenido", "envio": true, "label": "Faltantes de contenido", "gestion": "Paquete con faltante de contenido", "categoria": "paqueteria_nacional", "subgrupo": "nacional" },
+        { "id": "demora_internacional", "label": "Demora en la entrega internacional", "gestion": null, "categoria": null, "envio": true, "subgrupo": "internacional", "tags": ["internacional", "demora", "exterior", "envio", "atraso", "problema", "paqueteria internacional", "tarda", "no llega del exterior", "importacion tardia", "retenido", "aduana", "envio del exterior"] },
+        { "id": "aduana", "label": "Problemas con la aduana", "gestion": null, "categoria": null, "envio": true, "subgrupo": "internacional", "tags": ["aduana", "importacion", "arancel", "retencion", "customs", "problema", "paqueteria internacional", "retenido en aduana", "impuestos", "pago de aranceles", "liberar paquete", "tramite aduanero"] },
+        { "id": "extraviado_internacional", "label": "Paquete extraviado en tránsito internacional", "gestion": null, "categoria": null, "envio": true, "subgrupo": "internacional", "tags": ["extraviado", "perdido", "transito", "internacional", "envio", "paqueteria internacional", "se perdio", "no aparece", "desaparecido", "no llego nunca", "envio perdido", "paquete", "caja"] },
+        { "id": "costos_importacion", "label": "Costos de importación no informados", "gestion": null, "categoria": null, "envio": true, "subgrupo": "internacional", "tags": ["costos", "importacion", "arancel", "sorpresa", "cobro", "paqueteria internacional", "cobro extra", "cobro inesperado", "no me avisaron", "costo oculto", "impuestos sorpresa"] }
       ]
     },
     {
@@ -69,12 +72,11 @@
       "descripcion": "Seguimiento de envíos y otros temas",
       "icono": "otras",
       "items": [
-        { "id": "problemas_seguimiento", "label": "Problemas de seguimiento", "gestion": null, "categoria": null, "tags": ["seguimiento", "tracking", "estado", "rastreo", "donde esta", "problema"] },
-        { "id": "falta_info_seguimiento", "label": "Falta o error en información de seguimiento", "gestion": "Falta o error en la información de seguimiento", "categoria": "paqueteria_nacional" }
+        { "id": "problemas_seguimiento", "envio": true, "label": "Problemas de seguimiento", "gestion": null, "categoria": null, "tags": ["seguimiento", "tracking", "estado", "rastreo", "donde esta", "problema"] },
+        { "id": "falta_info_seguimiento", "envio": true, "label": "Falta o error en información de seguimiento", "gestion": "Falta o error en la información de seguimiento", "categoria": "paqueteria_nacional" }
       ]
     }
   ],
-
   "_accesos_rapidos": "Los mismos atajos que V2, apuntando a items de esta agrupacion. El label se toma del item, no se repite aca. 'Ingresar un reclamo' va ultimo porque es el unico que saltea la eleccion de gestion. Se ocultan solos si el tipo de usuario no ve el item.",
   "accesos_rapidos": [
     { "id": "ar_demora", "item": "demora_servicio", "icono": "reloj" },
@@ -86,7 +88,6 @@
     { "id": "ar_fulfillment", "label": "Fulfillment", "icono": "fulfillment", "categoria": "fulfillment" },
     { "id": "ar_nuevo_reclamo", "label": "Ingresar un reclamo", "icono": "reclamo-nuevo" }
   ],
-
   "_cuenta": "DATOS DE CUENTA FICTICIOS. En produccion vienen de la sesion del usuario registrado: por eso el formulario los muestra de solo lectura en vez de pedirlos. El nombre se toma de core/user.ts para que coincida con el saludo del header. En la referencia, 'Tipo de documento' mostraba 'Consumidor final', que es una condicion frente al IVA y no un tipo de documento: se uso DNI.",
   "cuenta": {
     "email": "rodrigo.correo@ejemplo.com",
@@ -95,6 +96,7 @@
     "codigoPostal": "6450",
     "provincia": "Buenos Aires",
     "tipoDocumento": "DNI",
-    "numeroDocumento": "30.123.456"
+    "numeroDocumento": "30.123.456",
+    "telefono": "11 4567-8910"
   }
 }

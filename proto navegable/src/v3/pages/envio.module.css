@@ -1,0 +1,575 @@
+/*
+ * Búsqueda del envío (V3). Medidas de Figma "Mi Correo 2.0":
+ * "Estado default" 13826:86552 y "Con búsqueda" 13826:86982.
+ */
+
+.pagina {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+/* --- Título con flecha de volver ------------------------------------------ */
+
+.titulo {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-2);
+}
+
+.volver {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: var(--radius-full);
+  background: none;
+  padding: 0;
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: background-color var(--transition-fast);
+}
+
+.volver:hover,
+.volver:focus-visible {
+  background: var(--surface-sunken);
+}
+
+.tituloTexto {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.h1 {
+  margin: 0;
+  color: var(--text-primary);
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-medium);
+  line-height: var(--line-height-tight);
+}
+
+.bajada {
+  margin: 0;
+  color: var(--text-primary);
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-medium);
+}
+
+/* --- Filtros ---------------------------------------------------------------- */
+
+.filtros {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.toggleFila {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  height: 32px;
+  border: none;
+  border-radius: 8px;
+  background: none;
+  padding: 0 var(--space-2);
+  color: var(--text-link);
+  font-family: inherit;
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-semibold);
+  cursor: pointer;
+}
+
+.toggle:hover,
+.toggle:focus-visible {
+  background: var(--surface-sunken);
+}
+
+.chevron {
+  transition: transform 0.3s ease;
+}
+
+.chevronAbierto {
+  transform: rotate(180deg);
+}
+
+/*
+ * Plegado animado: el alto va de 0 a su contenido con `grid-template-rows`
+ * (0fr ↔ 1fr), sin medir en JS. Al abrir, el contenido además baja un poco y
+ * aparece; al cerrar, sube y se desvanece.
+ */
+.plegable {
+  display: grid;
+  grid-template-rows: 0fr;
+  opacity: 0;
+  margin-top: calc(-1 * var(--space-4));
+  transition:
+    grid-template-rows 0.35s ease,
+    opacity 0.25s ease,
+    margin-top 0.35s ease;
+}
+
+.plegableAbierto {
+  grid-template-rows: 1fr;
+  opacity: 1;
+  margin-top: 0;
+}
+
+.plegableInterior {
+  min-height: 0;
+  overflow: hidden;
+}
+
+.plegable .panel,
+.plegable .panelChips {
+  transform: translateY(-8px);
+  transition: transform 0.35s ease;
+}
+
+.plegableAbierto .panel,
+.plegableAbierto .panelChips {
+  transform: none;
+}
+
+/* Los campos entran en cascada cuando el panel se abre. */
+.plegableAbierto .campos > * {
+  animation: entrarCampo 0.3s ease-out both;
+}
+
+.plegableAbierto .campos > :nth-child(2) { animation-delay: 30ms; }
+.plegableAbierto .campos > :nth-child(3) { animation-delay: 60ms; }
+.plegableAbierto .campos > :nth-child(4) { animation-delay: 90ms; }
+.plegableAbierto .campos > :nth-child(5) { animation-delay: 120ms; }
+.plegableAbierto .campos > :nth-child(6) { animation-delay: 150ms; }
+.plegableAbierto .campos > :nth-child(7) { animation-delay: 180ms; }
+.plegableAbierto .campos > :nth-child(8) { animation-delay: 210ms; }
+
+@keyframes entrarCampo {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+}
+
+/* Resultados y estados vacíos tras cada búsqueda. */
+.aparecer {
+  animation: aparecer 0.35s ease-out both;
+}
+
+@keyframes aparecer {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+}
+
+.panel,
+.panelChips {
+  border: var(--border-width-thin) solid var(--border-card);
+  border-radius: var(--radius-card);
+  background: var(--surface-raised);
+  padding: var(--space-4);
+}
+
+.panel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  /* Inputs de 40px como en Figma; el label flotante toma el fondo del panel. */
+  --field-height: 40px;
+  --field-label-backdrop: var(--surface-raised);
+}
+
+/* 4 columnas × 2 filas, como en Figma; baja a 2 y a 1 en pantallas angostas. */
+.campos {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--space-4);
+}
+
+@media (max-width: 991.98px) {
+  .campos {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 575.98px) {
+  .campos {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+:global(.force-mobile) .campos {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.campos > * {
+  margin-bottom: 0;
+}
+
+.acciones {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--space-4);
+}
+
+.panelChips {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-4);
+}
+
+.chips {
+  display: flex;
+  flex: 1;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* Chip Standard M de Figma (12651:276363): label + valor + ícono derecho. */
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  height: 32px;
+  border: var(--border-width-thin) solid var(--border-card);
+  border-radius: 999px;
+  background: var(--surface-raised);
+  padding: 0 var(--space-3) 0 var(--space-4);
+  color: var(--text-link);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  white-space: nowrap;
+  animation: entrarChip 0.3s ease-out both;
+}
+
+@keyframes entrarChip {
+  from {
+    opacity: 0;
+    transform: scale(0.92);
+  }
+}
+
+.chipQuitar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  border: none;
+  border-radius: var(--radius-full);
+  background: none;
+  padding: 0;
+  color: inherit;
+  cursor: pointer;
+}
+
+.chipQuitar:hover,
+.chipQuitar:focus-visible {
+  background: var(--surface-sunken);
+}
+
+/* --- Estado vacío ------------------------------------------------------------ */
+
+.vacio {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-1);
+  padding: var(--space-8) 0;
+  text-align: center;
+}
+
+.vacioIcono {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: var(--space-2);
+  border-radius: 999px;
+  background: var(--surface-sunken);
+  padding: 10px;
+  color: var(--text-muted);
+}
+
+.vacioTitulo {
+  margin: 0;
+  color: var(--text-primary);
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-semibold);
+}
+
+.vacioTexto {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-regular);
+}
+
+/* --- Tabla -------------------------------------------------------------------- */
+
+.resultados {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.contador {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-regular);
+}
+
+/* Sin scroll en escritorio: un contenedor con overflow recortaría el menú ⋮
+ * de las últimas filas. El scroll horizontal sólo aparece en pantallas
+ * angostas, donde la tabla no entra. */
+.tablaScroll {
+  overflow: visible;
+}
+
+@media (max-width: 1100px) {
+  .tablaScroll {
+    overflow-x: auto;
+    padding-bottom: 140px;
+    margin-bottom: -140px;
+  }
+}
+
+.tabla {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  min-width: 880px;
+}
+
+.fila {
+  display: grid;
+  grid-template-columns: 186px repeat(4, minmax(0, 1fr)) 200px;
+  border: var(--border-width-thin) solid var(--border-card);
+  border-radius: 8px;
+  background: var(--surface-raised);
+}
+
+.filaSombreada {
+  background: var(--surface-sunken);
+}
+
+/* La fila con el menú ⋮ abierto sube por encima de las siguientes: si no,
+ * las celdas posicionadas de las filas de abajo (fecha) tapan el menú. */
+.filaConMenu {
+  position: relative;
+  z-index: 10;
+}
+
+.celda {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 55px;
+  padding: var(--space-2);
+  color: var(--text-muted);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  text-align: center;
+  overflow-wrap: anywhere;
+}
+
+.cabecera .celda {
+  color: var(--text-primary);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+}
+
+.celdaFecha {
+  position: relative;
+  padding-left: 36px;
+}
+
+.ordenar {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  border: none;
+  background: none;
+  padding: 0;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
+
+.menuWrap {
+  position: absolute;
+  top: 50%;
+  left: var(--space-2);
+  transform: translateY(-50%);
+}
+
+/* Botón ⋮: al abrir su menú queda enmarcado, como en producción. */
+.menuBoton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 32px;
+  border: var(--border-width-thin) solid transparent;
+  border-radius: 8px;
+  background: none;
+  padding: 0;
+  color: var(--text-primary);
+  cursor: pointer;
+  transition:
+    background-color var(--transition-fast),
+    border-color var(--transition-fast);
+}
+
+.menuBoton:hover,
+.menuBoton:focus-visible {
+  background: var(--surface-raised);
+}
+
+.menuBotonAbierto,
+.menuBotonAbierto:hover {
+  border-color: var(--text-primary);
+  background: var(--surface-raised);
+}
+
+/* Menú de la fila (producción: Reclamo, Detalle, Seguimientos), a la derecha del botón. */
+.menu {
+  position: absolute;
+  top: 0;
+  left: calc(100% + 6px);
+  z-index: 5;
+  min-width: 220px;
+  border: var(--border-width-thin) solid var(--border-card);
+  border-radius: 8px;
+  background: var(--surface-raised);
+  padding: var(--space-2) 0;
+  box-shadow: var(--shadow-dropdown);
+  transform-origin: top left;
+  animation: abrirMenu 0.16s ease-out both;
+}
+
+@keyframes abrirMenu {
+  from {
+    opacity: 0;
+    transform: scale(0.96) translateY(-4px);
+  }
+}
+
+.menuItem {
+  display: block;
+  width: 100%;
+  border: none;
+  background: none;
+  padding: var(--space-2) var(--space-6);
+  color: var(--text-primary);
+  font-family: inherit;
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-medium);
+  text-align: left;
+  cursor: pointer;
+}
+
+.menuItem:hover,
+.menuItem:focus-visible {
+  background: var(--surface-sunken);
+}
+
+/* --- Paginador ---------------------------------------------------------------- */
+
+.paginador {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-6);
+  border: var(--border-width-thin) solid var(--border-card);
+  border-radius: 8px;
+  background: var(--surface-raised);
+  padding: var(--space-3) var(--space-6);
+}
+
+.paginadorTexto {
+  flex: 1;
+  margin: 0;
+  color: var(--text-muted);
+  font-size: var(--font-size-xs);
+}
+
+.paginadorControles {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.paginadorControles .paginadorTexto {
+  flex: none;
+}
+
+.filasSelect {
+  height: 28px;
+  border: var(--border-width-thin) solid var(--border-card);
+  border-radius: 6px;
+  background: var(--surface-sunken);
+  padding: 0 var(--space-2);
+  color: var(--text-primary);
+  font-family: inherit;
+  font-size: var(--font-size-xs);
+}
+
+.paginaBoton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border: none;
+  border-radius: 4px;
+  background: none;
+  padding: 0;
+  color: var(--text-primary);
+  cursor: pointer;
+}
+
+.paginaBoton:hover:not(:disabled) {
+  background: var(--surface-sunken);
+}
+
+.paginaBoton:disabled {
+  color: var(--text-disabled);
+  cursor: not-allowed;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .plegable,
+  .plegable .panel,
+  .plegable .panelChips,
+  .chevron {
+    transition: none;
+  }
+
+  .plegableAbierto .campos > *,
+  .chip,
+  .aparecer,
+  .menu {
+    animation: none;
+  }
+}
+
+@media (max-width: 767.98px) {
+  .panelChips {
+    flex-direction: column;
+  }
+
+  .paginador {
+    padding: var(--space-3) var(--space-4);
+  }
+}

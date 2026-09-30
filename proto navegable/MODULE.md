@@ -68,6 +68,8 @@ Funciona sin el Hub: no importa nada de `hub/`, `documentation/` ni
 | `/v2/reclamos/:casoId` | V2 — confirmación con número de caso |
 | `/v3` | V3 — buscador + 4 grupos + accesos rápidos (`?q=`) |
 | `/v3/formulario` | V3 — formulario; `?g=<item>` trae el asunto elegido |
+| `/v3/envio` | V3 — búsqueda del envío (gestiones de envío); `?g=<item>` + un param por filtro (`tn`, `dest`, `desde`, `hasta`, `po`, `so`, `pd`, `sd`) |
+| `/v3/reclamo-envio` | V3 — reclamo de un envío; `?g=<item>&tn=<TN>` |
 
 **Query params** (`src/core/session/deepLink.ts` y la propia
 `AsistentePage`):

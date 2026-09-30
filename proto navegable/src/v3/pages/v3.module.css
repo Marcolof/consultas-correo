@@ -110,6 +110,22 @@
   font-weight: var(--font-weight-semibold);
 }
 
+/* Subdivisión dentro de un tema (Envíos nacionales / internacionales). */
+.subgrupo {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.subgrupoTitulo {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
 /* --- Búsqueda (mismo comportamiento que V2) -------------------------------- */
 
 .volver {

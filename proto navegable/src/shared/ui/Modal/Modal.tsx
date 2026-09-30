@@ -20,7 +20,8 @@ function CloseIcon() {
   )
 }
 
-export type ModalSize = 'sm' | 'md' | 'lg' | 'xl'
+/** `wide`: tablas anchas (p. ej. el detalle de un envío en V3). */
+export type ModalSize = 'sm' | 'md' | 'lg' | 'xl' | 'wide'
 
 export interface ModalProps {
   readonly isOpen: boolean
@@ -40,6 +41,7 @@ const SIZE_CLASS: Record<ModalSize, string | undefined> = {
   md: styles.sizeMd,
   lg: styles.sizeLg,
   xl: styles.sizeXl,
+  wide: styles.sizeWide,
 }
 
 /**
