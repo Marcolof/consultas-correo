@@ -205,7 +205,10 @@ búsqueda" (`13826:86982`) y componente "Filtros reclamos" (`13818:80453`).
 - **Menú ⋮ de cada envío**: Reclamo · Detalle · Seguimientos.
 - **Modal "Detalles del envío"** y **modal "Movimientos del envío"**: se
   replicaron tal cual, aunque no sigan el estilo de V3. Rediseñarlos queda
-  para más adelante.
+  para más adelante. **Escala medida sobre el DOM de producción el
+  30/09/2026**: diálogo de 800px (`modal-lg`, radio 25px), título 22px bold,
+  TN 28px, celdas de 16px, botón de 44px. Una primera versión los dibujó de
+  1200px por tomar la escala de una captura ampliada; se corrigió.
 
 ### Datos
 

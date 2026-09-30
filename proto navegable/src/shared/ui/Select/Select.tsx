@@ -26,6 +26,13 @@ export interface SelectProps extends NativeSelectProps {
    */
   readonly placeholderOption?: string | null
   readonly placeholderOptionValue?: string
+  /**
+   * Con el select vacío y sin foco, el label descansa en el lugar del texto
+   * (como en un `Input`) y sube al enfocar o al elegir. La opción vacía sigue
+   * en la lista, pero su texto no se ve con el desplegable cerrado.
+   * Requiere `value` controlado.
+   */
+  readonly labelEnReposo?: boolean
 }
 
 /**
@@ -47,6 +54,7 @@ export function Select({
   className,
   placeholderOption = '-',
   placeholderOptionValue = '-1',
+  labelEnReposo = false,
   onFocus,
   onBlur,
   ...rest
@@ -55,6 +63,8 @@ export function Select({
   const hasError = error !== undefined && error !== null && error !== ''
   const showInvalid = hasError || invalid
   const hasHint = hint !== undefined && hint !== ''
+  const vacio = labelEnReposo && rest.value !== undefined && String(rest.value) === placeholderOptionValue
+  const reposo = vacio && !isFocused
 
   return (
     <Field
@@ -63,7 +73,7 @@ export function Select({
       error={error}
       hint={hint}
       className={className}
-      floatLabel
+      floatLabel={!reposo}
       labelActive={isFocused}
     >
       <select
@@ -74,6 +84,7 @@ export function Select({
         className={cn(
           fieldControlClasses.control,
           styles.select,
+          reposo && styles.selectReposo,
           showInvalid && fieldControlClasses.controlInvalid,
         )}
         onFocus={(event) => {

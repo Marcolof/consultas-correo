@@ -37,10 +37,6 @@
   max-width: var(--modal-width-lg);
 }
 
-.sizeWide {
-  max-width: var(--modal-width-wide);
-}
-
 /* Alto acotado (no relativo al viewport): el body interno scrollea. */
 .sizeXl {
   max-width: var(--modal-width-xl);

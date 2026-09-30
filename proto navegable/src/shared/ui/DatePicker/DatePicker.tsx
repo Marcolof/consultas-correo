@@ -151,7 +151,7 @@ export function DatePicker({
     (min !== undefined && min !== '' && iso < min) || (max !== undefined && max !== '' && iso > max)
 
   return (
-    <Field id={id} label={label} className={className} floatLabel labelActive={abierto}>
+    <Field id={id} label={label} className={className}>
       <input
         ref={inputRef}
         id={id}

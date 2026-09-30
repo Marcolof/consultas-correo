@@ -1,4 +1,9 @@
-/* Réplica de los modales de producción (capturas del 2026-09-30). */
+/*
+ * Réplica de los modales de producción (`/reclamosform`). Medidas tomadas del
+ * DOM real el 2026-09-30 (modal-lg de 800px, radio 25px, botón de 44px):
+ * título 22px bold, TN 28px medium, celdas de 16px, labels #636b6f sobre
+ * #dedede y bandas de sección en #b5b5b5.
+ */
 
 .detalle,
 .seguimiento {
@@ -12,35 +17,38 @@
   gap: var(--space-2);
   margin: 0;
   color: var(--text-primary);
-  font-size: 1.75rem;
-  font-weight: var(--font-weight-semibold);
+  font-size: 1.375rem; /* 22px */
+  font-weight: var(--font-weight-bold);
 }
 
 .tn {
-  margin: var(--space-2) 0 var(--space-4);
+  margin: var(--space-1) 0 var(--space-2);
   color: var(--text-primary);
-  font-size: 2.25rem;
-  font-weight: var(--font-weight-semibold);
+  font-size: 1.75rem; /* 28px */
+  font-weight: var(--font-weight-medium);
+  line-height: 1.2;
   overflow-wrap: anywhere;
 }
 
-/* Grilla de 4 columnas: bandas grises oscuras de sección, labels en gris
- * claro y valores centrados debajo. */
+/* Tabla de 4 columnas: bandas de sección, labels grises y valores debajo. */
 .tabla {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 3px;
+  /* Proporción medida en producción (165 / 202 / 164 / 164 px): la 2.ª columna
+   * (Mail, Provincia) es algo más ancha para que el correo entre en una línea. */
+  grid-template-columns: 1fr 1.22fr 1fr 1fr;
+  gap: 2px;
   text-align: center;
 }
 
 .banda {
   grid-column: 1 / -1;
-  margin-top: var(--space-3);
+  margin-top: 2px;
   background: #b5b5b5;
-  padding: var(--space-1) var(--space-12);
+  padding: 1px var(--space-12);
   color: var(--white);
-  font-size: 1.125rem;
+  font-size: var(--font-size-base);
   font-weight: var(--font-weight-bold);
+  line-height: 1.4;
   text-align: left;
 }
 
@@ -50,17 +58,20 @@
 
 .label {
   background: #dedede;
-  padding: var(--space-1) var(--space-2);
-  color: var(--grey-700);
-  font-size: 1.125rem;
-  font-weight: var(--font-weight-semibold);
+  padding: 1px;
+  color: #636b6f;
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-bold);
+  line-height: 1.6;
 }
 
 .valor {
-  min-height: 2.25rem;
-  padding: var(--space-1) var(--space-2);
-  color: var(--grey-700);
-  font-size: 1.125rem;
+  min-height: 27px;
+  padding: 1px;
+  color: #636b6f;
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-regular);
+  line-height: 1.6;
   overflow-wrap: anywhere;
 }
 
@@ -71,8 +82,8 @@
 .tituloMov {
   margin: 0 0 var(--space-3);
   color: var(--text-primary);
-  font-size: 1.75rem;
-  font-weight: var(--font-weight-semibold);
+  font-size: 1.375rem; /* 22px */
+  font-weight: var(--font-weight-bold);
 }
 
 .tnMarcado {
@@ -84,20 +95,20 @@
 .movimientos {
   width: 100%;
   border-collapse: collapse;
-  font-size: 1.125rem;
+  font-size: var(--font-size-base);
 }
 
 .movimientos th {
-  background: #dedede;
-  padding: var(--space-3) var(--space-2);
-  color: var(--grey-700);
-  font-weight: var(--font-weight-semibold);
+  background: #dbdbdb;
+  padding: 5px;
+  color: #393939;
+  font-weight: var(--font-weight-bold);
 }
 
 .movimientos td {
   border-bottom: 1px dashed var(--grey-300);
   background: var(--grey-100);
-  padding: var(--space-3) var(--space-2);
+  padding: 5px;
   color: #1c4f9c;
   font-weight: var(--font-weight-semibold);
 }

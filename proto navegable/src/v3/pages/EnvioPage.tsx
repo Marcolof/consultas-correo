@@ -57,6 +57,13 @@ import styles from './envio.module.css'
 
 const FILAS_POR_PAGINA = [10, 20, 50]
 
+/**
+ * Lo que tarda en aparecer el resultado. No hay backend: es sólo para que el
+ * loader se vea. Producción muestra el suyo sobre toda la pantalla; acá va
+ * en el lugar de los resultados (ver `cargando`).
+ */
+const DEMORA_BUSQUEDA_MS = 700
+
 function leerFiltros(params: URLSearchParams): FiltrosEnvio {
   const filtros: Record<ClaveFiltro, string> = { ...FILTROS_VACIOS }
   for (const clave of CLAVES_FILTRO) filtros[clave] = params.get(FILTRO_META[clave].param) ?? ''
@@ -81,9 +88,19 @@ export function EnvioPage() {
   const [pagina, setPagina] = useState(1)
   const [porPagina, setPorPagina] = useState(10)
   const [menuAbierto, setMenuAbierto] = useState<string | null>(null)
+  const [cargando, setCargando] = useState(false)
+  const temporizador = useRef<ReturnType<typeof setTimeout> | null>(null)
   const [detalle, setDetalle] = useState<Envio | null>(null)
   const [seguimiento, setSeguimiento] = useState<Envio | null>(null)
   const menuRef = useRef<HTMLDivElement | null>(null)
+
+  // Limpia el temporizador del loader si la pantalla se desmonta.
+  useEffect(
+    () => () => {
+      if (temporizador.current !== null) clearTimeout(temporizador.current)
+    },
+    [],
+  )
 
   // Cierra el menú de la fila al hacer clic afuera o con Escape.
   useEffect(() => {
@@ -132,6 +149,15 @@ export function EnvioPage() {
     }
     setSearchParams(params, { replace: true })
     setPagina(1)
+    // Cada búsqueda con filtros pasa por el loader; sin filtros vuelve el
+    // estado vacío inicial, que no espera nada.
+    if (temporizador.current !== null) clearTimeout(temporizador.current)
+    if (hayFiltros(filtros)) {
+      setCargando(true)
+      temporizador.current = setTimeout(() => setCargando(false), DEMORA_BUSQUEDA_MS)
+    } else {
+      setCargando(false)
+    }
   }
 
   const cambiar = (clave: ClaveFiltro, valor: string) => {
@@ -218,7 +244,20 @@ export function EnvioPage() {
             </button>
           </div>
 
-          {/* Panel de filtros: se pliega animando el alto (grid 0fr ↔ 1fr). */}
+          {/*
+            UNA sola tarjeta: lo que cambia es su contenido. El formulario y
+            los chips son dos secciones que se pliegan y se desvanecen una
+            contra la otra DENTRO de la misma tarjeta, que conserva su borde
+            y crece o achica su alto. La tarjeta entera sólo se pliega
+            cuando no hay nada que mostrar (filtros cerrados y sin aplicar).
+            Los pliegues animan el alto con grid 0fr ↔ 1fr.
+          */}
+          <div
+            className={cn(styles.plegable, (expandido || conFiltros) && styles.plegableAbierto)}
+            aria-hidden={!expandido && !conFiltros}
+          >
+            <div className={styles.plegableInterior}>
+              <div className={styles.tarjeta}>
           <div className={cn(styles.plegable, expandido && styles.plegableAbierto)} aria-hidden={!expandido}>
             <div className={styles.plegableInterior}>
               <form
@@ -234,8 +273,6 @@ export function EnvioPage() {
                   <Input
                     id="f-tn"
                     label="TN"
-                    placeholder="Introducir código TN"
-                    floatLabel
                     value={borrador.tn}
                     onChange={(event) => cambiar('tn', event.target.value)}
                   />
@@ -261,6 +298,7 @@ export function EnvioPage() {
                   />
                   <Select
                     id="f-po"
+                    labelEnReposo
                     label="Provincia de origen"
                     options={PROVINCIAS.map(opcion)}
                     placeholderOption="Todas..."
@@ -270,6 +308,7 @@ export function EnvioPage() {
                   />
                   <Select
                     id="f-so"
+                    labelEnReposo
                     label="Sucursal de origen"
                     options={sucursalesDe(borrador.provinciaOrigen).map(opcion)}
                     placeholderOption="Seleccionar ..."
@@ -280,6 +319,7 @@ export function EnvioPage() {
                   />
                   <Select
                     id="f-pd"
+                    labelEnReposo
                     label="Provincia de destino"
                     options={PROVINCIAS.map(opcion)}
                     placeholderOption="Todas..."
@@ -289,6 +329,7 @@ export function EnvioPage() {
                   />
                   <Select
                     id="f-sd"
+                    labelEnReposo
                     label="Sucursal de destino"
                     options={sucursalesDe(borrador.provinciaDestino).map(opcion)}
                     placeholderOption="Seleccionar ..."
@@ -310,7 +351,7 @@ export function EnvioPage() {
             </div>
           </div>
 
-          {/* Filtros aplicados: aparecen cuando el panel se pliega. */}
+          {/* Filtros aplicados: ocupan el lugar del formulario cuando éste se pliega. */}
           <div className={cn(styles.plegable, mostrarChips && styles.plegableAbierto)} aria-hidden={!mostrarChips}>
             <div className={styles.plegableInterior}>
               <div className={styles.panelChips} inert={!mostrarChips}>
@@ -341,9 +382,18 @@ export function EnvioPage() {
               </div>
             </div>
           </div>
+              </div>
+            </div>
+          </div>
         </section>
 
-        {!conFiltros ? (
+        {cargando ? (
+          <div className={cn(styles.vacio, styles.aparecer)} role="status" aria-live="polite">
+            <span className={styles.spinner} aria-hidden="true" />
+            <p className={styles.vacioTitulo}>Buscando envíos…</p>
+            <p className={styles.vacioTexto}>Esto puede demorar unos segundos</p>
+          </div>
+        ) : !conFiltros ? (
           <div className={styles.vacio}>
             <span className={styles.vacioIcono} aria-hidden="true">
               <Search size={24} strokeWidth={1.75} />
@@ -357,7 +407,7 @@ export function EnvioPage() {
               <Search size={24} strokeWidth={1.75} />
             </span>
             <p className={styles.vacioTitulo}>No encontramos envíos con esos filtros</p>
-            <p className={styles.vacioTexto}>Probá quitando alguno o cambiando las fechas.</p>
+            <p className={styles.vacioTexto}>Probá quitando alguno o cambiando los filtros.</p>
           </div>
         ) : (
           <section key={claveBusqueda} className={cn(styles.resultados, styles.aparecer)} aria-label="Envíos encontrados">
@@ -412,7 +462,7 @@ export function EnvioPage() {
                           aria-expanded={menuAbierto === envio.tn}
                           onClick={() => setMenuAbierto((actual) => (actual === envio.tn ? null : envio.tn))}
                         >
-                          <EllipsisVertical size={22} strokeWidth={2} aria-hidden="true" />
+                          <EllipsisVertical size={18} strokeWidth={1.75} aria-hidden="true" />
                         </button>
                         {menuAbierto === envio.tn && (
                           <div role="menu" className={styles.menu}>

@@ -90,8 +90,9 @@
   `documentation/propuesta-v3-ayuda-y-soporte.md`, sección 9).
 - Envíos de ejemplo **inventados** (`src/v3/core/envios.ts`).
 - Compartidos nuevos o ampliados: `DatePicker`; `Field.adornment`;
-  `Textarea.showCounter`; `Input.floatLabel`; `PageContainer width="wide"`;
-  `Modal size="wide"` (`--modal-width-wide: 1200px`).
+  `Textarea.showCounter`; `Input.floatLabel`; `PageContainer width="wide"`.
+  Los modales de Detalle y Seguimientos usan el `Modal size="lg"` de 800px,
+  igual que producción; se midieron sobre el DOM real el 30/09).
 - `npm run build:cliente`: paquete sólo-V3 para abrir con doble clic
   (`vite.client.config.ts`, `src/clientMain.tsx`, `src/app/ClientApp.tsx`).
 

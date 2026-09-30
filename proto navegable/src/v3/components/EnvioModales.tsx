@@ -44,14 +44,14 @@ export function DetalleEnvioModal({ envio, onClose }: EnvioModalProps) {
     <Modal
       isOpen={envio !== null}
       onClose={onClose}
-      size="wide"
+      size="lg"
       labelledById="detalle-envio-titulo"
       footer={<Button onClick={onClose}>Cerrar detalle</Button>}
     >
       {envio !== null && (
         <div className={styles.detalle}>
           <h2 id="detalle-envio-titulo" className={styles.titulo}>
-            <ZoomIn size={30} strokeWidth={2.25} aria-hidden="true" />
+            <ZoomIn size={22} strokeWidth={2.25} aria-hidden="true" />
             Detalles del envío
           </h2>
           <p className={styles.tn}>TN:{envio.tn}</p>
@@ -115,7 +115,7 @@ export function SeguimientoEnvioModal({ envio, onClose }: EnvioModalProps) {
     <Modal
       isOpen={envio !== null}
       onClose={onClose}
-      size="wide"
+      size="lg"
       labelledById="seguimiento-envio-titulo"
       footer={<Button onClick={onClose}>Aceptar</Button>}
     >

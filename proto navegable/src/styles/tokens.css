@@ -333,7 +333,6 @@
   --modal-width-md: 500px;
   --modal-width-lg: 800px;
   --modal-width-xl: 600px;
-  --modal-width-wide: 1200px; /* detalle de envío de producción (V3) */
   --modal-max-height-xl: 750px;
   /* Ancho máximo del contenedor de acciones (Cancelar/Agregar), no del modal
    * entero — así los botones no se estiran a los 600px de `--modal-width-xl`

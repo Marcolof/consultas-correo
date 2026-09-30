@@ -126,17 +126,6 @@
   overflow: hidden;
 }
 
-.plegable .panel,
-.plegable .panelChips {
-  transform: translateY(-8px);
-  transition: transform 0.35s ease;
-}
-
-.plegableAbierto .panel,
-.plegableAbierto .panelChips {
-  transform: none;
-}
-
 /* Los campos entran en cascada cuando el panel se abre. */
 .plegableAbierto .campos > * {
   animation: entrarCampo 0.3s ease-out both;
@@ -169,21 +158,34 @@
   }
 }
 
-.panel,
-.panelChips {
+/* La tarjeta ÚNICA de los filtros: el borde, el fondo y el padding viven acá.
+ * El formulario (.panel) y los chips (.panelChips) son sólo su contenido. */
+.tarjeta {
   border: var(--border-width-thin) solid var(--border-card);
   border-radius: var(--radius-card);
   background: var(--surface-raised);
-  padding: var(--space-4);
+  /* El aire de arriba lo da cada sección (ver .panel): los labels flotantes
+   * sobresalen del campo y el pliegue recorta con overflow:hidden, así que
+   * tienen que caer DENTRO del área recortada. */
+  padding: var(--space-1) var(--space-4) var(--space-4);
+  /* Inputs de 40px como en Figma; el label flotante toma el fondo de la tarjeta. */
+  --field-height: 40px;
+  --field-label-backdrop: var(--surface-raised);
+}
+
+/* Dentro de la tarjeta, las secciones no se separan por el margen negativo
+ * que sí usa el pliegue externo para no dejar un hueco. */
+.tarjeta .plegable {
+  margin-top: 0;
 }
 
 .panel {
   display: flex;
   flex-direction: column;
   gap: var(--space-4);
-  /* Inputs de 40px como en Figma; el label flotante toma el fondo del panel. */
-  --field-height: 40px;
-  --field-label-backdrop: var(--surface-raised);
+  /* 12px + los 4px de la tarjeta = los 16px de siempre; los 12px alojan los
+   * labels de la primera fila, que sobresalen unos 10px. */
+  padding-top: var(--space-3);
 }
 
 /* 4 columnas × 2 filas, como en Figma; baja a 2 y a 1 en pantallas angostas. */
@@ -223,6 +225,7 @@
   display: flex;
   align-items: flex-start;
   gap: var(--space-4);
+  padding-top: var(--space-3);
 }
 
 .chips {
@@ -550,8 +553,6 @@
 
 @media (prefers-reduced-motion: reduce) {
   .plegable,
-  .plegable .panel,
-  .plegable .panelChips,
   .chevron {
     transition: none;
   }
@@ -571,5 +572,32 @@
 
   .paginador {
     padding: var(--space-3) var(--space-4);
+  }
+}
+
+/* --- Loader de la búsqueda ------------------------------------------------------
+ * Reemplaza al estado vacío, en el mismo lugar y con la misma caja, así la
+ * pantalla no salta ni se bloquea. Es el equivalente del loader de producción
+ * (spinner sobre toda la pantalla oscurecida), pero acotado a los resultados. */
+
+.spinner {
+  width: 44px;
+  height: 44px;
+  margin-bottom: var(--space-2);
+  border: 4px solid var(--grey-200);
+  border-top-color: var(--correo-blue);
+  border-radius: var(--radius-full);
+  animation: girar 0.8s linear infinite;
+}
+
+@keyframes girar {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .spinner {
+    animation-duration: 2.4s;
   }
 }

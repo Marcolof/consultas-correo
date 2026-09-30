@@ -46,7 +46,11 @@
 
 /* Estado flotado. Se aplica por CSS (input con valor / foco) o por clase
  * (`.labelFloated`) cuando el control no puede tener placeholder — el select. */
-.control:not(:placeholder-shown) + .label,
+/* `input`/`textarea` explícitos: un <select> nunca está :placeholder-shown, así que
+ * `:not(:placeholder-shown)` siempre se cumpliría y su label quedaría levantado
+ * aunque esté vacío. El select se maneja sólo con `.labelFloated`. */
+input.control:not(:placeholder-shown) + .label,
+textarea.control:not(:placeholder-shown) + .label,
 .control:focus + .label,
 .labelFloated {
   top: 10px;
@@ -59,7 +63,8 @@
 
 /* Con valor pero sin foco el label vuelve al gris: sólo se pinta de azul
  * mientras el campo está activo. */
-.control:not(:focus):not(:placeholder-shown) + .label {
+input.control:not(:focus):not(:placeholder-shown) + .label,
+textarea.control:not(:focus):not(:placeholder-shown) + .label {
   color: var(--field-label-color);
 }
 

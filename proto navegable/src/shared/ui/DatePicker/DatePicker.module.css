@@ -13,6 +13,12 @@
   caret-color: transparent;
 }
 
+/* Vacío, el label ocupa el lugar del texto (el placeholder es transparente).
+ * Con foco el label sube y entonces sí se muestra el formato esperado. */
+.input:focus::placeholder {
+  color: var(--text-subtle);
+}
+
 .popover {
   position: fixed;
   z-index: var(--z-modal);
