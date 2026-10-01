@@ -177,7 +177,29 @@
   .step-card p { margin: 0; font-size: .9375rem; color: var(--text-muted); }
   .step-card__tag { display: inline-block; margin-top: 12px; padding: 3px 10px; border-radius: var(--radius-pill); background: #fff; color: var(--color-brand-dark); font-size: .75rem; font-weight: 700; letter-spacing: .03em; text-transform: uppercase; }
 
+  /* Comparación producción / propuesta (sección reclamos de envío) */
+  .compare-head { max-width: 1240px; }
+  .compare-head p { margin: 0; font-size: .9375rem; }
+  .compare { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr); gap: 22px; margin-top: 20px; align-items: start; }
+  .compare__col { display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+  .compare__tag { align-self: flex-start; padding: 4px 12px; border-radius: var(--radius-pill); font-size: .75rem; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; background: var(--gray-100); color: var(--text-muted); }
+  .compare__tag--new { background: var(--color-brand); color: var(--color-brand-dark); }
+  .compare .screen-frame { max-width: none; max-height: none; box-shadow: 0 12px 30px rgba(21,38,99,.12); }
+  /* El alto manda: las dos capturas entran en el slide sin scroll. */
+  .compare .screen-frame, .compare .shot { width: 100%; max-width: calc((100vh - 500px) * 1.6); }
+  .shot { display: flex; align-items: center; justify-content: center; aspect-ratio: 1440 / 900; padding: 18px; border: 1px solid var(--border-card); border-radius: var(--radius-md); background: var(--global-bg); overflow: hidden; }
+  .shot img { display: block; max-width: 100%; max-height: 100%; object-fit: contain; border-radius: 6px; }
+  .shot--cover { padding: 0; }
+  .shot--cover img { width: 100%; height: 100%; max-height: none; object-fit: cover; object-position: top center; border-radius: 0; }
+  .compare__note { margin: 0; font-size: .875rem; line-height: 1.5; color: var(--text-muted); }
+  .compare__note strong { color: var(--text-primary); }
+  .compare__list { margin: 0; padding-left: 18px; font-size: .875rem; line-height: 1.6; color: var(--text-muted); }
+  .compare__list li + li { margin-top: 4px; }
+  .compare__list strong { color: var(--text-primary); }
+  .compare__list code { padding: 1px 5px; border-radius: 4px; background: var(--gray-100); color: var(--color-brand-dark); font-size: .8125rem; }
+
   @media (max-width: 900px) {
+    .compare { grid-template-columns: 1fr; }
     .deck-stage { padding: 14px 16px; }
     .slide { border-radius: var(--radius-md); }
     .deck-nav { gap: 12px; padding: 12px 14px; }
@@ -381,7 +403,190 @@
       </div>
     </section>
 
-    <!-- 6. CIERRE -->
+    <!-- 7. DIVIDER · RECLAMOS DE ENVÍO -->
+    <section class="slide cover-slide">
+      <div class="cover-slide__bar"></div>
+      <div class="cover-slide__content">
+        <span class="cover-eyebrow">Propuesta V3 · Reclamos de envío</span>
+        <h1 class="cover-title">Mejoras en la búsqueda y el reclamo de envíos</h1>
+        <p class="cover-subtitle">Qué cambia respecto del formulario actual, paso por paso.</p>
+        <div class="crumb">
+          <span>Acciones ordenadas</span><span class="crumb-sep">›</span>
+          <span>Reclamo sin scroll</span><span class="crumb-sep">›</span>
+          <span>Filtros acumulativos</span><span class="crumb-sep">›</span>
+          <span>Paginado</span><span class="crumb-sep">›</span>
+          <span>Chips de filtros</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- 8. ACCIONES DEL FILTRO -->
+    <section class="slide screen-slide-wrap">
+      <div class="screen-topbar">
+        <div class="screen-topbar__stripe"></div>
+        <div class="screen-topbar__band">
+          <img class="screen-topbar__logo" src="../assets/CorreoArgentino-MiCorreo.png" alt="Correo Argentino · MiCorreo" />
+          <span class="screen-topbar__label">Filtros</span>
+        </div>
+      </div>
+      <div class="plain-body">
+        <div class="compare-head">
+          <span class="slide-eyebrow">05 · Acciones ordenadas</span>
+          <h2>Cada botón, en su lugar</h2>
+          <p>La sección de filtros deja de apilar navegación, filtrado y consulta en un mismo bloque.</p>
+        </div>
+        <div class="compare">
+          <div class="compare__col">
+            <span class="compare__tag">Hoy en producción</span>
+            <div class="shot"><img src="screenshots/v3-prod-botones-filtro.png" alt="Botones Limpiar filtro, Consultar, Filtrar y Atrás apilados" /></div>
+            <p class="compare__note"><strong>Cuatro acciones juntas</strong> con el mismo peso visual: volver, filtrar, limpiar y consultar compiten entre sí y es fácil tocar la equivocada.</p>
+          </div>
+          <div class="compare__col">
+            <span class="compare__tag compare__tag--new">Propuesta V3</span>
+            <div class="screen-frame"><iframe src="../prototipo/v3/envio?g=demora_servicio&amp;hideTooling=1" title="Búsqueda del envío — filtros"></iframe></div>
+            <ul class="compare__list">
+              <li><strong>Volver</strong> queda en el título, como en el resto de la gestión de reclamos.</li>
+              <li><strong>Limpiar y aplicar filtro</strong> viven al pie del panel, separados de la navegación.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 9. RECLAMO SIN SCROLL -->
+    <section class="slide screen-slide-wrap">
+      <div class="screen-topbar">
+        <div class="screen-topbar__stripe"></div>
+        <div class="screen-topbar__band">
+          <img class="screen-topbar__logo" src="../assets/CorreoArgentino-MiCorreo.png" alt="Correo Argentino · MiCorreo" />
+          <span class="screen-topbar__label">Reclamo</span>
+        </div>
+      </div>
+      <div class="plain-body">
+        <div class="compare-head">
+          <span class="slide-eyebrow">06 · Reclamo sin scroll</span>
+          <h2>Más espacio para contar el problema</h2>
+          <p>Después de elegir el envío, el reclamo deja de ser una página larga de campos deshabilitados: los campos a completar quedan a la vista desde el inicio.</p>
+        </div>
+        <div class="compare">
+          <div class="compare__col">
+            <span class="compare__tag">Hoy en producción</span>
+            <div class="shot shot--cover"><img src="screenshots/v3-prod-reclamo-inputs.png" alt="Formulario de reclamo con muchos inputs deshabilitados" /></div>
+            <p class="compare__note">Remitente, destinatario y servicio se muestran como <strong>inputs deshabilitados</strong>: alargan la página y parecen campos para completar.</p>
+          </div>
+          <div class="compare__col">
+            <span class="compare__tag compare__tag--new">Propuesta V3</span>
+            <div class="screen-frame"><iframe src="../prototipo/v3/reclamo-envio?g=demora_servicio&amp;tn=000500282470AAI4G32C400&amp;hideTooling=1" title="Reclamo de envío"></iframe></div>
+            <ul class="compare__list">
+              <li>Los datos del envío pasan a un <strong>panel lateral de lectura</strong>.</li>
+              <li>El espacio se destina a los <strong>dos campos del reclamo</strong>, con contador de caracteres.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 10. FILTROS ACUMULATIVOS -->
+    <section class="slide screen-slide-wrap">
+      <div class="screen-topbar">
+        <div class="screen-topbar__stripe"></div>
+        <div class="screen-topbar__band">
+          <img class="screen-topbar__logo" src="../assets/CorreoArgentino-MiCorreo.png" alt="Correo Argentino · MiCorreo" />
+          <span class="screen-topbar__label">Filtros</span>
+        </div>
+      </div>
+      <div class="plain-body">
+        <div class="compare-head">
+          <span class="slide-eyebrow">07 · Filtros acumulativos</span>
+          <h2>Buscar de nuevo sin empezar de cero</h2>
+          <p>Los filtros se suman: no hace falta limpiar la búsqueda para hacer otra.</p>
+        </div>
+        <div class="compare">
+          <div class="compare__col">
+            <span class="compare__tag">Hoy en producción</span>
+            <div class="shot"><img src="screenshots/v3-prod-nueva-busqueda.webp" alt="Resultado con botones Nueva búsqueda, Filtrar y Atrás" /></div>
+            <p class="compare__note">Para cambiar un criterio hay que pasar por <strong>"Nueva búsqueda"</strong>, que descarta lo que ya se había filtrado.</p>
+          </div>
+          <div class="compare__col">
+            <span class="compare__tag compare__tag--new">Propuesta V3</span>
+            <div class="screen-frame"><iframe src="../prototipo/v3/envio?g=demora_servicio&amp;desde=2026-01-01&amp;hideTooling=1" title="Búsqueda del envío — filtros aplicados"></iframe></div>
+            <ul class="compare__list">
+              <li>Al reabrir <strong>Filtros</strong>, los criterios aplicados siguen cargados.</li>
+              <li>Se pueden <strong>agregar más filtros</strong> sobre la búsqueda actual.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 11. PAGINADO -->
+    <section class="slide screen-slide-wrap">
+      <div class="screen-topbar">
+        <div class="screen-topbar__stripe"></div>
+        <div class="screen-topbar__band">
+          <img class="screen-topbar__logo" src="../assets/CorreoArgentino-MiCorreo.png" alt="Correo Argentino · MiCorreo" />
+          <span class="screen-topbar__label">Resultados</span>
+        </div>
+      </div>
+      <div class="plain-body">
+        <div class="compare-head">
+          <span class="slide-eyebrow">08 · Paginado</span>
+          <h2>Muchos envíos, sin scroll infinito</h2>
+          <p>Los resultados se paginan: la tabla mantiene un largo fijo y se navega entre páginas.</p>
+        </div>
+        <div class="compare">
+          <div class="compare__col">
+            <span class="compare__tag">Detalle</span>
+            <div class="shot shot--cover"><img src="screenshots/v3-paginado-detalle.png" alt="Detalle del paginado: filas por página y flechas" style="object-fit: contain;" /></div>
+            <p class="compare__note">Al pie de la tabla: <strong>filas por página</strong> y flechas para moverse entre páginas.</p>
+          </div>
+          <div class="compare__col">
+            <span class="compare__tag compare__tag--new">Propuesta V3</span>
+            <div class="screen-frame"><iframe src="../prototipo/v3/envio?g=demora_servicio&amp;desde=2026-01-01&amp;hideTooling=1" title="Búsqueda del envío — resultados paginados" data-scroll="bottom"></iframe></div>
+            <ul class="compare__list">
+              <li><strong>10, 20 o 50 filas</strong> por página, a elección del usuario.</li>
+              <li>Flechas para <strong>avanzar y retroceder</strong> entre páginas.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 12. CHIPS DE FILTROS -->
+    <section class="slide screen-slide-wrap">
+      <div class="screen-topbar">
+        <div class="screen-topbar__stripe"></div>
+        <div class="screen-topbar__band">
+          <img class="screen-topbar__logo" src="../assets/CorreoArgentino-MiCorreo.png" alt="Correo Argentino · MiCorreo" />
+          <span class="screen-topbar__label">Filtros</span>
+        </div>
+      </div>
+      <div class="plain-body">
+        <div class="compare-head">
+          <span class="slide-eyebrow">09 · Chips de filtros</span>
+          <h2>Refinamiento incremental de la búsqueda</h2>
+          <p>Con el panel colapsado, cada criterio activo es un chip independiente: removerlo re-ejecuta la consulta con los restantes, sin reabrir el formulario ni reiniciar la búsqueda.</p>
+        </div>
+        <div class="compare">
+          <div class="compare__col">
+            <span class="compare__tag">Detalle</span>
+            <div class="shot"><img src="screenshots/v3-chips-filtros.png" alt="Chips TN y Fecha desde con botón para quitar" /></div>
+            <p class="compare__note">Un chip por filtro aplicado, con su <strong>etiqueta, valor y acción de remoción</strong>.</p>
+          </div>
+          <div class="compare__col">
+            <span class="compare__tag compare__tag--new">Propuesta V3</span>
+            <div class="screen-frame"><iframe src="../prototipo/v3/envio?g=demora_servicio&amp;desde=2026-01-01&amp;hasta=2026-09-30&amp;hideTooling=1" title="Búsqueda del envío — chips de filtros"></iframe></div>
+            <ul class="compare__list">
+              <li><strong>Estado persistido en la URL</strong> (query params): la búsqueda sobrevive a una recarga.</li>
+              <li><strong>Dependencias resueltas</strong>: quitar una provincia limpia su sucursal.</li>
+              <li>Cada cambio <strong>reinicia el paginado</strong>; sin chips, el panel se expande.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 13. CIERRE -->
     <section class="slide cover-slide">
       <div class="cover-slide__bar"></div>
       <div class="cover-slide__content">
@@ -391,7 +596,8 @@
           <span>Temas claros</span><span class="crumb-sep">›</span>
           <span>Búsqueda</span><span class="crumb-sep">›</span>
           <span>Escalable</span><span class="crumb-sep">›</span>
-          <span>Formulario simple</span>
+          <span>Formulario simple</span><span class="crumb-sep">›</span>
+          <span>Reclamos de envío</span>
         </div>
         <p class="cover-subtitle" style="margin-top:22px;">MiCorreo · Correo Argentino</p>
       </div>
@@ -454,6 +660,18 @@
         slides[index].scrollTop = 0;
         scheduleFrameSync();
       }
+
+      // Capturas que deben mostrar el final de la pantalla (p. ej. el paginado).
+      // El prototipo se sirve desde el mismo origen, así que se puede desplazar.
+      document.querySelectorAll('iframe[data-scroll="bottom"]').forEach(iframe => {
+        const bajar = () => {
+          try {
+            const doc = iframe.contentDocument;
+            if (doc) iframe.contentWindow.scrollTo(0, doc.documentElement.scrollHeight);
+          } catch (e) { /* otro origen: se deja como está */ }
+        };
+        iframe.addEventListener('load', () => { [300, 1200, 2000].forEach(ms => setTimeout(bajar, ms)); });
+      });
 
       window.addEventListener('resize', () => scheduleFrameSync());
 
